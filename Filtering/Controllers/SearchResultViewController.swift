@@ -11,6 +11,7 @@ class SearchResultViewController: UIViewController {
     
     //ViewController에서 입력한 검색 내용
     var searchContent: String!
+    let cellIdentifier: String = "resultItemCell"
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -18,6 +19,12 @@ class SearchResultViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        //segue를 통해 세팅된 searchContent에 맞는 값을 가져오기
+        
+    }
 
     /*
     // MARK: - Navigation

@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C40B586A2585174100237BD2 /* NetworkHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C40B58692585174100237BD2 /* NetworkHandler.swift */; };
+		C40B586D25851DEE00237BD2 /* keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = C40B586C25851DEE00237BD2 /* keys.plist */; };
+		C40B58712585F95200237BD2 /* nonMedicalItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C40B58702585F95200237BD2 /* nonMedicalItem.swift */; };
 		C434E4BD2583D3B20029A313 /* SearchResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C434E4BC2583D3B20029A313 /* SearchResultViewController.swift */; };
 		C434E4C12583D3C60029A313 /* SearchResultDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C434E4C02583D3C60029A313 /* SearchResultDetailViewController.swift */; };
 		C434E4C42583D3EE0029A313 /* MaskAuthorizedListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C434E4C32583D3EE0029A313 /* MaskAuthorizedListViewController.swift */; };
@@ -21,6 +24,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C40B58692585174100237BD2 /* NetworkHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkHandler.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		C40B586C25851DEE00237BD2 /* keys.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = keys.plist; sourceTree = "<group>"; };
+		C40B58702585F95200237BD2 /* nonMedicalItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = nonMedicalItem.swift; sourceTree = "<group>"; };
 		C434E4BC2583D3B20029A313 /* SearchResultViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultViewController.swift; sourceTree = "<group>"; };
 		C434E4C02583D3C60029A313 /* SearchResultDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultDetailViewController.swift; sourceTree = "<group>"; };
 		C434E4C32583D3EE0029A313 /* MaskAuthorizedListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaskAuthorizedListViewController.swift; sourceTree = "<group>"; };
@@ -47,6 +53,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C40B58682585173000237BD2 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				C40B58692585174100237BD2 /* NetworkHandler.swift */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
+		C40B586F2585F8C400237BD2 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				C40B58702585F95200237BD2 /* nonMedicalItem.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		C434E4BB2583D3510029A313 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
@@ -78,6 +100,8 @@
 		C4C98BEF2583C19F0007B879 /* Filtering */ = {
 			isa = PBXGroup;
 			children = (
+				C40B586F2585F8C400237BD2 /* Model */,
+				C40B58682585173000237BD2 /* Network */,
 				C434E4BB2583D3510029A313 /* Controllers */,
 				C4C98BF02583C19F0007B879 /* AppDelegate.swift */,
 				C4C98BF22583C19F0007B879 /* SceneDelegate.swift */,
@@ -86,6 +110,7 @@
 				C4C98BF92583C19F0007B879 /* Assets.xcassets */,
 				C4C98BFB2583C19F0007B879 /* LaunchScreen.storyboard */,
 				C4C98BFE2583C19F0007B879 /* Info.plist */,
+				C40B586C25851DEE00237BD2 /* keys.plist */,
 			);
 			path = Filtering;
 			sourceTree = "<group>";
@@ -147,6 +172,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C40B586D25851DEE00237BD2 /* keys.plist in Resources */,
 				C4C98BFD2583C19F0007B879 /* LaunchScreen.storyboard in Resources */,
 				C4C98BFA2583C19F0007B879 /* Assets.xcassets in Resources */,
 				C4C98BF82583C19F0007B879 /* Main.storyboard in Resources */,
@@ -168,6 +194,8 @@
 				C434E4BD2583D3B20029A313 /* SearchResultViewController.swift in Sources */,
 				C4C98BF32583C19F0007B879 /* SceneDelegate.swift in Sources */,
 				C434E4CA2583D4200029A313 /* SettingsViewController.swift in Sources */,
+				C40B58712585F95200237BD2 /* nonMedicalItem.swift in Sources */,
+				C40B586A2585174100237BD2 /* NetworkHandler.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
