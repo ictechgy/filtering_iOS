@@ -9,7 +9,8 @@
 /* Begin PBXBuildFile section */
 		C40B586A2585174100237BD2 /* NetworkHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C40B58692585174100237BD2 /* NetworkHandler.swift */; };
 		C40B586D25851DEE00237BD2 /* keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = C40B586C25851DEE00237BD2 /* keys.plist */; };
-		C40B58712585F95200237BD2 /* nonMedicalItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C40B58702585F95200237BD2 /* nonMedicalItem.swift */; };
+		C40B58712585F95200237BD2 /* NonMedicalItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C40B58702585F95200237BD2 /* NonMedicalItem.swift */; };
+		C4133F2C2586532B00EEFB6A /* ItemXMLParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4133F2B2586532B00EEFB6A /* ItemXMLParser.swift */; };
 		C434E4BD2583D3B20029A313 /* SearchResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C434E4BC2583D3B20029A313 /* SearchResultViewController.swift */; };
 		C434E4C12583D3C60029A313 /* SearchResultDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C434E4C02583D3C60029A313 /* SearchResultDetailViewController.swift */; };
 		C434E4C42583D3EE0029A313 /* MaskAuthorizedListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C434E4C32583D3EE0029A313 /* MaskAuthorizedListViewController.swift */; };
@@ -26,7 +27,8 @@
 /* Begin PBXFileReference section */
 		C40B58692585174100237BD2 /* NetworkHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkHandler.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		C40B586C25851DEE00237BD2 /* keys.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = keys.plist; sourceTree = "<group>"; };
-		C40B58702585F95200237BD2 /* nonMedicalItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = nonMedicalItem.swift; sourceTree = "<group>"; };
+		C40B58702585F95200237BD2 /* NonMedicalItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NonMedicalItem.swift; sourceTree = "<group>"; };
+		C4133F2B2586532B00EEFB6A /* ItemXMLParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemXMLParser.swift; sourceTree = "<group>"; };
 		C434E4BC2583D3B20029A313 /* SearchResultViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultViewController.swift; sourceTree = "<group>"; };
 		C434E4C02583D3C60029A313 /* SearchResultDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultDetailViewController.swift; sourceTree = "<group>"; };
 		C434E4C32583D3EE0029A313 /* MaskAuthorizedListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaskAuthorizedListViewController.swift; sourceTree = "<group>"; };
@@ -57,6 +59,7 @@
 			isa = PBXGroup;
 			children = (
 				C40B58692585174100237BD2 /* NetworkHandler.swift */,
+				C4133F2B2586532B00EEFB6A /* ItemXMLParser.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -64,7 +67,7 @@
 		C40B586F2585F8C400237BD2 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				C40B58702585F95200237BD2 /* nonMedicalItem.swift */,
+				C40B58702585F95200237BD2 /* NonMedicalItem.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -186,6 +189,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C4133F2C2586532B00EEFB6A /* ItemXMLParser.swift in Sources */,
 				C434E4C72583D40E0029A313 /* FavoriteListViewController.swift in Sources */,
 				C434E4C12583D3C60029A313 /* SearchResultDetailViewController.swift in Sources */,
 				C434E4C42583D3EE0029A313 /* MaskAuthorizedListViewController.swift in Sources */,
@@ -194,7 +198,7 @@
 				C434E4BD2583D3B20029A313 /* SearchResultViewController.swift in Sources */,
 				C4C98BF32583C19F0007B879 /* SceneDelegate.swift in Sources */,
 				C434E4CA2583D4200029A313 /* SettingsViewController.swift in Sources */,
-				C40B58712585F95200237BD2 /* nonMedicalItem.swift in Sources */,
+				C40B58712585F95200237BD2 /* NonMedicalItem.swift in Sources */,
 				C40B586A2585174100237BD2 /* NetworkHandler.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

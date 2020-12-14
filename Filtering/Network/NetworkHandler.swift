@@ -10,42 +10,64 @@ import Foundation
 class NetworkHandler {
     
     ///singletone
-    static let shared = NetworkHandler()
-    private init(){}
+    static let shared: NetworkHandler? = NetworkHandler()
     
-    private let urlString: String = "http://apis.data.go.kr/1471057/NonMdcinPrductPrmisnInfoService/getNonMdcinPrductPrmisnInfoList"
+    private var apiKey: String
+    private let requestURL: String = "http://apis.data.go.kr/1471057/NonMdcinPrductPrmisnInfoService/getNonMdcinPrductPrmisnInfoList"
     private let urlSession: URLSession = URLSession.shared
     
-    ///사용자가 검색한 값을 기반으로 서버로부터 데이터를 가져옵니다.
-    func getContents(itemName: String, pageNum: Int = 1, numOfRows: Int = 20, resultHandler: @escaping (Result<[nonMedicalItem], errorType>) -> Void) {
-        
-        
-        //plist로부터 읽어오기
+    //제대로 파일 값을 읽어오지 못하는 경우 nil을 반환합니다. failable
+    private init?(){
+        //plist로부터 읽어오기, 싱글톤 객체 생성 시 최초 1회 작동
         guard let path = Bundle.main.path(forResource: "keys", ofType: "plist") else {
-            return resultHandler(.failure(.unknownError))
+            return nil
         }
         
-        let plistUrl = URL(fileURLWithPath: path)
-        guard let data = try? Data(contentsOf: plistUrl) else {
-            return resultHandler(.failure(.unknownError))
+        let plistURL = URL(fileURLWithPath: path)
+        guard let data = try? Data(contentsOf: plistURL) else {
+            return nil
         }
         
         guard let plist = try? PropertyListSerialization.propertyList(from: data, options: .mutableContainers, format: nil) as? [String: String] else {
-            return resultHandler(.failure(.unknownError))
+            return nil
         }
         
-        guard let apiKey: String = plist["ServiceKey"] else {
-            return resultHandler(.failure(.unknownError))
+        guard let retrievedKey = plist["ServiceKey"] else {
+            return nil
         }
         
+        self.apiKey = retrievedKey
+    }
+    
+    ///사용자가 검색한 값을 기반으로 서버로부터 데이터를 가져옵니다.
+    func getContents(itemName nameOfItem: String, pageNum numberOfPage: Int = 1, numOfRows numberOfRowsPerPage: Int = 20, resultHandler: @escaping (Result<Data, errorType>) -> Void) {
         
         //서버와 통신
-        guard let url: URL = URL(string: urlString) else{
-            return resultHandler(.failure(.unknownError))
+        var urlComponents = URLComponents(string: requestURL)
+        let serviceKey = URLQueryItem(name: "serviceKey", value: apiKey)
+        let itemName = URLQueryItem(name: "item_name", value: nameOfItem)
+        let pageNo = URLQueryItem(name: "pageNo", value: "\(numberOfPage)")
+        let numOfRows = URLQueryItem(name: "numOfRows", value: "\(numberOfRowsPerPage)")
+        
+        guard ((urlComponents?.queryItems = [serviceKey, itemName, pageNo, numOfRows]) != nil), let url = urlComponents?.url else {
+            return resultHandler(.failure(.componentError))
         }
         
+        let urlSessionTask: URLSessionTask = urlSession.dataTask(with: url) { (data, response, error) in
+            //async
+            
+            guard let data = data else{
+                return DispatchQueue.main.async {
+                    resultHandler(.failure(.fetchError))
+                }
+            }
+            
+            DispatchQueue.main.async {
+                resultHandler(.success(data))
+            }
+        }
         
-        
+        urlSessionTask.resume()
     }
     
     enum errorType: Int, Error {
@@ -64,6 +86,8 @@ class NetworkHandler {
         case expiredServiceKey = 31
         case wrongDomainName = 32
         
-        case unknownError = 00
+        case componentError
+        case fetchError
+        case unknownError
     }
 }

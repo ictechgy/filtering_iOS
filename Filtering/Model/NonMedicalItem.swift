@@ -8,13 +8,13 @@
 import Foundation
 
 ///검색 결과값에 대한 하나하나의 항목을 담을 구조체
-struct nonMedicalItem {
-    var itemSeq: String
-    var itemName: String
+struct NonMedicalItem {
+    var itemSeq: String?
+    var itemName: String?
     
-    var eeDocData: docData
-    var udDocData: docData
-    var nbDocData: docData
+    var eeDocData: docData?
+    var udDocData: docData?
+    var nbDocData: docData?
     
     struct docData {
         var title: docType
