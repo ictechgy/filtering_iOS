@@ -40,7 +40,7 @@ class NetworkHandler {
     }
     
     ///사용자가 검색한 값을 기반으로 서버로부터 데이터를 가져옵니다.
-    func getContents(itemName nameOfItem: String, pageNum numberOfPage: Int = 1, numOfRows numberOfRowsPerPage: Int = 20, resultHandler: @escaping (Result<Data, errorType>) -> Void) {
+    func getContents(itemName nameOfItem: String, pageNum numberOfPage: Int = 1, numOfRows numberOfRowsPerPage: Int = 20, resultHandler: @escaping (Result<Data, NetworkErrorType>) -> Void) {
         
         //서버와 통신
         var urlComponents = URLComponents(string: requestURL)
@@ -50,7 +50,7 @@ class NetworkHandler {
         let numOfRows = URLQueryItem(name: "numOfRows", value: "\(numberOfRowsPerPage)")
         
         guard ((urlComponents?.queryItems = [serviceKey, itemName, pageNo, numOfRows]) != nil), let url = urlComponents?.url else {
-            return resultHandler(.failure(.componentError))
+            return resultHandler(.failure(.componentError("URL 컴포넌트 변환 중 오류 발생")))
         }
         
         let urlSessionTask: URLSessionTask = urlSession.dataTask(with: url) { (data, response, error) in
@@ -58,7 +58,7 @@ class NetworkHandler {
             
             guard let data = data else{
                 return DispatchQueue.main.async {
-                    resultHandler(.failure(.fetchError))
+                    resultHandler(.failure(.fetchError("데이터를 받아오지 못했습니다.")))
                 }
             }
             
@@ -70,24 +70,24 @@ class NetworkHandler {
         urlSessionTask.resume()
     }
     
-    enum errorType: Int, Error {
+    enum NetworkErrorType: Error {
                 
-        case applicationError = 01
-        case databaseError = 02
-        case noData = 03
-        case httpError = 04
-        case serviceTimeOut = 05
-        case invalidRequestParameterError = 10
-        case missingRequiredRequestParameter = 11
-        case serviceRetired = 12
-        case accessDenied = 20
-        case serviceRequestLimitExceededError = 22
-        case unRegisteredServiceKey = 30
-        case expiredServiceKey = 31
-        case wrongDomainName = 32
+        case applicationError(Int = 1, String = "서비스 제공 상태가 원활하지 않습니다.")
+        case databaseError(Int = 2, String = "서비스 제공 상태가 원활하지 않습니다.")
+        case noData(Int = 3, String = "데이터 없음")
+        case httpError(Int = 4, String = "서비스 제공 상태가 원활하지 않습니다.")
+        case serviceTimeOut(Int = 5, String = "서비스 제공 상태가 원활하지 않습니다.")
+        case invalidRequestParameterError(Int = 10, String = "요청 URL이 잘못되었습니다.")
+        case missingRequiredRequestParameter(Int = 11, String = "필수 파라미터가 누락되었습니다.")
+        case serviceRetired(Int = 12, String = "해당 서비스는 폐기되었습니다.")
+        case accessDenied(Int = 20, String = "서비스 접근 거부")
+        case serviceRequestLimitExceededError(Int = 22, String = "일일 요청 제한 초과")
+        case unRegisteredServiceKey(Int = 30, String = "등록되지 않은 키")
+        case expiredServiceKey(Int = 31, String = "기한만료된 키")
+        case wrongDomainName(Int = 32, String = "등록되지 않은 도메인명입니다.")
         
-        case componentError
-        case fetchError
+        case componentError(String)
+        case fetchError(String)
         case unknownError
     }
 }
