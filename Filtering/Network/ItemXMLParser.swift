@@ -59,6 +59,11 @@ class ItemXMLParser: NSObject, XMLParserDelegate {
     }
     
     internal func parser(_ parser: XMLParser, foundCharacters string: String) {
+        let string = string.trimmingCharacters(in: .whitespacesAndNewlines)
+        if string == "" {
+            return
+        }
+        
         switch currentElement {
         case "totalCount":
             totalItemCount = Int(string) ?? 0

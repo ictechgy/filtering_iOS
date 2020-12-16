@@ -45,13 +45,17 @@ class NetworkHandler {
         //서버와 통신
         var urlComponents = URLComponents(string: requestURL)
         let serviceKey = URLQueryItem(name: "serviceKey", value: apiKey)
-        let itemName = URLQueryItem(name: "item_name", value: nameOfItem)
+        let itemName = URLQueryItem(name: "item_name", value: nameOfItem.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed))
         let pageNo = URLQueryItem(name: "pageNo", value: "\(numberOfPage)")
         let numOfRows = URLQueryItem(name: "numOfRows", value: "\(numberOfRowsPerPage)")
         
-        guard ((urlComponents?.queryItems = [serviceKey, itemName, pageNo, numOfRows]) != nil), let url = urlComponents?.url else {
+        guard ((urlComponents?.percentEncodedQueryItems = [serviceKey, itemName, pageNo, numOfRows]) != nil), let url = urlComponents?.url else {
             return resultHandler(.failure(.componentError("URL 컴포넌트 변환 중 오류 발생")))
         }
+        //이부분에서 조금 고생했다.
+        //URLComponents.url을 하면 자동으로 내부 QueryItem들이 PercentEncoding이 된다.
+        //apiKey는 이미 인코딩 되어있는데 또 인코딩해서 자꾸 오류가 발생했다.
+        //그래서 전부 percentEncodedQueryItems라고 해서 이미 인코딩 된 것으로 넣어줬고, nameOfItem만 별도로 미리 따로 인코딩 해줬다.
         
         let urlSessionTask: URLSessionTask = urlSession.dataTask(with: url) { (data, response, error) in
             //async
