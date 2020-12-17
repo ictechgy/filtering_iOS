@@ -10,6 +10,7 @@ import Foundation
 class ItemXMLParser: NSObject, XMLParserDelegate {
     static let shared = ItemXMLParser()
     private var parser: XMLParser?
+    private var resultHandler: ((Result<[NonMedicalItem], Error>, Int) -> Void)?
     
     ///파싱한 아이템이 담겨있는 배열
     var items: [NonMedicalItem] = []
@@ -25,14 +26,22 @@ class ItemXMLParser: NSObject, XMLParserDelegate {
     private override init() {}
     
     ///Data를 받아 global dispatch queue를 이용해 비동기적으로 XML을 파싱합니다.
-    func parseXML(xmlData: Data) {
+    func parseXML(xmlData: Data, resultHandler: @escaping ((Result<[NonMedicalItem], Error>, Int) -> Void)) {
         parser = XMLParser(data: xmlData)
         parser?.delegate = self
         //이 ItemXMLParser객체에서는 parser를 강한참조 하고 있지만 XMLParser클래스에서는 이 객체를 unowned로 참조한다.
         
+        self.resultHandler = resultHandler    //참조
         DispatchQueue.global().async { [weak self] in
             self?.parser?.parse()
         }
+    }
+    
+    func abortParse() {
+        parser?.abortParsing()
+        resultHandler = nil
+        items = []
+        parser = nil
     }
     
     internal func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String] = [:]) {
@@ -80,6 +89,12 @@ class ItemXMLParser: NSObject, XMLParserDelegate {
             item?.classNoName = string
         case "ENTP_NAME":
             item?.entpName = string
+        case "ITEM_PERMIT_DATE":
+            item?.itemPermitDate = string
+        case "CANCEL_CODE":
+            item?.cancelCode = string
+        case "CANCEL_DATE":
+            item?.cancelDate = string
         default:
             return
         }
@@ -93,12 +108,17 @@ class ItemXMLParser: NSObject, XMLParserDelegate {
             }
             items.append(item)
         case "items":
-            self.parser?.abortParsing()
             //결과 return
-            print(items)
-            DispatchQueue.main.async {
-                
+            guard let resultHandler = resultHandler else {
+                return
             }
+            DispatchQueue.main.async { [self] in
+                resultHandler(.success(items), totalItemCount)
+                self.resultHandler = nil
+                items = []
+            }
+            self.parser?.abortParsing()
+            self.parser = nil
             
         case "ARTICLE":
             guard let currentArticle = currentArticle else {
@@ -120,6 +140,18 @@ class ItemXMLParser: NSObject, XMLParserDelegate {
     }
     
     internal func parser(_ parser: XMLParser, parseErrorOccurred parseError: Error) {
+        if self.parser == nil {     //일부러 abort한 경우에는 아래쪽 구문 실행 안되도록
+            return
+        }
         
+        guard let resultHandler = resultHandler else {
+            return
+        }
+        DispatchQueue.main.async {
+            resultHandler(.failure(parseError), self.totalItemCount)
+            self.resultHandler = nil
+        }
+        items = []
+        self.parser = nil
     }
 }

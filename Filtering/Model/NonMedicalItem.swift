@@ -33,6 +33,15 @@ struct NonMedicalItem {
     ///업체명
     var entpName: String?
     
+    ///허가일
+    var itemPermitDate: String?
+    
+    ///인증상태 - 허가상태 여부(취소 됐는지, 안됐으면 정상)
+    var cancelCode: String?
+    
+    ///취소됐다면 그 날짜
+    var cancelDate: String?
+    
     struct DocData {
         var title: DocType
         

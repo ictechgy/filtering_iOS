@@ -56,7 +56,9 @@
                             <outletCollection property="gestureRecognizers" destination="CHO-fr-P18" appends="YES" id="LiL-bW-y0i"/>
                         </connections>
                     </view>
-                    <navigationItem key="navigationItem" id="DGj-bK-SgG"/>
+                    <navigationItem key="navigationItem" id="DGj-bK-SgG">
+                        <barButtonItem key="backBarButtonItem" title="검색" id="2iF-ba-qKu"/>
+                    </navigationItem>
                     <connections>
                         <outlet property="navItem" destination="DGj-bK-SgG" id="zhP-q4-Izp"/>
                         <outlet property="searchBar" destination="atC-HR-Yki" id="13Z-83-61O"/>
@@ -105,7 +107,7 @@
             </objects>
             <point key="canvasLocation" x="590" y="785"/>
         </scene>
-        <!--Search Result View Controller-->
+        <!--검색 결과-->
         <scene sceneID="A77-K8-cBn">
             <objects>
                 <viewController id="5LL-fS-KsU" customClass="SearchResultViewController" customModule="Filtering" customModuleProvider="target" sceneMemberID="viewController">
@@ -117,13 +119,40 @@
                                 <rect key="frame" x="0.0" y="88" width="414" height="725"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="resultItemCell" id="SSV-Og-OQU">
-                                        <rect key="frame" x="0.0" y="28" width="414" height="43.5"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="resultItemCell" rowHeight="70" id="SSV-Og-OQU" customClass="SearchItemTableViewCell" customModule="Filtering" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="28" width="414" height="70"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="SSV-Og-OQU" id="dOS-F8-brr">
-                                            <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="SSV-Og-OQU" id="dOS-F8-brr">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="70"/>
                                             <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="제품명이 들어갈 공간" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vvF-Y8-VRe">
+                                                    <rect key="frame" x="20" y="11" width="374" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="18"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="제조회사 명" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="J6z-oX-H1D">
+                                                    <rect key="frame" x="20" y="44" width="374" height="15"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="vvF-Y8-VRe" firstAttribute="trailing" secondItem="J6z-oX-H1D" secondAttribute="trailing" id="3DH-np-nkV"/>
+                                                <constraint firstItem="J6z-oX-H1D" firstAttribute="top" secondItem="vvF-Y8-VRe" secondAttribute="bottom" constant="12" id="3IN-nC-817"/>
+                                                <constraint firstItem="vvF-Y8-VRe" firstAttribute="trailing" secondItem="dOS-F8-brr" secondAttribute="trailingMargin" id="63B-s9-dFf"/>
+                                                <constraint firstItem="vvF-Y8-VRe" firstAttribute="leading" secondItem="dOS-F8-brr" secondAttribute="leadingMargin" id="EaX-M4-9hB"/>
+                                                <constraint firstItem="J6z-oX-H1D" firstAttribute="bottom" secondItem="dOS-F8-brr" secondAttribute="bottomMargin" id="K60-s6-SyN"/>
+                                                <constraint firstItem="vvF-Y8-VRe" firstAttribute="top" secondItem="dOS-F8-brr" secondAttribute="topMargin" id="gKs-IE-hEQ"/>
+                                                <constraint firstItem="vvF-Y8-VRe" firstAttribute="leading" secondItem="J6z-oX-H1D" secondAttribute="leading" id="qu3-lw-lCg"/>
+                                            </constraints>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="entpName" destination="J6z-oX-H1D" id="AvM-aB-RaE"/>
+                                            <outlet property="itemName" destination="vvF-Y8-VRe" id="xKz-eY-lfc"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
@@ -135,6 +164,12 @@
                                 </constraints>
                                 <color key="color" name="AccentColor"/>
                             </activityIndicatorView>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="검색 결과 없음" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NCa-7H-HZR">
+                                <rect key="frame" x="153" y="439" width="108.5" height="23"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="IiO-8W-nt0"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -142,19 +177,23 @@
                             <constraint firstItem="IiO-8W-nt0" firstAttribute="bottom" secondItem="OY5-bg-5Qc" secondAttribute="bottom" id="Ree-lw-Q5p"/>
                             <constraint firstItem="OY5-bg-5Qc" firstAttribute="top" secondItem="IiO-8W-nt0" secondAttribute="top" id="S2i-ET-asd"/>
                             <constraint firstItem="DVN-qq-Gmi" firstAttribute="centerY" secondItem="Wcr-6l-BKA" secondAttribute="centerY" id="V99-fy-cHz"/>
+                            <constraint firstItem="NCa-7H-HZR" firstAttribute="centerY" secondItem="OY5-bg-5Qc" secondAttribute="centerY" id="eoV-wS-nTW"/>
+                            <constraint firstItem="NCa-7H-HZR" firstAttribute="centerX" secondItem="DVN-qq-Gmi" secondAttribute="centerX" id="lvr-cn-onc"/>
                             <constraint firstItem="DVN-qq-Gmi" firstAttribute="centerX" secondItem="OY5-bg-5Qc" secondAttribute="centerX" id="mIt-Q8-uUQ"/>
                             <constraint firstItem="IiO-8W-nt0" firstAttribute="trailing" secondItem="OY5-bg-5Qc" secondAttribute="trailing" id="mbY-qJ-2hl"/>
                             <constraint firstItem="OY5-bg-5Qc" firstAttribute="leading" secondItem="IiO-8W-nt0" secondAttribute="leading" id="zuf-x2-Xjw"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="8u0-xt-lNO"/>
+                    <navigationItem key="navigationItem" title="검색 결과" id="8u0-xt-lNO"/>
                     <connections>
+                        <outlet property="isResultExists" destination="NCa-7H-HZR" id="ytn-YE-iPA"/>
                         <outlet property="loadingIndicator" destination="DVN-qq-Gmi" id="U6C-FV-NFx"/>
+                        <outlet property="tableView" destination="OY5-bg-5Qc" id="eUr-Tm-pve"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="flH-0P-vfq" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3762" y="-60"/>
+            <point key="canvasLocation" x="3760.8695652173915" y="-60.267857142857139"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="kaT-3E-Fjh">

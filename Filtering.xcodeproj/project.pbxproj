@@ -22,6 +22,7 @@
 		C4C98BF82583C19F0007B879 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C4C98BF62583C19F0007B879 /* Main.storyboard */; };
 		C4C98BFA2583C19F0007B879 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C4C98BF92583C19F0007B879 /* Assets.xcassets */; };
 		C4C98BFD2583C19F0007B879 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C4C98BFB2583C19F0007B879 /* LaunchScreen.storyboard */; };
+		C4DA7E5B258A79770040E846 /* SearchItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DA7E59258A79770040E846 /* SearchItemTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +43,7 @@
 		C4C98BF92583C19F0007B879 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C4C98BFC2583C19F0007B879 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C4C98BFE2583C19F0007B879 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C4DA7E59258A79770040E846 /* SearchItemTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchItemTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +105,7 @@
 		C4C98BEF2583C19F0007B879 /* Filtering */ = {
 			isa = PBXGroup;
 			children = (
+				C4DA7E58258A794C0040E846 /* View */,
 				C40B586F2585F8C400237BD2 /* Model */,
 				C40B58682585173000237BD2 /* Network */,
 				C434E4BB2583D3510029A313 /* Controllers */,
@@ -116,6 +119,14 @@
 				C40B586C25851DEE00237BD2 /* keys.plist */,
 			);
 			path = Filtering;
+			sourceTree = "<group>";
+		};
+		C4DA7E58258A794C0040E846 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				C4DA7E59258A79770040E846 /* SearchItemTableViewCell.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -193,6 +204,7 @@
 				C434E4C72583D40E0029A313 /* FavoriteListViewController.swift in Sources */,
 				C434E4C12583D3C60029A313 /* SearchResultDetailViewController.swift in Sources */,
 				C434E4C42583D3EE0029A313 /* MaskAuthorizedListViewController.swift in Sources */,
+				C4DA7E5B258A79770040E846 /* SearchItemTableViewCell.swift in Sources */,
 				C4C98BF52583C19F0007B879 /* ViewController.swift in Sources */,
 				C4C98BF12583C19F0007B879 /* AppDelegate.swift in Sources */,
 				C434E4BD2583D3B20029A313 /* SearchResultViewController.swift in Sources */,

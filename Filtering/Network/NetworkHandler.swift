@@ -16,6 +16,8 @@ class NetworkHandler {
     private let requestURL: String = "http://apis.data.go.kr/1471057/NonMdcinPrductPrmisnInfoService/getNonMdcinPrductPrmisnInfoList"
     private let urlSession: URLSession = URLSession.shared
     
+    private var task: URLSessionTask?
+    
     //제대로 파일 값을 읽어오지 못하는 경우 nil을 반환합니다. failable
     private init?(){
         //plist로부터 읽어오기, 싱글톤 객체 생성 시 최초 1회 작동
@@ -72,6 +74,12 @@ class NetworkHandler {
         }
         
         urlSessionTask.resume()
+        task = urlSessionTask
+    }
+    
+    func abortNetworking() {
+        task?.cancel()
+        task = nil
     }
     
     enum NetworkErrorType: Error {
