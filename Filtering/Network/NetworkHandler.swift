@@ -18,6 +18,9 @@ class NetworkHandler {
     
     private var task: URLSessionTask?
     
+    ///작업이 취소되었는지를 판별하는 프로퍼티
+    private var isCanceled: Bool = false
+    
     //제대로 파일 값을 읽어오지 못하는 경우 nil을 반환합니다. failable
     private init?(){
         //plist로부터 읽어오기, 싱글톤 객체 생성 시 최초 1회 작동
@@ -42,7 +45,7 @@ class NetworkHandler {
     }
     
     ///사용자가 검색한 값을 기반으로 서버로부터 데이터를 가져옵니다.
-    func getContents(itemName nameOfItem: String, pageNum numberOfPage: Int = 1, numOfRows numberOfRowsPerPage: Int = 20, resultHandler: @escaping (Result<Data, NetworkErrorType>) -> Void) {
+    func getContents(itemName nameOfItem: String, pageNum numberOfPage: Int, numOfRows numberOfRowsPerPage: Int, resultHandler: @escaping (Result<Data, NetworkErrorType>) -> Void) {
         
         //서버와 통신
         var urlComponents = URLComponents(string: requestURL)
@@ -59,12 +62,20 @@ class NetworkHandler {
         //apiKey는 이미 인코딩 되어있는데 또 인코딩해서 자꾸 오류가 발생했다.
         //그래서 전부 percentEncodedQueryItems라고 해서 이미 인코딩 된 것으로 넣어줬고, nameOfItem만 별도로 미리 따로 인코딩 해줬다.
         
+        isCanceled = false
         let urlSessionTask: URLSessionTask = urlSession.dataTask(with: url) { (data, response, error) in
             //async
             
             guard let data = data else{
+                var error: NetworkErrorType
+                if self.isCanceled {    //만약에 사용자 취소에 의한 nil data라면..
+                    error = .canceled
+                    self.isCanceled = false     //초기값으로
+                }else {
+                    error = .fetchError("데이터를 받아오지 못했습니다.")
+                }
                 return DispatchQueue.main.async {
-                    resultHandler(.failure(.fetchError("데이터를 받아오지 못했습니다.")))
+                    resultHandler(.failure(error))
                 }
             }
             
@@ -78,7 +89,8 @@ class NetworkHandler {
     }
     
     func abortNetworking() {
-        task?.cancel()
+        isCanceled = true
+        task?.cancel()  //cancel 할 시 dataTask에서 완료 콜백 클로저 handler가 data nil인 상태로 작동
         task = nil
     }
     
@@ -100,6 +112,7 @@ class NetworkHandler {
         
         case componentError(String)
         case fetchError(String)
+        case canceled
         case unknownError
     }
 }
