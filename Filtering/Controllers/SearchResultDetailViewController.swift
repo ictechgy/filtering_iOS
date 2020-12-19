@@ -21,6 +21,8 @@ class SearchResultDetailViewController: UIViewController {
     @IBOutlet weak var itemPermitDate: UILabel!
     @IBOutlet weak var cancelCode: UILabel!
     @IBOutlet weak var cancelDate: UILabel!
+    
+    @IBOutlet weak var segmentedContent: UILabel!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,7 +34,8 @@ class SearchResultDetailViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        
+        setItemInfo()
+        setSegViewContent(index: 0)
     }
     
     func setItemInfo() {
@@ -44,6 +47,39 @@ class SearchResultDetailViewController: UIViewController {
         itemPermitDate.text?.append(item.itemPermitDate ?? notApplicable)
         cancelCode.text?.append(item.cancelCode ?? notApplicable)
         cancelDate.text?.append(item.cancelDate ?? notApplicable)
+    }
+    
+    ///segmented control에 의해 바뀌어야 하는 뷰의 내용 제어
+    func setSegViewContent(index: Int) {
+        segmentedContent.text = ""
+        
+        var docData: NonMedicalItem.DocData?
+        switch index {
+        case 0:
+            docData = item.eeDocData
+        case 1:
+            docData = item.udDocData
+        case 2:
+            docData = item.nbDocData
+        default:
+            docData = nil
+        }
+        
+        guard let doc = docData else {
+            segmentedContent.text = "N/A"
+            return
+        }
+        
+        for article in doc.articles {
+            segmentedContent.text?.append(article.title + "\n")
+            for paragraph in article.paragraphs {
+                segmentedContent.text?.append("  " + paragraph + "\n")
+            }
+        }
+    }
+    
+    @IBAction func segmentedControlTapped(_ sender: UISegmentedControl){
+        setSegViewContent(index: sender.selectedSegmentIndex)
     }
 
     /*
