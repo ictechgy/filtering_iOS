@@ -76,7 +76,7 @@
             </objects>
             <point key="canvasLocation" x="2714" y="-60"/>
         </scene>
-        <!--View Controller-->
+        <!--Favorites-->
         <scene sceneID="QfM-bO-Eg7">
             <objects>
                 <viewController id="LxR-5k-wvZ" sceneMemberID="viewController">
@@ -86,13 +86,13 @@
                         <viewLayoutGuide key="safeArea" id="gVB-tN-vjt"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
-                    <tabBarItem key="tabBarItem" systemItem="favorites" id="wxL-cg-gBC"/>
+                    <tabBarItem key="tabBarItem" title="Favorites" image="star" catalog="system" selectedImage="star.fill" id="wxL-cg-gBC"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JkK-U6-Kml" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1690" y="785"/>
         </scene>
-        <!--Settings-->
+        <!--More-->
         <scene sceneID="3aL-b4-E1f">
             <objects>
                 <viewController id="bqZ-Vq-WQ5" sceneMemberID="viewController">
@@ -102,7 +102,7 @@
                         <viewLayoutGuide key="safeArea" id="iwE-L7-fkY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Settings" id="kSa-CF-j0H"/>
+                    <tabBarItem key="tabBarItem" title="More" id="kSa-CF-j0H"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bTE-tF-1a8" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -395,11 +395,11 @@
             </objects>
             <point key="canvasLocation" x="2713" y="785"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Search-->
         <scene sceneID="HGC-Rk-cFc">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="DbO-79-JIi" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" systemItem="search" id="6p9-N9-a87"/>
+                    <tabBarItem key="tabBarItem" title="Search" image="magnifyingglass.circle" catalog="system" selectedImage="magnifyingglass.circle.fill" id="6p9-N9-a87"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="sKb-bz-mBx">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
@@ -418,6 +418,10 @@
     </scenes>
     <resources>
         <image name="chevron.forward" catalog="system" width="96" height="128"/>
+        <image name="magnifyingglass.circle" catalog="system" width="128" height="121"/>
+        <image name="magnifyingglass.circle.fill" catalog="system" width="128" height="121"/>
+        <image name="star" catalog="system" width="128" height="116"/>
+        <image name="star.fill" catalog="system" width="128" height="116"/>
         <namedColor name="AccentColor">
             <color red="0.0" green="0.46000000000000002" blue="0.89000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

@@ -13,6 +13,11 @@ class SearchResultDetailViewController: UIViewController {
     var item: NonMedicalItem!
     let notApplicable: String = "N/A"
     
+    lazy var addToFavoritesButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(image: <#T##UIImage?#>, style: <#T##UIBarButtonItem.Style#>, target: <#T##Any?#>, action: <#T##Selector?#>)
+        return button
+    }()
+    
     @IBOutlet weak var itemSeq: UILabel!
     @IBOutlet weak var itemName: UILabel!
     @IBOutlet weak var classNo: UILabel!
@@ -27,7 +32,8 @@ class SearchResultDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationController?.navigationItem.title = "상세 조회"
+        self.navigationItem.title = "상세 조회"
+        self.navigationItem.rightBarButtonItem = addToFavoritesButton
         // Do any additional setup after loading the view.
     }
     
@@ -76,6 +82,10 @@ class SearchResultDetailViewController: UIViewController {
                 segmentedContent.text?.append("  " + paragraph + "\n")
             }
         }
+    }
+    
+    @objc func addToFavorite(_ sender: UIBarButtonItem){
+        
     }
     
     @IBAction func segmentedControlTapped(_ sender: UISegmentedControl){
