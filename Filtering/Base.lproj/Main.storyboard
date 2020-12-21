@@ -86,7 +86,7 @@
                         <viewLayoutGuide key="safeArea" id="gVB-tN-vjt"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Favorites" image="star" catalog="system" selectedImage="star.fill" id="wxL-cg-gBC"/>
+                    <tabBarItem key="tabBarItem" title="Favorites" image="star.circle" catalog="system" selectedImage="star.circle.fill" id="wxL-cg-gBC"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JkK-U6-Kml" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -102,7 +102,7 @@
                         <viewLayoutGuide key="safeArea" id="iwE-L7-fkY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="More" id="kSa-CF-j0H"/>
+                    <tabBarItem key="tabBarItem" title="More" image="ellipsis.circle" catalog="system" selectedImage="ellipsis.circle.fill" id="kSa-CF-j0H"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bTE-tF-1a8" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -418,10 +418,12 @@
     </scenes>
     <resources>
         <image name="chevron.forward" catalog="system" width="96" height="128"/>
+        <image name="ellipsis.circle" catalog="system" width="128" height="121"/>
+        <image name="ellipsis.circle.fill" catalog="system" width="128" height="121"/>
         <image name="magnifyingglass.circle" catalog="system" width="128" height="121"/>
         <image name="magnifyingglass.circle.fill" catalog="system" width="128" height="121"/>
-        <image name="star" catalog="system" width="128" height="116"/>
-        <image name="star.fill" catalog="system" width="128" height="116"/>
+        <image name="star.circle" catalog="system" width="128" height="121"/>
+        <image name="star.circle.fill" catalog="system" width="128" height="121"/>
         <namedColor name="AccentColor">
             <color red="0.0" green="0.46000000000000002" blue="0.89000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

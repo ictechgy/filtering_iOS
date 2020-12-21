@@ -12,9 +12,16 @@ class SearchResultDetailViewController: UIViewController {
     ///이전 화면(SearchResultViewController)에서 넘겨받은 아이템 객체
     var item: NonMedicalItem!
     let notApplicable: String = "N/A"
+    var isAddedToFavorites: Bool = false    //즐겨찾기에 추가되어있는지
     
     lazy var addToFavoritesButton: UIBarButtonItem = {
-        let button = UIBarButtonItem(image: <#T##UIImage?#>, style: <#T##UIBarButtonItem.Style#>, target: <#T##Any?#>, action: <#T##Selector?#>)
+        var iconImage: UIImage
+        if isAddedToFavorites {
+            iconImage = UIImage(systemName: "star.fill")!
+        }else {
+            iconImage = UIImage(systemName: "star")!
+        }
+        let button = UIBarButtonItem(image: iconImage, style: .plain, target: self, action: #selector(favoritesButtonTapped(_:)))
         return button
     }()
     
@@ -33,7 +40,6 @@ class SearchResultDetailViewController: UIViewController {
         super.viewDidLoad()
         
         self.navigationItem.title = "상세 조회"
-        self.navigationItem.rightBarButtonItem = addToFavoritesButton
         // Do any additional setup after loading the view.
     }
     
@@ -42,6 +48,9 @@ class SearchResultDetailViewController: UIViewController {
         
         setItemInfo()
         setSegViewContent(index: 0)
+        
+        checkFavorites()
+        self.navigationItem.rightBarButtonItem = addToFavoritesButton
     }
     
     func setItemInfo() {
@@ -84,8 +93,19 @@ class SearchResultDetailViewController: UIViewController {
         }
     }
     
-    @objc func addToFavorite(_ sender: UIBarButtonItem){
+    ///해당 아이템이 즐겨찾기에 추가되어있는지 확인하고 이에 따라 isAddedToFavorites 프로퍼티의 값을 바꿉니다.
+    func checkFavorites() {
         
+    }
+    
+    ///해당 아이템을 즐겨찾기에 추가하거나 삭제합니다.
+    @objc func favoritesButtonTapped(_ sender: UIBarButtonItem){
+        
+        if isAddedToFavorites {
+            
+        }else {
+            
+        }
     }
     
     @IBAction func segmentedControlTapped(_ sender: UISegmentedControl){
