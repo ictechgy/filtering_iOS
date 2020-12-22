@@ -6,12 +6,14 @@
 //
 
 import UIKit
+import CoreData
 
 class SearchResultDetailViewController: UIViewController {
     
     ///이전 화면(SearchResultViewController)에서 넘겨받은 아이템 객체
     var item: NonMedicalItem!
     let notApplicable: String = "N/A"
+    
     var isAddedToFavorites: Bool = false    //즐겨찾기에 추가되어있는지
     
     lazy var addToFavoritesButton: UIBarButtonItem = {
@@ -95,15 +97,62 @@ class SearchResultDetailViewController: UIViewController {
     
     ///해당 아이템이 즐겨찾기에 추가되어있는지 확인하고 이에 따라 isAddedToFavorites 프로퍼티의 값을 바꿉니다.
     func checkFavorites() {
+        let coreDataHandler = CoreDataHandler.shared
+        let context = coreDataHandler.persistentContainer.viewContext
         
+        do {
+            
+        } catch {
+            print(error.localizedDescription)
+        }
     }
     
     ///해당 아이템을 즐겨찾기에 추가하거나 삭제합니다.
     @objc func favoritesButtonTapped(_ sender: UIBarButtonItem){
         
         if isAddedToFavorites {
+            //이미 즐겨찾기에 추가되어있다면 삭제합니다.
             
         }else {
+            //즐겨찾기에 없으므로 추가합니다.
+            
+            //NSManagedObjectContext 가져오기
+            let coreDataHandler = CoreDataHandler.shared
+            let context = coreDataHandler.persistentContainer.viewContext
+            
+            //entity 가져오기
+            let entity = NSEntityDescription.entity(forEntityName: "QuasiDrug", in: context)
+            
+            //NSManagedObject 만들기
+            if let entity = entity {
+                let item = NSManagedObject(entity: entity, insertInto: context)
+                
+                //object 값 세팅
+                item.setValue(self.item.itemSeq, forKey: "itemSeq")
+                item.setValue(self.item.itemName, forKey: "itemName")
+                item.setValue(self.item.classNo, forKey: "classNo")
+                item.setValue(self.item.classNoName, forKey: "classNoName")
+                item.setValue(self.item.entpName, forKey: "entpName")
+                item.setValue(self.item.itemPermitDate, forKey: "itemPermitDate")
+                item.setValue(self.item.cancelCode, forKey: "cancelCode")
+                item.setValue(self.item.cancelDate, forKey: "cancelDate")
+                
+                let encoder = PropertyListEncoder()
+                
+                //NSManagedObjectContext 저장
+                do {
+                    try item.setValue(encoder.encode(self.item.eeDocData), forKey: "eeDocData")
+                    try item.setValue(encoder.encode(self.item.udDocData), forKey: "udDocData")
+                    try item.setValue(encoder.encode(self.item.nbDocData), forKey: "nbDocData")
+                    try context.save()
+                } catch {
+                    print(error.localizedDescription)
+                }
+                
+                //버튼 이미지를 바꾸고 프로퍼티 값 변경
+                self.addToFavoritesButton.image = UIImage(systemName: "star.fill")!
+                self.isAddedToFavorites = true
+            }
             
         }
     }

@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17709" systemVersion="20C69" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <entity name="QuasiDrug" representedClassName="QuasiDrug" syncable="YES" codeGenerationType="class">
+    <entity name="QuasiDrug" representedClassName="QuasiDrug" syncable="YES">
         <attribute name="cancelCode" optional="YES" attributeType="String"/>
         <attribute name="cancelDate" optional="YES" attributeType="String"/>
         <attribute name="classNo" optional="YES" attributeType="String"/>
         <attribute name="classNoName" optional="YES" attributeType="String"/>
-        <attribute name="eeDocData" optional="YES" attributeType="Transformable"/>
+        <attribute name="eeDocData" optional="YES" attributeType="Binary"/>
         <attribute name="entpName" optional="YES" attributeType="String"/>
         <attribute name="itemName" optional="YES" attributeType="String"/>
         <attribute name="itemPermitDate" optional="YES" attributeType="String"/>
         <attribute name="itemSeq" optional="YES" attributeType="String"/>
-        <attribute name="nbDocData" optional="YES" attributeType="Transformable"/>
-        <attribute name="udDocData" optional="YES" attributeType="Transformable"/>
+        <attribute name="nbDocData" optional="YES" attributeType="Binary"/>
+        <attribute name="udDocData" optional="YES" attributeType="Binary"/>
     </entity>
     <elements>
         <element name="QuasiDrug" positionX="-13013.05078125" positionY="-7888.726043701172" width="289.3839721679688" height="208"/>

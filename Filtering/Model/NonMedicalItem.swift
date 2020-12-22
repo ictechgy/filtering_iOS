@@ -42,18 +42,18 @@ struct NonMedicalItem {
     ///취소됐다면 그 날짜
     var cancelDate: String?
     
-    struct DocData {
+    struct DocData: Codable {
         var title: DocType
         
         var articles: [Article]
         
-        struct Article {
+        struct Article: Codable {
             var title: String
             var paragraphs: [String]
         }
     }
     
-    enum DocType: String {
+    enum DocType: String, Codable {
         case EE = "효능효과"
         case UD = "용법용령"
         case NB = "사용상의 주의사항"
