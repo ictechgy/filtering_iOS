@@ -12,9 +12,10 @@ class SearchResultDetailViewController: UIViewController {
     
     ///이전 화면(SearchResultViewController)에서 넘겨받은 아이템 객체
     var item: NonMedicalItem!
-    let notApplicable: String = "N/A"
+    let notApplicable: String = "N/A"   //받은 아이템 객체 값에 nil 이 있을 시 띄울 메시지
     
-    var isAddedToFavorites: Bool = false    //즐겨찾기에 추가되어있는지
+    var isAddedToFavorites: Bool = false    //즐겨찾기에 추가되어있는지 아닌지
+    var isFavoritesAvailable: Bool = true   //즐겨찾기 버튼 활성화 여부
     
     lazy var addToFavoritesButton: UIBarButtonItem = {
         var iconImage: UIImage
@@ -24,6 +25,10 @@ class SearchResultDetailViewController: UIViewController {
             iconImage = UIImage(systemName: "star")!
         }
         let button = UIBarButtonItem(image: iconImage, style: .plain, target: self, action: #selector(favoritesButtonTapped(_:)))
+        
+        button.tintColor = .systemYellow
+        button.isEnabled = isFavoritesAvailable
+        
         return button
     }()
     
@@ -48,13 +53,14 @@ class SearchResultDetailViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        setItemInfo()
-        setSegViewContent(index: 0)
+        setItemInfo()   //넘겨받은 아이템을 이용해서 화면 Outlet에 값 세팅
+        setSegViewContent(index: 0) //세그먼티드 컨트롤에 대한 뷰 세팅(기본 값은 0번 인덱스 값으로)
         
-        checkFavorites()
-        self.navigationItem.rightBarButtonItem = addToFavoritesButton
+        checkFavorites()    //현재 아이템이 즐겨찾기에 추가되어있는지 아닌지를 체크합니다.
+        self.navigationItem.rightBarButtonItem = addToFavoritesButton   //즐겨찾기 추가상태 기반으로 버튼 생성
     }
     
+    ///아이템의 값들을 이용하여 화면 IBOutlets에 값 세팅
     func setItemInfo() {
         itemSeq.text?.append(item.itemSeq ?? notApplicable)
         itemName.text?.append(item.itemName ?? notApplicable)
@@ -97,68 +103,70 @@ class SearchResultDetailViewController: UIViewController {
     
     ///해당 아이템이 즐겨찾기에 추가되어있는지 확인하고 이에 따라 isAddedToFavorites 프로퍼티의 값을 바꿉니다.
     func checkFavorites() {
-        let coreDataHandler = CoreDataHandler.shared
-        let context = coreDataHandler.persistentContainer.viewContext
+        guard let seq = self.item.itemSeq else {
+            //itemSeq를 확인할 수 없는 경우에는 즐겨찾기 버튼 비활성화 하기
+            isFavoritesAvailable = false
+            return
+        }
         
-        do {
-            
-        } catch {
-            print(error.localizedDescription)
+        let coreDataHandler = CoreDataHandler.shared
+        let result = coreDataHandler.isItemExist(itemSeq: seq)
+        
+        switch result {
+        case .none:     //확인 실패, 즐겨찾기 비활성화
+            isFavoritesAvailable = false
+        case .some(let exist):
+            if exist {  //존재한다면
+                isAddedToFavorites = true
+                isFavoritesAvailable = true
+            }else {
+                isAddedToFavorites = false
+                isFavoritesAvailable = true
+            }
         }
     }
     
     ///해당 아이템을 즐겨찾기에 추가하거나 삭제합니다.
     @objc func favoritesButtonTapped(_ sender: UIBarButtonItem){
+        let coreDataHandler = CoreDataHandler.shared
         
         if isAddedToFavorites {
             //이미 즐겨찾기에 추가되어있다면 삭제합니다.
+            let result = coreDataHandler.deleteItem(itemSeq: self.item.itemSeq!)    //itemSeq가 nil이라면 버튼이 비활성화되도록 해두었으므로 unwrapping 가능
+            if result {     //삭제 성공
+                self.addToFavoritesButton.image = UIImage(systemName: "star")!
+                self.isAddedToFavorites = false
+            }else {
+                //삭제 실패 - alert를 띄우고 버튼 이미지는 바꾸지 않습니다.
+                presentAlert(title: "삭제 실패", message: "즐겨찾기 목록에서 삭제하는데 실패하였습니다. 다음에 다시 시도하세요.")
+            }
             
         }else {
             //즐겨찾기에 없으므로 추가합니다.
+            let result = coreDataHandler.insertItem(item: self.item)
             
-            //NSManagedObjectContext 가져오기
-            let coreDataHandler = CoreDataHandler.shared
-            let context = coreDataHandler.persistentContainer.viewContext
-            
-            //entity 가져오기
-            let entity = NSEntityDescription.entity(forEntityName: "QuasiDrug", in: context)
-            
-            //NSManagedObject 만들기
-            if let entity = entity {
-                let item = NSManagedObject(entity: entity, insertInto: context)
-                
-                //object 값 세팅
-                item.setValue(self.item.itemSeq, forKey: "itemSeq")
-                item.setValue(self.item.itemName, forKey: "itemName")
-                item.setValue(self.item.classNo, forKey: "classNo")
-                item.setValue(self.item.classNoName, forKey: "classNoName")
-                item.setValue(self.item.entpName, forKey: "entpName")
-                item.setValue(self.item.itemPermitDate, forKey: "itemPermitDate")
-                item.setValue(self.item.cancelCode, forKey: "cancelCode")
-                item.setValue(self.item.cancelDate, forKey: "cancelDate")
-                
-                let encoder = PropertyListEncoder()
-                
-                //NSManagedObjectContext 저장
-                do {
-                    try item.setValue(encoder.encode(self.item.eeDocData), forKey: "eeDocData")
-                    try item.setValue(encoder.encode(self.item.udDocData), forKey: "udDocData")
-                    try item.setValue(encoder.encode(self.item.nbDocData), forKey: "nbDocData")
-                    try context.save()
-                } catch {
-                    print(error.localizedDescription)
-                }
-                
+            if result {     //즐겨찾기 추가 성공
                 //버튼 이미지를 바꾸고 프로퍼티 값 변경
                 self.addToFavoritesButton.image = UIImage(systemName: "star.fill")!
                 self.isAddedToFavorites = true
+            }else {
+                //즐겨찾기 추가 실패 -  alert를 띄우고 버튼 이미지는 바꾸지 않습니다.
+                presentAlert(title: "추가 실패", message: "즐겨찾기 목록에 추가하는데 실패하였습니다. 다음에 다시 시도하세요.")
             }
-            
         }
     }
     
     @IBAction func segmentedControlTapped(_ sender: UISegmentedControl){
         setSegViewContent(index: sender.selectedSegmentIndex)
+    }
+    
+    func presentAlert(title: String, message: String) {
+        let alertController: UIAlertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        
+        let okAlertAction: UIAlertAction = UIAlertAction(title: "확인", style: .default, handler: nil)
+        alertController.addAction(okAlertAction)
+        
+        self.present(alertController, animated: true, completion: nil)
     }
 
     /*

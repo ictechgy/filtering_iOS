@@ -12,6 +12,11 @@
         <attribute name="itemSeq" optional="YES" attributeType="String"/>
         <attribute name="nbDocData" optional="YES" attributeType="Binary"/>
         <attribute name="udDocData" optional="YES" attributeType="Binary"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="itemSeq"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
     </entity>
     <elements>
         <element name="QuasiDrug" positionX="-13013.05078125" positionY="-7888.726043701172" width="289.3839721679688" height="208"/>
