@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import CoreData
 
 class SearchResultDetailViewController: UIViewController {
     
@@ -41,6 +40,7 @@ class SearchResultDetailViewController: UIViewController {
     @IBOutlet weak var cancelCode: UILabel!
     @IBOutlet weak var cancelDate: UILabel!
     
+    @IBOutlet weak var segmentedControl: UISegmentedControl!
     @IBOutlet weak var segmentedContent: UILabel!
 
     override func viewDidLoad() {
@@ -48,13 +48,15 @@ class SearchResultDetailViewController: UIViewController {
         
         self.navigationItem.title = "상세 조회"
         // Do any additional setup after loading the view.
+        segmentedControl.addTarget(self, action: #selector(setSegViewContent(_:)), for: .valueChanged)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         setItemInfo()   //넘겨받은 아이템을 이용해서 화면 Outlet에 값 세팅
-        setSegViewContent(index: 0) //세그먼티드 컨트롤에 대한 뷰 세팅(기본 값은 0번 인덱스 값으로)
+        segmentedControl.selectedSegmentIndex = 0   //다른 화면 갔다가 다시 돌아오는 경우 세그 뷰 컨텐츠만 0번 인덱스 값으로 바뀌고 컨트롤은 그대로 1번 인덱스나 2번 인덱스를 가리키고 있어서 추가한 구문
+        setSegViewContent(self.segmentedControl) //세그먼티드 컨트롤에 대한 뷰 세팅(기본 값은 0번 인덱스 값으로)
         
         checkFavorites()    //현재 아이템이 즐겨찾기에 추가되어있는지 아닌지를 체크합니다.
         self.navigationItem.rightBarButtonItem = addToFavoritesButton   //즐겨찾기 추가상태 기반으로 버튼 생성
@@ -62,22 +64,23 @@ class SearchResultDetailViewController: UIViewController {
     
     ///아이템의 값들을 이용하여 화면 IBOutlets에 값 세팅
     func setItemInfo() {
-        itemSeq.text?.append(item.itemSeq ?? notApplicable)
-        itemName.text?.append(item.itemName ?? notApplicable)
-        classNo.text?.append(item.classNo ?? notApplicable)
-        classNoName.text?.append(item.classNoName ?? notApplicable)
-        entpName.text?.append(item.entpName ?? notApplicable)
-        itemPermitDate.text?.append(item.itemPermitDate ?? notApplicable)
-        cancelCode.text?.append(item.cancelCode ?? notApplicable)
-        cancelDate.text?.append(item.cancelDate ?? notApplicable)
+        itemSeq.text = "품목기준코드: " + (item.itemSeq ?? notApplicable)
+        itemName.text = "품목명: " + (item.itemName ?? notApplicable)
+        classNo.text = "품목코드: " + (item.classNo ?? notApplicable)
+        classNoName.text = "품목코드명: " + (item.classNoName ?? notApplicable)
+        entpName.text = "업체명: " + (item.entpName ?? notApplicable)
+        itemPermitDate.text = "허가일: " + (item.itemPermitDate ?? notApplicable)
+        cancelCode.text = "인증상태: " + (item.cancelCode ?? notApplicable)
+        cancelDate.text = "취소일: " + (item.cancelDate ?? notApplicable)
+        //text.append로 하니까 viewWillAppear할 때마다 뒤에 계속 값이 붙어서 변경 (다른 화면으로 단순히 이동했다가 다시 오는경우..)
     }
     
     ///segmented control에 의해 바뀌어야 하는 뷰의 내용 제어
-    func setSegViewContent(index: Int) {
+    @objc func setSegViewContent(_ sender: UISegmentedControl) {
         segmentedContent.text = ""
         
         var docData: NonMedicalItem.DocData?
-        switch index {
+        switch sender.selectedSegmentIndex {
         case 0:
             docData = item.eeDocData
         case 1:
@@ -154,10 +157,6 @@ class SearchResultDetailViewController: UIViewController {
                 presentAlert(title: "추가 실패", message: "즐겨찾기 목록에 추가하는데 실패하였습니다. 다음에 다시 시도하세요.")
             }
         }
-    }
-    
-    @IBAction func segmentedControlTapped(_ sender: UISegmentedControl){
-        setSegViewContent(index: sender.selectedSegmentIndex)
     }
     
     func presentAlert(title: String, message: String) {

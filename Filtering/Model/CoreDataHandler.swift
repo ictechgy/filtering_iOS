@@ -14,6 +14,9 @@ class CoreDataHandler {
     private init() {}
     
     let modelName: String = "DataModel"
+    var needToCheckData: Bool = true
+    //즐겨찾기 목록 화면(FavoriteListVC)에서 데이터를 fetch해야 할지 말지 결정하게 해주는 프로퍼티
+    //DB에 변경이 생긴 경우 true가 된다. 초기에는 데이터를 가져가야 하므로 기본값은 true
     
     //MARK:- Core Data stack
     
@@ -120,6 +123,7 @@ class CoreDataHandler {
                 
                 //NSManagedObjectContext 저장
                 try context.save()
+                needToCheckData = true
             } catch {
                 print(error.localizedDescription)
                 return false    //error, 저장 실패
@@ -146,6 +150,7 @@ class CoreDataHandler {
                 context.delete(result[0])
                 
                 try context.save()
+                needToCheckData = true
                 return true     //삭제 성공
             }else {
                 return false
@@ -213,5 +218,38 @@ class CoreDataHandler {
             print(error.localizedDescription)
             return []       //에러 시 빈 배열 반환
         }
+    }
+    
+    ///저장되어있는 아이템들의 개수를 반환합니다.
+    func fetchAllItemsCount() -> Int {
+        guard let context = self.context else {
+            return -1
+        }
+        
+        let request: NSFetchRequest<QuasiDrug> = QuasiDrug.fetchRequest()
+        
+        do {
+            let count = try context.count(for: request)
+            return count
+        } catch {
+            return -2
+        }
+    }
+    
+    func deleteAllItems() -> Bool {
+        guard let context = self.context else {
+            return false
+        }
+        
+        let request: NSFetchRequest<NSFetchRequestResult> = QuasiDrug.fetchRequest()
+        let batchRequest = NSBatchDeleteRequest(fetchRequest: request)      //batchDelete - 한번에 삭제
+        
+        do {
+            try context.execute(batchRequest)
+            return true
+        } catch {
+            return false
+        }
+    
     }
 }
