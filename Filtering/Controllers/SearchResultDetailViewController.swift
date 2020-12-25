@@ -17,19 +17,22 @@ class SearchResultDetailViewController: UIViewController {
     var isFavoritesAvailable: Bool = true   //즐겨찾기 버튼 활성화 여부
     
     lazy var addToFavoritesButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(image: nil, style: .plain, target: self, action: #selector(favoritesButtonTapped(_:)))
+        button.tintColor = .systemYellow
+        //이미지 및 enable 여부는 viewWillAppear에서 결정하도록 하자.
+
+        return button
+    }()
+    
+    lazy var star: ()-> UIImage = { [unowned self] in
         var iconImage: UIImage
-        if isAddedToFavorites {
+        if self.isAddedToFavorites {
             iconImage = UIImage(systemName: "star.fill")!
         }else {
             iconImage = UIImage(systemName: "star")!
         }
-        let button = UIBarButtonItem(image: iconImage, style: .plain, target: self, action: #selector(favoritesButtonTapped(_:)))
-        
-        button.tintColor = .systemYellow
-        button.isEnabled = isFavoritesAvailable
-        
-        return button
-    }()
+        return iconImage
+    }
     
     @IBOutlet weak var itemSeq: UILabel!
     @IBOutlet weak var itemName: UILabel!
@@ -43,12 +46,16 @@ class SearchResultDetailViewController: UIViewController {
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     @IBOutlet weak var segmentedContent: UILabel!
 
+    //MARK:- LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.navigationItem.title = "상세 조회"
         // Do any additional setup after loading the view.
         segmentedControl.addTarget(self, action: #selector(setSegViewContent(_:)), for: .valueChanged)
+        
+        //즐겨찾기 버튼은 언제나 있어야 한다. (viewWillAppear에 둘 필요가 없음)
+        self.navigationItem.rightBarButtonItem = addToFavoritesButton
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -59,7 +66,12 @@ class SearchResultDetailViewController: UIViewController {
         setSegViewContent(self.segmentedControl) //세그먼티드 컨트롤에 대한 뷰 세팅(기본 값은 0번 인덱스 값으로)
         
         checkFavorites()    //현재 아이템이 즐겨찾기에 추가되어있는지 아닌지를 체크합니다.
-        self.navigationItem.rightBarButtonItem = addToFavoritesButton   //즐겨찾기 추가상태 기반으로 버튼 생성
+        //이 메소드가 작동함으로써 현재 아이템이 DB에 있는지 없는지 알 수 있으며 itemSeq가 nil인 경우 즐겨찾기 비활성화 여부도 알 수 있다.
+        
+        addToFavoritesButton.image = star()  //뷰가 나타날 때마다 새로 아이콘 이미지 설정.
+        //상세화면에서 즐겨찾기 추가 후 바로 Favorite 즐겨찾기 목록에서 삭제하고 다시 돌아오는 경우가 있을 수 있어 매번 체크해야함
+        
+        addToFavoritesButton.isEnabled = isFavoritesAvailable   //활성화여부 설정
     }
     
     ///아이템의 값들을 이용하여 화면 IBOutlets에 값 세팅

@@ -16,17 +16,14 @@ class FavoriteListViewController: UIViewController, UITableViewDataSource, UITab
     let cellIdentifier: String = "favoriteItemCell"
     var items: [NonMedicalItem] = []
     
-    lazy var editButtonOnLeftBar: UIBarButtonItem = {
-        let button = editButtonItem
-        //item fetch가 먼저 수행되므로 self.items.count 사용 가능
-        if self.items.count == 0 {
-            button.isEnabled = false
-        }else {
-            button.isEnabled = true
-        }
+    lazy var editModeDeleteButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(image: UIImage(systemName: "trash")!, style: .plain, target: self, action: #selector(deleteSelectedRows(_:)))
+        button.tintColor = .systemRed
+
         return button
     }()
-
+    
+    //MARK:- LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -34,13 +31,21 @@ class FavoriteListViewController: UIViewController, UITableViewDataSource, UITab
         tableView.dataSource = self
         tableView.delegate = self
         tableView.allowsMultipleSelectionDuringEditing = true
+        
+        self.navigationItem.leftBarButtonItem = editButtonItem      //이 친구는 계속 있어야하므로 lazy var가 아니라 여기에.
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         bringAllItemsAndSetUp()
-        self.navigationItem.leftBarButtonItem = editButtonOnLeftBar
+    
+        //아이템 개수 체크해서 활성화여부는 계속 확인해야 한다. (이 화면이 한번 만들어졌던 상태에서) 검색화면에서 즐겨찾기가 계속 바뀔 수 있으므로
+        if self.items.count == 0 {
+            editButtonItem.isEnabled = false
+        }else {
+            editButtonItem.isEnabled = true
+        }
     }
     
     ///Core Data에서 즐겨찾기에 추가되어있는 모든 아이템을 가져옵니다.
@@ -112,7 +117,12 @@ class FavoriteListViewController: UIViewController, UITableViewDataSource, UITab
     }
     
     @objc func tableViewCellTapped(_ sender: UITapGestureRecognizer){
-        guard let tag = (sender.view as? UITableViewCell)?.tag else {
+        guard let cell = sender.view as? UITableViewCell else {
+            return
+        }
+
+        if isEditing {  //edit 중인 상태인 경우
+            cell.setSelected(!cell.isSelected, animated: true)  //toggle
             return
         }
         
@@ -121,9 +131,65 @@ class FavoriteListViewController: UIViewController, UITableViewDataSource, UITab
         }   //즐겨찾기 목록 클릭 시 넘어가는 상세 화면은 기존 화면을 재이용합니다.
         
         
-        detailViewController.item = items[tag]
+        detailViewController.item = items[cell.tag]
         self.navigationController?.pushViewController(detailViewController, animated: true)
     }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        guard let itemSeq: String = self.items[indexPath.row].itemSeq else {
+            presentAlert(title: "스와이프 메뉴 실행 불가", message: "편집 모드로 들어가지 못했습니다. 다음에 다시 시도하세요.")
+            return      //itemSeq를 얻지 못해 메소드 종료
+        }
+        
+        //사용자가 스와이프 해서 delete버튼을 누른 경우
+        if editingStyle == .delete {
+            let result = CoreDataHandler.shared.deleteItem(itemSeq: itemSeq)
+            
+            if result { //성공적으로 DB에서 삭제한 경우
+                self.items.remove(at: indexPath.row)        //현재 배열에서도 해당 인덱스 객체 삭제
+                tableView.deleteRows(at: [indexPath], with: .fade)      //해당 Row 업데이트
+                CoreDataHandler.shared.needToCheckData = false      //별도로 tableView를 reload할 필요는 없으므로 false로 변경
+                
+                if self.items.count == 0 {
+                    editButtonItem.isEnabled = false  //삭제하다가 item 개수가 0개가 된 경우에 disable
+                }
+            }else {     //DB에서 삭제 실패
+                presentAlert(title: "삭제 실패", message: "삭제에 실패하였습니다.")
+            }
+        }
+    }
+    
+    ///Edit button을 누른 경우 작동
+    override func setEditing(_ editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated: animated)
+        
+        tableView.setEditing(editing, animated: true)
+        
+        if !editing {   //Edit 모드가 끝났을 때 선택 된 것들이 남아있으면 선택 해제를 해주기 위한 부분
+            for index in 0...items.count-1 {
+                guard let cell = tableView.cellForRow(at: IndexPath(row: index, section: 0)) else { continue }
+                if cell.isSelected { cell.setSelected(false, animated: true) }
+            }
+            //더 나은 방법이 있을까..?
+        }else {
+            //EditMode인 경우
+            
+        }
+    }
+    
+    @objc func deleteSelectedRows(_ sender: UIBarButtonItem){
+        
+    }
+        
+    func presentAlert(title: String, message: String) {
+        let alertController: UIAlertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        
+        let okAlertAction: UIAlertAction = UIAlertAction(title: "확인", style: .default, handler: nil)
+        alertController.addAction(okAlertAction)
+        
+        self.present(alertController, animated: true, completion: nil)
+    }
+    
 
     /*
     // MARK: - Navigation
