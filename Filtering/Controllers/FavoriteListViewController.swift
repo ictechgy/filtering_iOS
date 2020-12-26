@@ -14,7 +14,32 @@ class FavoriteListViewController: UIViewController, UITableViewDataSource, UITab
     @IBOutlet weak var favoritesNotExistLabel: UILabel!
     
     let cellIdentifier: String = "favoriteItemCell"
-    var items: [NonMedicalItem] = []
+    var items: [NonMedicalItem] = []    //ordered, random-access collection. remove시 시간복잡도 O(n)소요
+    //그러면 모든 아이템 삭제 시 최악 O(n^2)이 되려나.. 즐겨찾기 삭제가 빈번할 수 있다면 구조를 바꾸는 것도 고려해봄직 하다.
+    //근데 일단 목록으로서 띄워질려면 ordered되어있긴 해야하는데..
+    
+    /*
+     Edit모드에서 선택한 아이템(selected cell)을 별도로 저장하는 자료구조를 만드려고 한다. (선택된 아이템 삭제 및 Selected 해제 시 편하게 하려함)
+     어떤 구조가 가장 효율적일까?
+     items배열과 동일한 크기의 Bool형 배열? 아니면 NonMedicalItem 자체에 Bool형 프로퍼티를 두는게 좋을까?
+     selected 목록에의 추가와 삭제가 빈번하고 추가는 맨 뒤에 하든 어디에 하든 상관없지만 목록에서의 삭제 시 검색이 용이해야한다. selected 목록에서 삭제 후 재정렬도 필요없다. -> Hash형 구조? Set or Dictionary?
+     
+     'm은 items의 개수이며 n은 selected아이템의 개수. n <= m 이다.' 라고 가정
+     selected 목록에의 - 추가  삭제  검색, 선택된 아이템들에 대해 items에서 - 일괄선택해제  삭제
+     Array     append - O(1)  O(n^2)  O(n)   , Array의 인덱스가 items의 인덱스와 매칭이 안되므로 selected 아이템이 items의 어디에 매칭되는지 추가적인 검색이 또 필요하다.(setSelected를 해제하려면 array의 아이템이 items에서 몇번 인덱스에 해당하는지 알아야함)기본적으로 각 element에 대해 items에서의 검색 O(m)이 필요하므로 일괄선택해제는 O(mn), 삭제는 items에서 삭제 후 재정렬 O(m)까지 필요하므로 합산해보면 O(nm^2)이다. 아니면 삭제의 경우 DB에 먼저 반영하여 삭제 후에 다시 fetch해서 items배열을 만드는게 나을수도.   -> selected 목록에의 append를 하는 경우 인덱스가 의미가 없으므로 목록 내 선형검색 복잡도는 O(n), 목록에서의 삭제는 검색 복잡도 O(n)와 삭제 O(1) 에 삭제 후 인덱스 빈공간 재정렬 O(n)을 고려한 값
+     
+     Set     hashable - O(1)   O(1)   O(1)                                    O(n)        O(nm)
+     Dict key가 hashable O(1)  O(1)   O(1)                                   O(n)         O(nm)
+     Set와 Dict의 경우 키값 자체를 index로 두면 될 듯하다. items와의 인덱스 매칭도 되므로. 일괄선택해제시에는 인덱스 값을 그대로 이용하면 되므로 O(n)이고
+     삭제의 경우 삭제 후 items 재정렬 비용이 드므로 O(nm)    -> O(nm) >= O(n^2)
+     
+     [Bool]             O(1)   O(1)   O(1)                              O(m)        O(m^2)    -> Bool형 배열은 items 개수만큼 만들고, selected됐을 때에는 해당하는 인덱스의 값을 true, deselect에는 false로 바꾼다. 일괄선택해제시에는 배열을 돌면서 true인 값이 있는지 체크하고 해당 인덱스에 대해 viewcell을 deselect해야하므로 O(m)이고 삭제시에는 검색 O(m) + 삭제 후의 items 재정렬 O(m)이므로 O(m^2)
+     
+     결론 - NonMedicalItem이 Hashable protocol을 채택하게 해서 Set형으로 구현하거나 Dictionary를 이용하거나(키값은 item 배열의 인덱스 값 이용) 하는 것 보다도 그냥 index 자체를 키값으로 삼아 Hashset을 쓰는게 가장 간단하고 시간복잡도면에서 유리하다.
+     
+     이진검색트리/레드블랙트리라면? 추가나 검색에서 기본적으로 최악 O(logN)이 걸릴 것이므로 고려하지 않음
+     */
+    var selectedItems: Set<Int> = Set()
     
     lazy var editModeDeleteButton: UIBarButtonItem = {
         let button = UIBarButtonItem(image: UIImage(systemName: "trash")!, style: .plain, target: self, action: #selector(deleteSelectedRows(_:)))
@@ -123,6 +148,13 @@ class FavoriteListViewController: UIViewController, UITableViewDataSource, UITab
 
         if isEditing {  //edit 중인 상태인 경우
             cell.setSelected(!cell.isSelected, animated: true)  //toggle
+            
+            if cell.isSelected {    //위의 toggle에 의해 이제 막선택된 경우라면
+                self.selectedItems.insert(cell.tag)
+            }else {     //toggle에 의해 이제 막 선택이 해제된 경우라면
+                self.selectedItems.remove(cell.tag)
+            }
+            
             return
         }
         
@@ -166,14 +198,19 @@ class FavoriteListViewController: UIViewController, UITableViewDataSource, UITab
         tableView.setEditing(editing, animated: true)
         
         if !editing {   //Edit 모드가 끝났을 때 선택 된 것들이 남아있으면 선택 해제를 해주기 위한 부분
-            for index in 0...items.count-1 {
-                guard let cell = tableView.cellForRow(at: IndexPath(row: index, section: 0)) else { continue }
-                if cell.isSelected { cell.setSelected(false, animated: true) }
+            //기존에 for문을 이용해서 처음부터 끝까지 일일히 체크하며 해제해주던 방식에서 -> 정확히 selected된 것만 찝어서 해제
+            if !selectedItems.isEmpty {
+                selectedItems.forEach { index in
+                    tableView.cellForRow(at: IndexPath(row: index, section: 0))?.setSelected(false, animated: true)
+                }
+                selectedItems.removeAll()
             }
-            //더 나은 방법이 있을까..?
+            
+            self.navigationItem.rightBarButtonItem = nil    //Edit모드 끝나면 삭제버튼 사라지게 하기
         }else {
             //EditMode인 경우
-            
+            self.navigationItem.rightBarButtonItem = editModeDeleteButton   //Edit모드 진입 시 삭제버튼 보이기
+            editModeDeleteButton.isEnabled = false  //초기에는 비활성화 상태. (Row 한개 이상 선택 시 활성화)
         }
     }
     
@@ -201,4 +238,13 @@ class FavoriteListViewController: UIViewController, UITableViewDataSource, UITab
     }
     */
 
+}
+
+/**
+ (selected item을 위해 사용하는) Set에 들어간 아이템의 개수를 Observe해서
+ 그 개수가 0일 때는 삭제버튼 disable
+ 1개 이상일 때는 enable하기 위함
+ */
+extension Set {
+    
 }
