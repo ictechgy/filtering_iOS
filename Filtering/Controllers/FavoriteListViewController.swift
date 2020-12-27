@@ -10,9 +10,12 @@ import UIKit
 //즐겨찾기 한 목록을 볼 수 있는 VC
 class FavoriteListViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
+    //MARK:- Outlet variables
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var favoritesNotExistLabel: UILabel!
     
+    
+    //MARK:- Constant, Variables
     let cellIdentifier: String = "favoriteItemCell"
     var items: [NonMedicalItem] = []    //ordered, random-access collection. remove시 시간복잡도 O(n)소요
     //그러면 모든 아이템 삭제 시 최악 O(n^2)이 되려나.. 즐겨찾기 삭제가 빈번할 수 있다면 구조를 바꾸는 것도 고려해봄직 하다.
@@ -39,10 +42,16 @@ class FavoriteListViewController: UIViewController, UITableViewDataSource, UITab
      
      이진검색트리/레드블랙트리라면? 추가나 검색에서 기본적으로 최악 O(logN)이 걸릴 것이므로 고려하지 않음
      */
-    var selectedItems: Set<Int> = Set()
+    var selectedItems: Set<Int> = [] {
+        //옵저버 패턴을 만들 필요 없이 그냥 didSet 프로퍼티 옵저버 쓰면 되네...
+        didSet {
+            self.editModeDeleteButton.title = "\(self.selectedItems.count)개 삭제"
+            self.editModeDeleteButton.isEnabled = !selectedItems.isEmpty
+        }
+    }
     
     lazy var editModeDeleteButton: UIBarButtonItem = {
-        let button = UIBarButtonItem(image: UIImage(systemName: "trash")!, style: .plain, target: self, action: #selector(deleteSelectedRows(_:)))
+        let button = UIBarButtonItem(title: nil, style: .plain, target: self, action: #selector(deleteSelectedRows(_:)))
         button.tintColor = .systemRed
 
         return button
@@ -70,23 +79,6 @@ class FavoriteListViewController: UIViewController, UITableViewDataSource, UITab
             editButtonItem.isEnabled = false
         }else {
             editButtonItem.isEnabled = true
-        }
-    }
-    
-    ///Core Data에서 즐겨찾기에 추가되어있는 모든 아이템을 가져옵니다.
-    func bringAllItemsAndSetUp() {
-        let coreDataHandler = CoreDataHandler.shared
-        
-        if coreDataHandler.needToCheckData {
-            items = coreDataHandler.fetchAllItems()
-            
-            if items.count == 0 {
-                favoritesNotExistLabel.isHidden = false
-                tableView.isHidden = true
-            }else{
-                favoritesNotExistLabel.isHidden = true
-                tableView.isHidden = false
-            }
         }
     }
     
@@ -120,6 +112,17 @@ class FavoriteListViewController: UIViewController, UITableViewDataSource, UITab
          */
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        //다른 화면으로 갈 때 Edit모드인 경우 해제하기
+        if isEditing {
+            self.setEditing(false, animated: false)     //animation은 불필요하다.
+        }
+    }
+    
+    //MARK:- UITableView Methods
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         items.count
     }
@@ -141,6 +144,32 @@ class FavoriteListViewController: UIViewController, UITableViewDataSource, UITab
         return cell
     }
     
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        guard let itemSeq: String = self.items[indexPath.row].itemSeq else {
+            presentAlert(title: "스와이프 메뉴 실행 불가", message: "편집 모드로 들어가지 못했습니다. 다음에 다시 시도하세요.")
+            return      //itemSeq를 얻지 못해 메소드 종료
+        }
+        
+        //사용자가 스와이프 해서 delete버튼을 누른 경우
+        if editingStyle == .delete {
+            let result = CoreDataHandler.shared.deleteItem(itemSeq: itemSeq)
+            
+            if result { //성공적으로 DB에서 삭제한 경우
+                self.items.remove(at: indexPath.row)        //현재 배열에서도 해당 인덱스 객체 삭제
+                tableView.deleteRows(at: [indexPath], with: .fade)      //해당 Row 업데이트
+                CoreDataHandler.shared.needToCheckData = false      //별도로 tableView를 reload할 필요는 없으므로 false로 변경
+                
+                if self.items.count == 0 {
+                    editButtonItem.isEnabled = false  //삭제하다가 item 개수가 0개가 된 경우에 disable
+                }
+            }else {     //DB에서 삭제 실패
+                presentAlert(title: "삭제 실패", message: "삭제에 실패하였습니다.")
+            }
+        }
+    }
+    
+    //MARK: UIGestureRecognizer in UITableViewCell action method
+    ///각각의 뷰 셀을 터치시 작동하는 메소드
     @objc func tableViewCellTapped(_ sender: UITapGestureRecognizer){
         guard let cell = sender.view as? UITableViewCell else {
             return
@@ -167,26 +196,21 @@ class FavoriteListViewController: UIViewController, UITableViewDataSource, UITab
         self.navigationController?.pushViewController(detailViewController, animated: true)
     }
     
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        guard let itemSeq: String = self.items[indexPath.row].itemSeq else {
-            presentAlert(title: "스와이프 메뉴 실행 불가", message: "편집 모드로 들어가지 못했습니다. 다음에 다시 시도하세요.")
-            return      //itemSeq를 얻지 못해 메소드 종료
-        }
+    //MARK:- Custom Methods
+    
+    ///Core Data에서 즐겨찾기에 추가되어있는 모든 아이템을 가져옵니다. called in viewWillAppear(animated: Bool)
+    func bringAllItemsAndSetUp() {
+        let coreDataHandler = CoreDataHandler.shared
         
-        //사용자가 스와이프 해서 delete버튼을 누른 경우
-        if editingStyle == .delete {
-            let result = CoreDataHandler.shared.deleteItem(itemSeq: itemSeq)
+        if coreDataHandler.needToCheckData {
+            items = coreDataHandler.fetchAllItems()
             
-            if result { //성공적으로 DB에서 삭제한 경우
-                self.items.remove(at: indexPath.row)        //현재 배열에서도 해당 인덱스 객체 삭제
-                tableView.deleteRows(at: [indexPath], with: .fade)      //해당 Row 업데이트
-                CoreDataHandler.shared.needToCheckData = false      //별도로 tableView를 reload할 필요는 없으므로 false로 변경
-                
-                if self.items.count == 0 {
-                    editButtonItem.isEnabled = false  //삭제하다가 item 개수가 0개가 된 경우에 disable
-                }
-            }else {     //DB에서 삭제 실패
-                presentAlert(title: "삭제 실패", message: "삭제에 실패하였습니다.")
+            if items.count == 0 {
+                favoritesNotExistLabel.isHidden = false
+                tableView.isHidden = true
+            }else{
+                favoritesNotExistLabel.isHidden = true
+                tableView.isHidden = false
             }
         }
     }
@@ -214,10 +238,23 @@ class FavoriteListViewController: UIViewController, UITableViewDataSource, UITab
         }
     }
     
+    ///Edit Mode에서 몇몇 아이템들을 선택 후에 삭제버튼을 누른 경우 작동
     @objc func deleteSelectedRows(_ sender: UIBarButtonItem){
+        if self.selectedItems.isEmpty {
+            return
+        }
+        
+        var itemSeqs: [String] = selectedItems.map {
+            if let itemSeq = items[$0].itemSeq{
+                
+            }
+        }
+        
+        let result = CoreDataHandler.shared.deleteItems(itemSeqs: itemSeqs)
         
     }
-        
+    
+    ///Alert를 쉽게 쓰려고 일반화한 메소드
     func presentAlert(title: String, message: String) {
         let alertController: UIAlertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
         
@@ -238,13 +275,4 @@ class FavoriteListViewController: UIViewController, UITableViewDataSource, UITab
     }
     */
 
-}
-
-/**
- (selected item을 위해 사용하는) Set에 들어간 아이템의 개수를 Observe해서
- 그 개수가 0일 때는 삭제버튼 disable
- 1개 이상일 때는 enable하기 위함
- */
-extension Set {
-    
 }

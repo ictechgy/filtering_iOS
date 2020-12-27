@@ -161,6 +161,34 @@ class CoreDataHandler {
         }
     }
     
+    ///itemSeq와 일치하는 키를 가진 인스턴스들을 삭제
+    func deleteItems(itemSeqs: [String]) -> Bool {
+        guard let context = self.context else {
+            return false
+        }
+        
+        let request: NSFetchRequest<QuasiDrug> = QuasiDrug.fetchRequest()
+        request.predicate = NSPredicate(format: "%k in %@", #keyPath(QuasiDrug.itemSeq), itemSeqs)
+        
+        do {
+            let result = try context.fetch(request)
+            if result.count == itemSeqs.count {
+                result.forEach {
+                    context.delete($0)
+                }
+                try context.save()
+                needToCheckData = true
+                
+                return true
+            }else {
+                return false
+            }
+        } catch {
+            print(error.localizedDescription)
+            return false
+        }
+    }
+    
     ///저장되어있는 모든 아이템 가져오기
     func fetchAllItems() -> [NonMedicalItem] {
         guard let context = self.context else {
