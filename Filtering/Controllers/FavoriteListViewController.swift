@@ -17,7 +17,11 @@ class FavoriteListViewController: UIViewController, UITableViewDataSource, UITab
     
     //MARK:- Constant, Variables
     let cellIdentifier: String = "favoriteItemCell"
-    var items: [NonMedicalItem] = []    //ordered, random-access collection. remove시 시간복잡도 O(n)소요
+    var items: [NonMedicalItem] = [] {
+        didSet {    //items가 초기화(initialized) 된 이후에 작동
+            self.editButtonItem.isEnabled =  !(self.items.count == 0)
+        }
+    }    //ordered, random-access collection. remove시 시간복잡도 O(n)소요
     //그러면 모든 아이템 삭제 시 최악 O(n^2)이 되려나.. 즐겨찾기 삭제가 빈번할 수 있다면 구조를 바꾸는 것도 고려해봄직 하다.
     //근데 일단 목록으로서 띄워질려면 ordered되어있긴 해야하는데..
     
@@ -57,6 +61,8 @@ class FavoriteListViewController: UIViewController, UITableViewDataSource, UITab
         return button
     }()
     
+    let trashCanIcon: UIImage = UIImage(systemName: "trash")!
+    
     //MARK:- LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -74,12 +80,11 @@ class FavoriteListViewController: UIViewController, UITableViewDataSource, UITab
         
         bringAllItemsAndSetUp()
     
-        //아이템 개수 체크해서 활성화여부는 계속 확인해야 한다. (이 화면이 한번 만들어졌던 상태에서) 검색화면에서 즐겨찾기가 계속 바뀔 수 있으므로
-        if self.items.count == 0 {
-            editButtonItem.isEnabled = false
-        }else {
-            editButtonItem.isEnabled = true
-        }
+        //아이템 개수 체크해서 Edit 버튼 활성화여부는 계속 확인해야 한다. (이 화면이 한번 만들어졌던 상태에서) 검색화면에서 즐겨찾기가 계속 바뀔 수 있으므로
+        //didSet은 초기화 이후부터 작동한다. 따라서 초기화된 직후 items가 비어있을 때 별도 설정이 없으면 Edit 버튼이 활성화되어있을 것만 같았는데..
+        //(items가 초기화된 이후) 화면이 처음 띄워질 때에는 무조건 DB에서 데이터를 가지고 오므로 items 배열은 무조건 다시 세팅된다. didSet 호출됨
+        //이후에 즐겨찾기 삭제를 하면 당연히 didSet이 작동할테고, 검색화면으로 가서 내가 즐찾한거 직접 삭제한다고 해도 데이터 변경이 감지되서
+        //즐겨찾기 화면 다시 돌아오면 items 다시 가져오게 되므로 didSet이 발동(?)한다.
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -144,6 +149,19 @@ class FavoriteListViewController: UIViewController, UITableViewDataSource, UITab
         return cell
     }
     
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        //기본적으로 오른쪽에서 왼쪽으로 swipe하면 delete 글자 있는 버튼이 나오는데 이를 쓰레기통 아이콘으로 변경
+        let contextualAction: UIContextualAction = UIContextualAction(style: .destructive, title: nil) { _, _, _ in
+            self.tableView(tableView, commit: .delete, forRowAt: indexPath)
+        }
+        contextualAction.image = trashCanIcon
+        contextualAction.backgroundColor = .systemRed
+        
+        let swipeActionConfig = UISwipeActionsConfiguration(actions: [contextualAction])
+        swipeActionConfig.performsFirstActionWithFullSwipe = true
+        return swipeActionConfig
+    }
+    
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         guard let itemSeq: String = self.items[indexPath.row].itemSeq else {
             presentAlert(title: "스와이프 메뉴 실행 불가", message: "편집 모드로 들어가지 못했습니다. 다음에 다시 시도하세요.")
@@ -159,9 +177,8 @@ class FavoriteListViewController: UIViewController, UITableViewDataSource, UITab
                 tableView.deleteRows(at: [indexPath], with: .fade)      //해당 Row 업데이트
                 CoreDataHandler.shared.needToCheckData = false      //별도로 tableView를 reload할 필요는 없으므로 false로 변경
                 
-                if self.items.count == 0 {
-                    editButtonItem.isEnabled = false  //삭제하다가 item 개수가 0개가 된 경우에 disable
-                }
+                //삭제하다가 item 개수가 0개가 된 경우에 Edit Button disable -> didSet이용
+                
             }else {     //DB에서 삭제 실패
                 presentAlert(title: "삭제 실패", message: "삭제에 실패하였습니다.")
             }
@@ -238,20 +255,58 @@ class FavoriteListViewController: UIViewController, UITableViewDataSource, UITab
         }
     }
     
-    ///Edit Mode에서 몇몇 아이템들을 선택 후에 삭제버튼을 누른 경우 작동
+    ///Edit Mode에서 몇몇 아이템들을 선택 후에 삭제버튼을 누른 경우 작동, items 프로퍼티가 Array이므로 최악의 경우 시간복잡도는 O(n^2)
     @objc func deleteSelectedRows(_ sender: UIBarButtonItem){
-        if self.selectedItems.isEmpty {
+        if self.selectedItems.isEmpty {     //set가 비어있다면 취소(버튼은 disabled 되어있을 것이지만 혹시 모르니)
             return
         }
         
-        var itemSeqs: [String] = selectedItems.map {
-            if let itemSeq = items[$0].itemSeq{
-                
+        var itemSeqs: [String]
+        do {
+            itemSeqs = try selectedItems.map {
+                guard let itemSeq = items[$0].itemSeq else {
+                    throw NSError(domain: "변환도중 오류 발생, itemSeq가 존재하지 않는 item 존재", code: 100, userInfo: nil)
+                }
+                return itemSeq
             }
+        } catch {
+            print(error.localizedDescription)
+            presentAlert(title: "삭제 실패", message: "삭제 도중 문제가 발생하였습니다. 다음에 다시 시도하십시오.")
+            return
         }
         
-        let result = CoreDataHandler.shared.deleteItems(itemSeqs: itemSeqs)
+        let alertController: UIAlertController = UIAlertController(title: "즐겨찾기 삭제", message: "\(self.selectedItems.count)개의 목록을 삭제하시겠습니까?", preferredStyle: .alert)
         
+        let okAlertAction: UIAlertAction = UIAlertAction(title: "확인", style: .destructive){ _ in
+            let result = CoreDataHandler.shared.deleteItems(itemSeqs: itemSeqs)
+            
+            if result { //삭제 최종 성공
+                self.selectedItems.sorted { $0 > $1 }.forEach {
+                    self.items.remove(at: $0)
+                }
+                //먼저 index 내림차순으로 정렬한 뒤 큰 값에 해당하는 (뒤쪽에 존재하는) item부터 삭제한다.
+                //이렇게 하는 이유는 앞쪽 인덱스 요소부터 지우게 되면 뒤쪽 값들이 앞쪽으로 땡겨 앉게 되어서 그것보다 뒤쪽 인덱스들을 제대로 가리키지 못하거나 out of range 오류를 일으킬 수 있기 때문.
+                //시간복잡도는 O(n^2)
+                
+                self.tableView.deleteRows(at: self.selectedItems.map{
+                    IndexPath(row: $0, section: 0)
+                } , with: .fade)        //items Array와는 다르게 한번에 지우므로 어떤 row부터 없애는지 별로 중요하지 않다.
+                
+                self.selectedItems.removeAll()
+                CoreDataHandler.shared.needToCheckData = false
+                
+                if self.items.isEmpty { self.setEditing(false, animated: true) }
+                
+            }else {
+                self.presentAlert(title: "삭제 실패", message: "데이터 삭제도중 문제가 발생하였습니다. 다음에 다시 시도하세요.")
+            }
+        }
+        let cancelAlertAction: UIAlertAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+        
+        alertController.addAction(okAlertAction)
+        alertController.addAction(cancelAlertAction)
+        
+        self.present(alertController, animated: true, completion: nil)
     }
     
     ///Alert를 쉽게 쓰려고 일반화한 메소드

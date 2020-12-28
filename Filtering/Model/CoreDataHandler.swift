@@ -168,7 +168,7 @@ class CoreDataHandler {
         }
         
         let request: NSFetchRequest<QuasiDrug> = QuasiDrug.fetchRequest()
-        request.predicate = NSPredicate(format: "%k in %@", #keyPath(QuasiDrug.itemSeq), itemSeqs)
+        request.predicate = NSPredicate(format: "%K in %@", #keyPath(QuasiDrug.itemSeq), itemSeqs)  //format 문자 대소문자에 주의하자.
         
         do {
             let result = try context.fetch(request)
