@@ -162,6 +162,16 @@ class FavoriteListViewController: UIViewController, UITableViewDataSource, UITab
         return swipeActionConfig
     }
     
+    //아래의 두 메소드는 swipe action 시 Edit 버튼이 비활성화 되도록 하기 위해 추가하였습니다. swipe 모드가 끝나면 다시 enable 됩니다.
+    func tableView(_ tableView: UITableView, willBeginEditingRowAt indexPath: IndexPath) {
+        self.editButtonItem.isEnabled = false
+    }
+    
+    func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?) {
+        if !items.isEmpty { self.editButtonItem.isEnabled = true }
+        //특정 row에 대한 swipe edit이 끝난 경우 items가 비어있지만 않으면 다시 원래대로 복구(enable)
+    }
+    
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         guard let itemSeq: String = self.items[indexPath.row].itemSeq else {
             presentAlert(title: "스와이프 메뉴 실행 불가", message: "편집 모드로 들어가지 못했습니다. 다음에 다시 시도하세요.")

@@ -7,16 +7,16 @@
 
 import UIKit
 
-class ViewController: UIViewController, UIGestureRecognizerDelegate, UISearchBarDelegate {
+class ViewController: UIViewController, UIGestureRecognizerDelegate, UISearchBarDelegate, UIPickerViewDataSource, UIPickerViewDelegate {
     
     @IBOutlet weak var navItem: UINavigationItem!
-    
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var searchButton: UIButton!
-    
     @IBOutlet weak var showMaskAuthorizedList: UIButton!
+    @IBOutlet weak var searchModePickerView: UIPickerView!
     
     let segueToSearchResultIdentifier: String = "segueToSearchResult"
+    let searchMode: [String] = ["제품명", "업체명"]
         
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,6 +24,8 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate, UISearchBar
         navItem.title = "filtering"
         
         searchBar.delegate = self
+        searchModePickerView.dataSource = self
+        searchModePickerView.delegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -75,6 +77,28 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate, UISearchBar
         default:
             return
         }
+    }
+    
+    //column 수
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        searchMode.count
+    }
+    
+    //글자 속성을 지정하기 위해서 pickerView(titleForRow:) 대신 아래의 메소드 사용
+    func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
+        let label: UILabel = (view as? UILabel) ?? UILabel()
+        label.text = searchMode[row]
+        label.textAlignment = .center
+        return label
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        
+        
     }
 }
 
