@@ -20,6 +20,7 @@
 		C4A233942590B25E0088E42F /* QuasiDrug+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A233922590B25E0088E42F /* QuasiDrug+CoreDataClass.swift */; };
 		C4A233952590B25E0088E42F /* QuasiDrug+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A233932590B25E0088E42F /* QuasiDrug+CoreDataProperties.swift */; };
 		C4A233992590F0E90088E42F /* CoreDataHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A233982590F0E90088E42F /* CoreDataHandler.swift */; };
+		C4A2339E259B5B7C0088E42F /* UIDropDownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A2339D259B5B7B0088E42F /* UIDropDownView.swift */; };
 		C4C98BF12583C19F0007B879 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4C98BF02583C19F0007B879 /* AppDelegate.swift */; };
 		C4C98BF32583C19F0007B879 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4C98BF22583C19F0007B879 /* SceneDelegate.swift */; };
 		C4C98BF52583C19F0007B879 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4C98BF42583C19F0007B879 /* ViewController.swift */; };
@@ -43,6 +44,7 @@
 		C4A233922590B25E0088E42F /* QuasiDrug+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "QuasiDrug+CoreDataClass.swift"; sourceTree = "<group>"; };
 		C4A233932590B25E0088E42F /* QuasiDrug+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "QuasiDrug+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		C4A233982590F0E90088E42F /* CoreDataHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataHandler.swift; sourceTree = "<group>"; };
+		C4A2339D259B5B7B0088E42F /* UIDropDownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIDropDownView.swift; sourceTree = "<group>"; };
 		C4C98BED2583C19F0007B879 /* Filtering.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Filtering.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C4C98BF02583C19F0007B879 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C4C98BF22583C19F0007B879 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -137,6 +139,7 @@
 			isa = PBXGroup;
 			children = (
 				C4DA7E59258A79770040E846 /* SearchItemTableViewCell.swift */,
+				C4A2339D259B5B7B0088E42F /* UIDropDownView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -216,6 +219,7 @@
 				C4A233992590F0E90088E42F /* CoreDataHandler.swift in Sources */,
 				C434E4C72583D40E0029A313 /* FavoriteListViewController.swift in Sources */,
 				C434E4C12583D3C60029A313 /* SearchResultDetailViewController.swift in Sources */,
+				C4A2339E259B5B7C0088E42F /* UIDropDownView.swift in Sources */,
 				C434E4C42583D3EE0029A313 /* MaskAuthorizedListViewController.swift in Sources */,
 				C4DA7E5B258A79770040E846 /* SearchItemTableViewCell.swift in Sources */,
 				C4C98BF52583C19F0007B879 /* ViewController.swift in Sources */,
