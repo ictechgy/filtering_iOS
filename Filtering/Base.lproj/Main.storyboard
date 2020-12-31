@@ -18,17 +18,28 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="f8K-OG-fjC">
-                                <rect key="frame" x="12" y="325" width="390" height="100"/>
+                                <rect key="frame" x="12" y="420" width="390" height="56"/>
                                 <subviews>
-                                    <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="okY-ro-esT">
-                                        <rect key="frame" x="0.0" y="0.0" width="80" height="100"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="100" id="0Zn-8w-zuj"/>
-                                            <constraint firstAttribute="width" constant="80" id="k0i-gC-79e"/>
-                                        </constraints>
-                                    </pickerView>
+                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="rPe-Tt-Xgi">
+                                        <rect key="frame" x="0.0" y="0.0" width="65" height="56"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="제품명" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lJf-ne-ZqE">
+                                                <rect key="frame" x="0.0" y="0.0" width="44.5" height="56"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="chevron.down" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="YbC-t1-2Xc">
+                                                <rect key="frame" x="46.5" y="5" width="18.5" height="46.5"/>
+                                            </imageView>
+                                        </subviews>
+                                        <gestureRecognizers/>
+                                        <connections>
+                                            <outletCollection property="gestureRecognizers" destination="e0o-dR-tcZ" appends="YES" id="WLY-jT-ZAe"/>
+                                        </connections>
+                                    </stackView>
                                     <searchBar contentMode="redraw" searchBarStyle="minimal" placeholder="제품명 입력" translatesAutoresizingMaskIntoConstraints="NO" id="atC-HR-Yki">
-                                        <rect key="frame" x="80" y="0.0" width="270" height="100"/>
+                                        <rect key="frame" x="65" y="0.0" width="270" height="56"/>
                                         <textInputTraits key="textInputTraits"/>
                                         <scopeButtonTitles>
                                             <string>Title</string>
@@ -36,24 +47,16 @@
                                         </scopeButtonTitles>
                                     </searchBar>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Oao-a9-4iR">
-                                        <rect key="frame" x="350" y="0.0" width="40" height="100"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="40" id="VZo-b2-8z8"/>
-                                        </constraints>
+                                        <rect key="frame" x="335" y="0.0" width="55" height="56"/>
                                         <state key="normal" title="검색"/>
                                         <connections>
                                             <segue destination="5LL-fS-KsU" kind="show" identifier="segueToSearchResult" id="d9s-Sc-h7y"/>
                                         </connections>
                                     </button>
                                 </subviews>
-                                <constraints>
-                                    <constraint firstItem="okY-ro-esT" firstAttribute="centerY" secondItem="f8K-OG-fjC" secondAttribute="centerY" id="C35-JZ-Wec"/>
-                                    <constraint firstItem="atC-HR-Yki" firstAttribute="centerY" secondItem="f8K-OG-fjC" secondAttribute="centerY" id="OKp-xH-JON"/>
-                                    <constraint firstItem="Oao-a9-4iR" firstAttribute="centerY" secondItem="f8K-OG-fjC" secondAttribute="centerY" id="dLE-OS-S3R"/>
-                                </constraints>
                             </stackView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MJc-vK-Brq">
-                                <rect key="frame" x="100" y="505" width="214" height="30"/>
+                                <rect key="frame" x="80" y="556" width="254" height="30"/>
                                 <state key="normal" title="마스크 정보 검색하기"/>
                                 <connections>
                                     <segue destination="ZWY-kH-5pK" kind="showDetail" id="OAp-8Y-Pba"/>
@@ -64,13 +67,12 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <gestureRecognizers/>
                         <constraints>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="MJc-vK-Brq" secondAttribute="bottom" constant="278" id="GpH-tD-jXs"/>
-                            <constraint firstItem="f8K-OG-fjC" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="12" id="RFX-EC-QiJ"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="f8K-OG-fjC" secondAttribute="trailing" constant="12" id="aoD-b9-NrL"/>
-                            <constraint firstItem="f8K-OG-fjC" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="dbI-Yl-JsA"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="MJc-vK-Brq" secondAttribute="trailing" constant="100" id="lph-lj-vrg"/>
-                            <constraint firstItem="MJc-vK-Brq" firstAttribute="top" secondItem="f8K-OG-fjC" secondAttribute="bottom" constant="80" id="mp4-GU-54c"/>
-                            <constraint firstItem="MJc-vK-Brq" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="100" id="trZ-cT-Yes"/>
+                            <constraint firstItem="f8K-OG-fjC" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="BG1-qy-Cdb"/>
+                            <constraint firstItem="MJc-vK-Brq" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="80" id="Cu9-pE-TcV"/>
+                            <constraint firstItem="f8K-OG-fjC" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="12" id="DMu-bH-R1D"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="f8K-OG-fjC" secondAttribute="trailing" constant="12" id="d8O-Tt-WAe"/>
+                            <constraint firstItem="MJc-vK-Brq" firstAttribute="top" secondItem="f8K-OG-fjC" secondAttribute="bottom" constant="80" id="fp7-qe-rNC"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="MJc-vK-Brq" secondAttribute="trailing" constant="80" id="kxg-xN-HhO"/>
                         </constraints>
                         <connections>
                             <outletCollection property="gestureRecognizers" destination="CHO-fr-P18" appends="YES" id="LiL-bW-y0i"/>
@@ -83,16 +85,19 @@
                         <outlet property="navItem" destination="DGj-bK-SgG" id="zhP-q4-Izp"/>
                         <outlet property="searchBar" destination="atC-HR-Yki" id="13Z-83-61O"/>
                         <outlet property="searchButton" destination="Oao-a9-4iR" id="H5t-uu-kSD"/>
-                        <outlet property="searchModePickerView" destination="okY-ro-esT" id="QhO-aF-p3A"/>
+                        <outlet property="searchModeLabel" destination="lJf-ne-ZqE" id="345-iV-mUC"/>
+                        <outlet property="searchModeStackView" destination="rPe-Tt-Xgi" id="Fcb-Zo-wBY"/>
+                        <outlet property="searchModeTapGestureRecognizer" destination="e0o-dR-tcZ" id="MVj-Kt-nBI"/>
                         <outlet property="showMaskAuthorizedList" destination="MJc-vK-Brq" id="SjH-kJ-mmK"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
-                <tapGestureRecognizer id="CHO-fr-P18">
+                <tapGestureRecognizer id="CHO-fr-P18" userLabel="Background Gesture Recognizer">
                     <connections>
                         <action selector="tapOutsideView:" destination="BYZ-38-t0r" id="mQL-6Y-NBP"/>
                     </connections>
                 </tapGestureRecognizer>
+                <tapGestureRecognizer id="e0o-dR-tcZ" userLabel="SearchMode Gesture Recognizer"/>
             </objects>
             <point key="canvasLocation" x="2713.04347826087" y="-60.267857142857139"/>
         </scene>
@@ -551,6 +556,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="chevron.down" catalog="system" width="128" height="72"/>
         <image name="ellipsis.circle" catalog="system" width="128" height="121"/>
         <image name="ellipsis.circle.fill" catalog="system" width="128" height="121"/>
         <image name="magnifyingglass.circle" catalog="system" width="128" height="121"/>

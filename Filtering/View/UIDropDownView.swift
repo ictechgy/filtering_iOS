@@ -87,6 +87,7 @@ class UIDropDownView: UIView {
         self.addShadowToView()
         self.frame = CGRect(x: viewPositionReference.minX, y: viewPositionReference.maxY + offset, width: 0, height: 0)
         dropDownTableView = UITableView(frame: CGRect(x: self.frame.minX, y: self.frame.minY, width: 0, height: 0))
+        //위와같이 설정하는 이유는 DropDownView를 특정 프레임 하단에 위치시킬 것이기 때문이다. 클릭하면 아래에 DropDown이 뜨게 하기 위해 특정 뷰를 기준으로 한다. 
         self.width = viewPositionReference.width
         self.offset = offset
         self.viewPositionRef = viewPositionReference
@@ -94,6 +95,7 @@ class UIDropDownView: UIView {
         dropDownTableView?.showsHorizontalScrollIndicator = false
         dropDownTableView?.backgroundColor = .white
         dropDownTableView?.separatorStyle = .none
+        //dropDownTableView 자체에 대한 dataSource와 delegate는 self에서 구현합니다. 구현한 메소드 내에서 UIDropDownViewDataSource/Delegate로 처리를 넘길 것임.
         dropDownTableView?.delegate = self
         dropDownTableView?.dataSource = self
         dropDownTableView?.allowsSelection = true
@@ -102,115 +104,22 @@ class UIDropDownView: UIView {
         self.addSubview(dropDownTableView!)
     }
     
-    //DropDown 메뉴 보여주기
+    ///DropDown 메뉴 보여주기
     func showDropDown(height: CGFloat){
-        if isDropDownPresent{
-            self.hideDropDown()
-        }else{
-            isDropDownPresent = true
-            self.frame = CGRect(x: (self.viewPositionRef?.minX)!, y: (self.viewPositionRef?.maxY)! + self.offset, width: width, height: 0)
-            self.dropDownTableView?.frame = CGRect(x: 0, y: 0, width: width, height: 0)
-            self.dropDownTableView?.reloadData()
-            
-            UIView.animate(withDuration: 0.7, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0.05, options: .curveLinear
-                , animations: {
-                self.frame.size = CGSize(width: self.width, height: height)
-                self.dropDownTableView?.frame.size = CGSize(width: self.width, height: height)
-            })
-        }
         
-    }
-}
-
-
-
-class MakeDropDown: UIView{
-    
-    //MARK: Variables
-    // The DropDownIdentifier is to differentiate if you are using multiple Xibs
-    var makeDropDownIdentifier: String = "DROP_DOWN"
-    // Reuse Identifier of your custom cell
-    var cellReusableIdentifier: String = "DROP_DOWN_CELL"
-    // Table View
-    var dropDownTableView: UITableView?
-    var width: CGFloat = 0
-    var offset:CGFloat = 0
-    var makeDropDownDataSourceProtocol: MakeDropDownDataSourceProtocol?
-    var nib: UINib?{
-        didSet{
-            dropDownTableView?.register(nib, forCellReuseIdentifier: self.cellReusableIdentifier)
-        }
-    }
-    // Other Variables
-    var viewPositionRef: CGRect?
-    var isDropDownPresent: Bool = false
-   
-    
-    //MARK: - DropDown Methods
-    
-    // Make Table View Programatically
-    
-    func setUpDropDown(viewPositionReference: CGRect,  offset: CGFloat){
-        self.addBorders()
-        self.addShadowToView()
-        self.frame = CGRect(x: viewPositionReference.minX, y: viewPositionReference.maxY + offset, width: 0, height: 0)
-        dropDownTableView = UITableView(frame: CGRect(x: self.frame.minX, y: self.frame.minY, width: 0, height: 0))
-        self.width = viewPositionReference.width
-        self.offset = offset
-        self.viewPositionRef = viewPositionReference
-        dropDownTableView?.showsVerticalScrollIndicator = false
-        dropDownTableView?.showsHorizontalScrollIndicator = false
-        dropDownTableView?.backgroundColor = .white
-        dropDownTableView?.separatorStyle = .none
-        dropDownTableView?.delegate = self
-        dropDownTableView?.dataSource = self
-        dropDownTableView?.allowsSelection = true
-        dropDownTableView?.isUserInteractionEnabled = true
-        dropDownTableView?.tableFooterView = UIView()
-        self.addSubview(dropDownTableView!)
-        
-    }
-    
-    // Shows Drop Down Menu
-    func showDropDown(height: CGFloat){
-        if isDropDownPresent{
-            self.hideDropDown()
-        }else{
-            isDropDownPresent = true
-            self.frame = CGRect(x: (self.viewPositionRef?.minX)!, y: (self.viewPositionRef?.maxY)! + self.offset, width: width, height: 0)
-            self.dropDownTableView?.frame = CGRect(x: 0, y: 0, width: width, height: 0)
-            self.dropDownTableView?.reloadData()
-            
-            UIView.animate(withDuration: 0.7, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0.05, options: .curveLinear
-                , animations: {
-                self.frame.size = CGSize(width: self.width, height: height)
-                self.dropDownTableView?.frame.size = CGSize(width: self.width, height: height)
-            })
-        }
-        
-    }
-    
-    // Use this method if you want change height again and again
-    // For eg in UISearchBar DropDownMenu
-    func reloadDropDown(height: CGFloat){
-        self.frame = CGRect(x: (self.viewPositionRef?.minX)!, y: (self.viewPositionRef?.maxY)!
-            + self.offset, width: width, height: 0)
+        isDropDownPresent = true
+        self.frame = CGRect(x: (self.viewPositionRef?.minX)!, y: (self.viewPositionRef?.maxY)! + self.offset, width: width, height: 0)
         self.dropDownTableView?.frame = CGRect(x: 0, y: 0, width: width, height: 0)
-        self.dropDownTableView?.reloadData()
+        self.dropDownTableView?.reloadSections(IndexSet(integer: 0), with: .none)
+        
         UIView.animate(withDuration: 0.7, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0.05, options: .curveLinear
             , animations: {
             self.frame.size = CGSize(width: self.width, height: height)
             self.dropDownTableView?.frame.size = CGSize(width: self.width, height: height)
-        })
+        })  //에니메이션으로 보여주는 부분
     }
     
-    //Sets Row Height of your Custom XIB
-    func setRowHeight(height: CGFloat){
-        self.dropDownTableView?.rowHeight = height
-        self.dropDownTableView?.estimatedRowHeight = height
-    }
-    
-    //Hides DropDownMenu
+    ///DropDown 메뉴 감추기
     func hideDropDown(){
         isDropDownPresent = false
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.3, options: .curveLinear
@@ -220,8 +129,25 @@ class MakeDropDown: UIView{
         })
     }
     
-    // Removes DropDown Menu
-    // Use it only if needed
+    ///높이를 계속 변경하기 위한 메소드. ex) UISearchBar의 DropDownMenu에서 쓰는 경우
+    func reloadDropDown(height: CGFloat){
+        self.frame = CGRect(x: (self.viewPositionRef?.minX)!, y: (self.viewPositionRef?.maxY)! + self.offset, width: width, height: 0)
+        self.dropDownTableView?.frame = CGRect(x: 0, y: 0, width: width, height: 0)
+        self.dropDownTableView?.reloadSections(IndexSet(integer: 0), with: .none)
+        UIView.animate(withDuration: 0.7, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0.05, options: .curveLinear
+            , animations: {
+            self.frame.size = CGSize(width: self.width, height: height)
+            self.dropDownTableView?.frame.size = CGSize(width: self.width, height: height)
+        })
+    }
+    
+    ///Custom XIB 파일의 높이를 설정하는 메소드(TableView의 각각의 row height 값)
+    func setRowHeight(height: CGFloat){
+        self.dropDownTableView?.rowHeight = height
+        self.dropDownTableView?.estimatedRowHeight = height
+    }
+    
+    ///DropDown을 제거하는 메소드. 필요할 때만 사용하세요.
     func removeDropDown(){
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.3, options: .curveLinear
             , animations: {
@@ -229,30 +155,29 @@ class MakeDropDown: UIView{
         }) { (_) in
             self.removeFromSuperview()
             self.dropDownTableView?.removeFromSuperview()
+            self.dropDownTableView?.dataSource = nil
+            self.dropDownTableView?.delegate = nil
         }
     }
-    
 }
 
-// MARK: - Table View Methods
-
-extension MakeDropDown: UITableViewDelegate, UITableViewDataSource{
-    
+//MARK: - UIDropDownView Extension About TableView Protocols
+///아래의 extension에서는 '내부 tableView의 데이터 구성 및 작동에 대한 부분'을 외부 프로토콜로 이관합니다.
+extension UIDropDownView: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return (makeDropDownDataSourceProtocol?.numberOfRows(makeDropDownIdentifier: self.makeDropDownIdentifier) ?? 0)
+        return (self.dataSource?.dropDownView(numberOfRowsInDropDownViewWithID: self.dropDownViewIdentifier) ?? 0)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell: UITableViewCell = (dropDownTableView?.dequeueReusableCell(withIdentifier: self.cellReusableIdentifier) ?? UITableViewCell())
-        makeDropDownDataSourceProtocol?.getDataToDropDown(cell: cell, indexPos: indexPath.row, makeDropDownIdentifier: self.makeDropDownIdentifier)
+        let cell: UITableViewCell = (dropDownTableView?.dequeueReusableCell(withIdentifier: self.dropDownViewCellReusableIdentifier, for: indexPath) ?? UITableViewCell())
+        self.dataSource?.dropDownView(dequeuedCell: cell, cellForRowAt: indexPath.row, dropDownViewIdentifier: self.dropDownViewIdentifier)
         
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        makeDropDownDataSourceProtocol?.selectItemInDropDown(indexPos: indexPath.row, makeDropDownIdentifier: self.makeDropDownIdentifier)
+        self.delegate?.dropDownView(didSelectedRowAt: indexPath.row, dropDownViewIdentifier: self.dropDownViewIdentifier)
     }
-    
 }
 
 //MARK: - UIView Extension
@@ -269,20 +194,3 @@ extension UIView{
         self.layer.shadowOpacity = 1
     }
 }
-
-
-
-//저장용.
-
-protocol MakeDropDownDataSourceProtocol{
-    func getDataToDropDown(cell: UITableViewCell, indexPos: Int, makeDropDownIdentifier: String)
-    func numberOfRows(makeDropDownIdentifier: String) -> Int
-    
-    //Optional Method for item selection
-    func selectItemInDropDown(indexPos: Int, makeDropDownIdentifier: String)
-}
-
-extension MakeDropDownDataSourceProtocol{
-    func selectItemInDropDown(indexPos: Int, makeDropDownIdentifier: String) {}
-}
-
