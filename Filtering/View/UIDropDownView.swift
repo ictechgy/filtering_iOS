@@ -39,7 +39,7 @@ import UIKit
     ///DropDownView의 특정 아이템 셀이 선택된 경우 작동할 메소드
     /// - parameter index: 아이템 셀의 인덱스 값
     /// - parameter identifier: DropDownView를 구분하는 고유 ID
-    @objc func dropDownView(didSelectedRowAt index: Int, dropDownViewIdentifier identifier: String)
+    @objc func dropDownView(didSelectRowAt index: Int, dropDownViewIdentifier identifier: String)
 }
 
 //MARK: - Class
@@ -176,7 +176,7 @@ extension UIDropDownView: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        self.delegate?.dropDownView(didSelectedRowAt: indexPath.row, dropDownViewIdentifier: self.dropDownViewIdentifier)
+        self.delegate?.dropDownView(didSelectRowAt: indexPath.row, dropDownViewIdentifier: self.dropDownViewIdentifier)
     }
 }
 

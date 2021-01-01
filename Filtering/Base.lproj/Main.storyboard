@@ -85,8 +85,9 @@
                         <outlet property="navItem" destination="DGj-bK-SgG" id="zhP-q4-Izp"/>
                         <outlet property="searchBar" destination="atC-HR-Yki" id="13Z-83-61O"/>
                         <outlet property="searchButton" destination="Oao-a9-4iR" id="H5t-uu-kSD"/>
+                        <outlet property="searchContainerStackView" destination="f8K-OG-fjC" id="QGO-tq-0AK"/>
                         <outlet property="searchModeLabel" destination="lJf-ne-ZqE" id="345-iV-mUC"/>
-                        <outlet property="searchModeStackView" destination="rPe-Tt-Xgi" id="Fcb-Zo-wBY"/>
+                        <outlet property="searchModeStackView" destination="rPe-Tt-Xgi" id="BRM-KG-QHA"/>
                         <outlet property="searchModeTapGestureRecognizer" destination="e0o-dR-tcZ" id="MVj-Kt-nBI"/>
                         <outlet property="showMaskAuthorizedList" destination="MJc-vK-Brq" id="SjH-kJ-mmK"/>
                     </connections>

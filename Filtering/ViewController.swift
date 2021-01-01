@@ -14,9 +14,10 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate, UISearchBar
     @IBOutlet weak var searchButton: UIButton!
     @IBOutlet weak var showMaskAuthorizedList: UIButton!
     
-    @IBOutlet weak var searchModeLabel: UILabel!
-    @IBOutlet weak var searchModeTapGestureRecognizer: UITapGestureRecognizer!
-    @IBOutlet weak var searchModeStackView: UIStackView!
+    @IBOutlet weak var searchModeLabel: UILabel!    //검색 모드를 나타내는 label
+    @IBOutlet weak var searchModeTapGestureRecognizer: UITapGestureRecognizer!  //검색 모드를 누르면 dropdown이 뜨게 할 tap 인식기
+    @IBOutlet weak var searchModeStackView: UIStackView!    //검색 모드 label과 icon을 포함하는 스택 뷰
+    @IBOutlet weak var searchContainerStackView: UIStackView!   //검색 모드 label, icon과 검색 창, 검색버튼을 포함하는 컨테이너 스택뷰
     
     var dropDownView: UIDropDownView = UIDropDownView()
     let dropDownViewIdentifier = "searchModeDropDownView"
@@ -45,10 +46,18 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate, UISearchBar
         setUpDropDownView() //뷰들의 위치를 기반으로 생성되기 때문에 이 메소드에서 호출합니다.
     }
     
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive event: UIEvent) -> Bool {
+        if dropDownView.frame.contains(gestureRecognizer.location(in: self.view)) {
+            
+        }
+    }
     
     @IBAction func tapOutsideView(_ sender: UITapGestureRecognizer){
-        self.view.endEditing(true) ///검색바 외부 클릭시 키보드 숨기기
-        dropDownView.hideDropDown() //외부 터치 시 DropDownView 숨기기
+        self.view.endEditing(true) //검색바 외부 클릭시 키보드 숨기기
+        if !dropDownView.frame.contains(sender.location(in: self.view)) && dropDownView.isDropDownPresent {
+            dropDownView.hideDropDown() //외부 터치 시 DropDownView 숨기기
+        }   //dropDownView가 펼쳐져 있을 때 외부를 누른 경우에만 숨기기가 작동하도록 함
+        //if문을 안쓰면 dropDownView가 이벤트를 받기 전 GestureRecognizer가 이벤트를 먼저 받아 테이블 뷰가 사라짐
     }
     
     ///검색바 키보드에서 search버튼 클릭 시
@@ -104,9 +113,11 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate, UISearchBar
         dropDownView.delegate = self
         
         //셋업
-        dropDownView.setUpDropDown(viewPositionReference: searchModeStackView.frame, offset: 2.0) //해당 뷰 아래에 생성
+        dropDownView.setUpDropDown(viewPositionReference: searchContainerStackView.frame, offset: 2.0) //해당 뷰 아래에 생성
+        dropDownView.width = searchModeStackView.frame.width
+        
         dropDownView.nib = UINib(nibName: "UIDropDownViewCell", bundle: nil)    //cell을 nib으로 올려놓고 테이블 뷰에 regist하는 과정
-        dropDownView.setRowHeight(height: searchModeLabel.frame.height)
+        dropDownView.setRowHeight(height: searchModeLabel.frame.height - 20)
         
         self.view.addSubview(dropDownView)  //추가는 했지만 아직 보이지는 않는다. 내부적으로 height가 0인 상태
     }
@@ -115,7 +126,7 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate, UISearchBar
         if self.dropDownView.isDropDownPresent {
             self.dropDownView.hideDropDown()
         }else {
-            self.dropDownView.showDropDown(height: searchModeLabel.frame.height * CGFloat(searchModes.count))
+            self.dropDownView.showDropDown(height: (searchModeLabel.frame.height - 25) * CGFloat(searchModes.count))
         }
     }
 }
@@ -132,7 +143,7 @@ extension ViewController: UIDropDownViewDataSource, UIDropDownViewDelegate {
         cell.searchModeImageView.image = searchModes[index].modeImage
     }
     
-    func dropDownView(didSelectedRowAt index: Int, dropDownViewIdentifier identifier: String) {
+    func dropDownView(didSelectRowAt index: Int, dropDownViewIdentifier identifier: String) {
         self.searchModeLabel.text = searchModes[index].modeName
         self.dropDownView.hideDropDown()
     }
