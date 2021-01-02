@@ -83,6 +83,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="navItem" destination="DGj-bK-SgG" id="zhP-q4-Izp"/>
+                        <outlet property="outsideTapGestureRecognizer" destination="CHO-fr-P18" id="JXx-gE-Dw3"/>
                         <outlet property="searchBar" destination="atC-HR-Yki" id="13Z-83-61O"/>
                         <outlet property="searchButton" destination="Oao-a9-4iR" id="H5t-uu-kSD"/>
                         <outlet property="searchContainerStackView" destination="f8K-OG-fjC" id="QGO-tq-0AK"/>
@@ -93,12 +94,8 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
-                <tapGestureRecognizer id="CHO-fr-P18" userLabel="Background Gesture Recognizer">
-                    <connections>
-                        <action selector="tapOutsideView:" destination="BYZ-38-t0r" id="mQL-6Y-NBP"/>
-                    </connections>
-                </tapGestureRecognizer>
                 <tapGestureRecognizer id="e0o-dR-tcZ" userLabel="SearchMode Gesture Recognizer"/>
+                <tapGestureRecognizer id="CHO-fr-P18" userLabel="Background Gesture Recognizer"/>
             </objects>
             <point key="canvasLocation" x="2713.04347826087" y="-60.267857142857139"/>
         </scene>

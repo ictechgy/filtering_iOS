@@ -13,6 +13,7 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate, UISearchBar
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var searchButton: UIButton!
     @IBOutlet weak var showMaskAuthorizedList: UIButton!
+    @IBOutlet weak var outsideTapGestureRecognizer: UITapGestureRecognizer!
     
     @IBOutlet weak var searchModeLabel: UILabel!    //검색 모드를 나타내는 label
     @IBOutlet weak var searchModeTapGestureRecognizer: UITapGestureRecognizer!  //검색 모드를 누르면 dropdown이 뜨게 할 tap 인식기
@@ -32,7 +33,11 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate, UISearchBar
         // Do any additional setup after loading the view.
         navItem.title = "filtering"
         searchBar.delegate = self
-        searchModeTapGestureRecognizer.addTarget(self, action: #selector(searchModeStackViewTapped(_:)))
+        
+        //delegate방식으로 GestureRecognizer 처리 일원화
+        outsideTapGestureRecognizer.delegate = self
+        searchModeTapGestureRecognizer.delegate = self
+        outsideTapGestureRecognizer.cancelsTouchesInView = false //하단 뷰들이 터치 이벤트를 받을 수 있도록 처리
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -46,18 +51,37 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate, UISearchBar
         setUpDropDownView() //뷰들의 위치를 기반으로 생성되기 때문에 이 메소드에서 호출합니다.
     }
     
+    ///제스쳐 인식기에 대한 처리 일원화
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive event: UIEvent) -> Bool {
-        if dropDownView.frame.contains(gestureRecognizer.location(in: self.view)) {
-            
+        let location = gestureRecognizer.location(in: self.view)
+        
+        print(gestureRecognizer)
+        switch gestureRecognizer {
+        case outsideTapGestureRecognizer:
+            if !searchBar.frame.contains(location) {    //searchBar 외부 누른 경우 키보드 가리기
+                self.view.endEditing(true)
+            }
+            if dropDownView.isDropDownPresent && !dropDownView.frame.contains(location) {
+                dropDownView.hideDropDown() //외부 터치 시 DropDownView 숨기기
+            }   //dropDownView가 펼쳐져 있을 때 외부를 누른 경우에만 숨기기가 작동하도록 함
+            //frame 외부 조건을 걸지 않으면 dropDownView가 이벤트를 받기 전 GestureRecognizer가 이벤트를 먼저 받아 테이블 뷰가 사라짐
+        case searchModeTapGestureRecognizer:
+            if self.dropDownView.isDropDownPresent {
+                self.dropDownView.hideDropDown()
+            }else {
+                self.dropDownView.showDropDown(height: (searchModeLabel.frame.height - 25) * CGFloat(searchModes.count))
+            }
+        default:
+            return true
         }
+        
+        return true
+        //이 메소드에서 true를 반환하면 gestureRecognizerShoudBegin이 호출 되고 false 반환 시 호출되지 않음
+        //이 메소드는 touch down하면 호출되고 gestureRecognizerShoudBegin은 touch up하면 호출된다.
     }
-    
-    @IBAction func tapOutsideView(_ sender: UITapGestureRecognizer){
-        self.view.endEditing(true) //검색바 외부 클릭시 키보드 숨기기
-        if !dropDownView.frame.contains(sender.location(in: self.view)) && dropDownView.isDropDownPresent {
-            dropDownView.hideDropDown() //외부 터치 시 DropDownView 숨기기
-        }   //dropDownView가 펼쳐져 있을 때 외부를 누른 경우에만 숨기기가 작동하도록 함
-        //if문을 안쓰면 dropDownView가 이벤트를 받기 전 GestureRecognizer가 이벤트를 먼저 받아 테이블 뷰가 사라짐
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        print(gestureRecognizer)
+        return false
     }
     
     ///검색바 키보드에서 search버튼 클릭 시
@@ -122,13 +146,6 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate, UISearchBar
         self.view.addSubview(dropDownView)  //추가는 했지만 아직 보이지는 않는다. 내부적으로 height가 0인 상태
     }
     
-    @objc func searchModeStackViewTapped(_ sender: UITapGestureRecognizer) {
-        if self.dropDownView.isDropDownPresent {
-            self.dropDownView.hideDropDown()
-        }else {
-            self.dropDownView.showDropDown(height: (searchModeLabel.frame.height - 25) * CGFloat(searchModes.count))
-        }
-    }
 }
 
 ///DropDownView를 구현하기 위한 프로토콜 채택
