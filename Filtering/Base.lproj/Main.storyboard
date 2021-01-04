@@ -34,9 +34,6 @@
                                             </imageView>
                                         </subviews>
                                         <gestureRecognizers/>
-                                        <connections>
-                                            <outletCollection property="gestureRecognizers" destination="e0o-dR-tcZ" appends="YES" id="WLY-jT-ZAe"/>
-                                        </connections>
                                     </stackView>
                                     <searchBar contentMode="redraw" searchBarStyle="minimal" placeholder="제품명 입력" translatesAutoresizingMaskIntoConstraints="NO" id="atC-HR-Yki">
                                         <rect key="frame" x="65" y="0.0" width="270" height="56"/>
@@ -89,12 +86,10 @@
                         <outlet property="searchContainerStackView" destination="f8K-OG-fjC" id="QGO-tq-0AK"/>
                         <outlet property="searchModeLabel" destination="lJf-ne-ZqE" id="345-iV-mUC"/>
                         <outlet property="searchModeStackView" destination="rPe-Tt-Xgi" id="BRM-KG-QHA"/>
-                        <outlet property="searchModeTapGestureRecognizer" destination="e0o-dR-tcZ" id="MVj-Kt-nBI"/>
                         <outlet property="showMaskAuthorizedList" destination="MJc-vK-Brq" id="SjH-kJ-mmK"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
-                <tapGestureRecognizer id="e0o-dR-tcZ" userLabel="SearchMode Gesture Recognizer"/>
                 <tapGestureRecognizer id="CHO-fr-P18" userLabel="Background Gesture Recognizer"/>
             </objects>
             <point key="canvasLocation" x="2713.04347826087" y="-60.267857142857139"/>
