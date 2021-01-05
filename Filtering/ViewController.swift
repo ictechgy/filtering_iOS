@@ -19,15 +19,15 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate, UISearchBar
     @IBOutlet weak var searchModeStackView: UIStackView!    //검색 모드 label과 icon을 포함하는 스택 뷰
     @IBOutlet weak var searchContainerStackView: UIStackView!   //검색 모드 label, icon과 검색 창, 검색버튼을 포함하는 컨테이너 스택뷰
     
-    //아래의 Position 프로퍼티들은 각 뷰들의 viewController root view에서의 절대적 위치를 얻기 위한 것들이다. (특정 뷰의 frame값을 단순히 얻어오는 경유 superView에서의 위치만을 얻어옴
+    //아래의 Position 프로퍼티들은 각 뷰들의 viewController root view에서의 절대적 위치를 얻기 위한 것들이다. (특정 뷰의 frame값을 단순히 얻어오는 경유 superView에서의 위치만을 얻어옴 -> frame이 아닌 bounds 프로퍼티 써야함
     lazy var searchModeStackViewPosition: CGRect = {
-        return self.searchModeStackView.convert(self.searchModeStackView.frame, from: self.view)
+        return self.searchModeStackView.convert(self.searchModeStackView.bounds, to: nil)   //nil로 두면 알아서 윈도우 기준으로 convert
     }()
     lazy var searchBarPosition: CGRect = {
-        return self.searchBar.convert(searchBar.frame, from: self.view)
+        return self.searchBar.convert(searchBar.bounds, to: nil)
     }()
     lazy var dropDownViewPosition: CGRect = {
-        return self.dropDownView.convert(dropDownView.frame, from: self.view)
+        return self.dropDownView.convert(dropDownView.bounds, to: nil)
     }()
     
     var dropDownView: UIDropDownView = UIDropDownView()
@@ -68,47 +68,23 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate, UISearchBar
      
      */
     
-    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        //gestureRecognizer(_, shoudReceive:)에서는 gestureRecognizer.location 값이 (0.0)으로만 나와서 이 메소드로 변경. 우선 receive를 해야 좌표값이 받아지는건가
-        //gestureRecognizer(_, shoudReceive:) 메소드에서 true를 반환하면 gestureRecognizerShoudBegin이 호출 되고 false 반환 시 호출되지 않음
-        //gestureRecognizer(_, shoudReceive:) 메소드는 touch down하면 호출되고 gestureRecognizerShoudBegin은 touch up하면 호출된다.
-        
-        print(gestureRecognizer.location(in: self.view))
-        return true
-    }
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
-        print("touch")
-        print(gestureRecognizer.location(in: self.view))
-        print(touch.location(in: self.view))
-        return true
-    }
-    
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive event: UIEvent) -> Bool {
-        let location = gestureRecognizer.location(in: gestureRecognizer.view)
-        
-        print(location)
-        print(dropDownView.frame)
-        print(searchModeStackView.frame)
+        let location = touch.location(in: self.view)
         
         //기존 2개의 GestureRecognizer를 하나로 합침
-        if searchBar.isFocused && !searchBar.frame.contains(location) {    //searchBar 외부 누른 경우 키보드 가리기
+        if searchBar.isFirstResponder && !searchBarPosition.contains(location) {    //searchBar 외부 누른 경우 키보드 가리기
             searchBar.endEditing(true)
         }
         
-        if self.dropDownView.isDropDownPresent && !self.dropDownView.frame.contains(location) {    //드롭다운이 열려있는 상태에서는 어딜 누르든 드롭다운이 닫히게 만든다. dropDownView의 특정 row아이템을 선택하는 경우 제외 -> 해당 경우는 별도로 처리할 것
+        if self.dropDownView.isDropDownPresent && !self.dropDownViewPosition.contains(location) {   //드롭다운이 열려있는 상태에서는 어딜 누르든 드롭다운이 닫히게 만든다. dropDownView의 특정 row아이템을 선택하는 경우 제외 -> 해당 경우는 별도로 처리할 것
             self.dropDownView.hideDropDown()
-            print("가리기")
-            //dropDwonView frame 외부 조건을 걸지 않으면 dropDownView가 이벤트를 받기 전 GestureRecognizer가 이벤트를 먼저 받아 테이블 뷰가 사라짐 -> view가 이벤트 받는 것이 begin 되었어도 cancel되기 때문 (responder chain 과정 상)
-        } else if self.searchModeStackView.frame.contains(location) {    //드롭다운이 열려있지 않을 때 해당 stackView 부분 누르면 열리도록 함
-            print("보이기")
+            //dropDwonView frame 외부 조건(두번째 조건)을 걸지 않으면 dropDownView 열린 상태에서 아이템 클릭 시 dropDownView가 이벤트를 받기 전 GestureRecognizer가 이벤트를 먼저 받아 테이블 뷰가 사라짐 -> view가 이벤트 받는 것이 begin 되었어도 cancel되기 때문 (responder chain 과정 상)
+        } else if self.searchModeStackViewPosition.contains(location) { //드롭다운이 열려있지 않을 때 해당 stackView 부분 누르면 열리도록 함
             self.dropDownView.showDropDown(height: (searchModeLabel.frame.height - 25) * CGFloat(searchModes.count))
         }
         
-        
-        
-        return true    //이후 메소드 호출 필요성 없음
+        return false    //이후 메소드 호출 필요성 없음
     }
-    
     
     ///검색바 키보드에서 search버튼 클릭 시
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
