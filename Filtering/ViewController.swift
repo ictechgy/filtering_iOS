@@ -33,10 +33,11 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate, UISearchBar
     var dropDownView: UIDropDownView = UIDropDownView()
     let dropDownViewIdentifier = "searchModeDropDownView"
     let dropDownViewCellIdentifier = "searchModeDropDownViewCell"
-    let searchModes: [SearchModeItem] = [SearchModeItem(modeIdentifier: "item_name", modeName: "제품명", modeImage: UIImage(systemName: "doc.text.magnifyingglass")), SearchModeItem(modeIdentifier: "entp_name", modeName: "업체명", modeImage: UIImage(systemName: "building"))]
+    let searchModes: [SearchModeItem] = [SearchModeItem(modeIdentifier: .itemName, modeName: "제품명", modeImage: UIImage(systemName: "doc.text.magnifyingglass")), SearchModeItem(modeIdentifier: .entpName, modeName: "업체명", modeImage: UIImage(systemName: "building"))]
     
     let segueToSearchResultIdentifier: String = "segueToSearchResult"
     
+    var currentSearchMode : SearchMode = .itemName
         
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -117,6 +118,7 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate, UISearchBar
                 return
             }
             nextViewController.searchContent = searchBar.text
+            nextViewController.searchMode = currentSearchMode
             
         //허가받은 목록 버튼 누른 경우
         case showMaskAuthorizedList:
@@ -164,6 +166,9 @@ extension ViewController: UIDropDownViewDataSource, UIDropDownViewDelegate {
     
     func dropDownView(didSelectRowAt index: Int, dropDownViewIdentifier identifier: String) {
         self.searchModeLabel.text = searchModes[index].modeName
+        self.searchBar.placeholder = searchModes[index].modeName + " 입력"
+        self.currentSearchMode = searchModes[index].modeIdentifier
+        
         self.dropDownView.hideDropDown()
     }
 }

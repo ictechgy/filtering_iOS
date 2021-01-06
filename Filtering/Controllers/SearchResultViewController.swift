@@ -11,6 +11,7 @@ class SearchResultViewController: UIViewController, UITableViewDelegate, UITable
     
     //ViewController에서 입력한 검색 내용
     var searchContent: String?
+    var searchMode: SearchMode = .itemName
     private let cellIdentifier: String = "resultItemCell"
     
     @IBOutlet weak var loadingIndicator: UIActivityIndicatorView!
@@ -183,7 +184,7 @@ class SearchResultViewController: UIViewController, UITableViewDelegate, UITable
         
         //segue를 통해 세팅된 searchContent에 맞는 값을 가져오기
         loadingIndicator.startAnimating()
-        networkHandler.getContents(itemName: searchContent, pageNum: numberOfPage, numOfRows: numberOfRowsPerPage) { result in
+        networkHandler.getContents(searchMode: searchMode, searchContent: searchContent, pageNum: numberOfPage, numOfRows: numberOfRowsPerPage) { result in
             switch result {
             case .success(let data):
                 let parser: ItemXMLParser = ItemXMLParser.shared

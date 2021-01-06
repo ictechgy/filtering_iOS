@@ -45,22 +45,31 @@ class NetworkHandler {
     }
     
     ///사용자가 검색한 값을 기반으로 서버로부터 데이터를 가져옵니다.
-    func getContents(itemName nameOfItem: String, pageNum numberOfPage: Int, numOfRows numberOfRowsPerPage: Int, resultHandler: @escaping (Result<Data, NetworkErrorType>) -> Void) {
+    func getContents(searchMode: SearchMode, searchContent: String, pageNum numberOfPage: Int, numOfRows numberOfRowsPerPage: Int, resultHandler: @escaping (Result<Data, NetworkErrorType>) -> Void) {
+        
+        var searchValue: String?
+        
+        switch searchMode {
+        case .itemName, .entpName:  //한글, 영어같은 값일 것이므로 인코딩 필요
+            searchValue = searchContent.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+        case .itemSeq, .classNo:    //숫자 값이므로 인코딩 필요 없음
+            searchValue = searchContent
+        }
         
         //서버와 통신
         var urlComponents = URLComponents(string: requestURL)
         let serviceKey = URLQueryItem(name: "serviceKey", value: apiKey)
-        let itemName = URLQueryItem(name: "item_name", value: nameOfItem.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed))
+        let content2Query = URLQueryItem(name: searchMode.rawValue, value: searchValue)
         let pageNo = URLQueryItem(name: "pageNo", value: "\(numberOfPage)")
         let numOfRows = URLQueryItem(name: "numOfRows", value: "\(numberOfRowsPerPage)")
         
-        guard ((urlComponents?.percentEncodedQueryItems = [serviceKey, itemName, pageNo, numOfRows]) != nil), let url = urlComponents?.url else {
+        guard ((urlComponents?.percentEncodedQueryItems = [serviceKey, content2Query, pageNo, numOfRows]) != nil), let url = urlComponents?.url else {
             return resultHandler(.failure(.componentError("URL 컴포넌트 변환 중 오류 발생")))
         }
         //이부분에서 조금 고생했다.
         //URLComponents.url을 하면 자동으로 내부 QueryItem들이 PercentEncoding이 된다.
         //apiKey는 이미 인코딩 되어있는데 또 인코딩해서 자꾸 오류가 발생했다.
-        //그래서 전부 percentEncodedQueryItems라고 해서 이미 인코딩 된 것으로 넣어줬고, nameOfItem만 별도로 미리 따로 인코딩 해줬다.
+        //그래서 전부 percentEncodedQueryItems라고 해서 이미 인코딩 된 것으로 넣어줬고, 인코딩이 필요한 프로퍼티들만 별도로 미리 따로 인코딩 해줬다.
         
         isCanceled = false
         let urlSessionTask: URLSessionTask = urlSession.dataTask(with: url) { (data, response, error) in
