@@ -103,6 +103,41 @@ class NetworkHandler {
         task = nil
     }
     
+    static func getMaskData() {
+        guard let documentURL: URL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
+            return
+        }
+        let destinationFileURL: URL = documentURL.appendingPathComponent("maskData.xlsx")
+        
+        guard let fileURL = URL(string: "https://nedrug.mfds.go.kr/pbp/CCBCC01/getExcel") else {
+            return
+        }
+        var urlRequest = URLRequest(url: fileURL)
+        urlRequest.httpMethod = "POST"
+        urlRequest.allHTTPHeaderFields = ["Cache-Control":"max-age=0", "Connection":"keep-alive", "Content-Length":"117", "Content-Type":"application/x-www-form-urlencoded"]
+        
+        let urlSession = URLSession.shared
+        let task = urlSession.downloadTask(with: urlRequest) { tempUrl, response, error in
+            
+            guard let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode == 200, let tempUrl = tempUrl else {
+                return
+            }
+            
+            do {
+                if FileManager.default.fileExists(atPath: destinationFileURL.absoluteString) {
+                    try FileManager.default.replaceItemAt(destinationFileURL, withItemAt: tempUrl)
+                }else {
+                    try FileManager.default.copyItem(at: tempUrl, to: destinationFileURL)
+                }
+            } catch {
+                
+            }
+            
+        }
+        
+        task.resume()
+    }
+    
     enum NetworkErrorType: Error {
                 
         case applicationError(Int = 1, String = "서비스 제공 상태가 원활하지 않습니다.")
