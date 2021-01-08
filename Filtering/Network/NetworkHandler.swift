@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftSoup
 
 class NetworkHandler {
     
@@ -81,6 +82,7 @@ class NetworkHandler {
                     error = .canceled
                     self.isCanceled = false     //초기값으로
                 }else {
+                    //TODO: (response as? HTTPURLResponse)?.statusCode를 얻어 각각의 오류에 맞는 처리 필요
                     error = .fetchError("데이터를 받아오지 못했습니다.")
                 }
                 return DispatchQueue.main.async {
@@ -103,34 +105,54 @@ class NetworkHandler {
         task = nil
     }
     
-    static func getMaskData() {
+    ///허가된 마스크 목록 개수를 스크래핑 해오는 메소드
+    static func scrapingNumberOfMasks(resultHandler: @escaping (Result<Int, Error>) -> Void){
+        guard let scrapURL: URL = URL(string: "https://nedrug.mfds.go.kr/pbp/CCBCC01/getList?totalPages=439&page=1&limit=10&sort=&sortOrder=&searchYn=&itemSeq=&itemName=&maskModelName=&entpName=&grade=&classNo=#none") else {
+            return
+        }
+        do {
+            let content = try String(contentsOf: scrapURL)
+            let doc: Document = try SwiftSoup.parse(content)
+            
+        } catch {
+            
+        }
+    }
+    
+    ///허가된 마스크 목록을 엑셀파일로 받아오는 메소드
+    static func getMaskData(resultHandler: @escaping (Result<URL, MaskDataError>) -> Void) {
         guard let documentURL: URL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
-            return
+            return resultHandler(.failure(.documentURLError))
         }
-        let destinationFileURL: URL = documentURL.appendingPathComponent("maskData.xlsx")
+        let localFileURL: URL = documentURL.appendingPathComponent("maskData.xlsx") //local에 저장될 파일 경로 + 파일명
         
-        guard let fileURL = URL(string: "https://nedrug.mfds.go.kr/pbp/CCBCC01/getExcel") else {
-            return
+        guard let remoteFileURL = URL(string: "https://nedrug.mfds.go.kr/pbp/CCBCC01/getExcel") else {
+            return resultHandler(.failure(.remoteFileURLError))
         }
-        var urlRequest = URLRequest(url: fileURL)
+        var urlRequest = URLRequest(url: remoteFileURL)
         urlRequest.httpMethod = "POST"
         urlRequest.allHTTPHeaderFields = ["Cache-Control":"max-age=0", "Connection":"keep-alive", "Content-Length":"117", "Content-Type":"application/x-www-form-urlencoded"]
         
         let urlSession = URLSession.shared
-        let task = urlSession.downloadTask(with: urlRequest) { tempUrl, response, error in
+        let task = urlSession.downloadTask(with: urlRequest) { fetchedFileTempUrl, response, error in   //Async
             
-            guard let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode == 200, let tempUrl = tempUrl else {
-                return
+            guard let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode == 200, let fetchedFileTempUrl = fetchedFileTempUrl else {
+                return DispatchQueue.main.async {
+                    resultHandler(.failure(.fetchError))
+                }
             }
             
             do {
-                if FileManager.default.fileExists(atPath: destinationFileURL.absoluteString) {
-                    try FileManager.default.replaceItemAt(destinationFileURL, withItemAt: tempUrl)
+                if FileManager.default.fileExists(atPath: localFileURL.absoluteString) {
+                    try FileManager.default.replaceItemAt(localFileURL, withItemAt: fetchedFileTempUrl)
                 }else {
-                    try FileManager.default.copyItem(at: tempUrl, to: destinationFileURL)
+                    try FileManager.default.copyItem(at: fetchedFileTempUrl, to: localFileURL)
                 }
+                return resultHandler(.success(localFileURL))
             } catch {
-                
+                return DispatchQueue.main.async {
+                    resultHandler(.failure(.move2LocalError))
+                }
             }
             
         }
@@ -158,5 +180,12 @@ class NetworkHandler {
         case fetchError(String)
         case canceled
         case unknownError
+    }
+    
+    enum MaskDataError: String, Error {
+        case documentURLError = "저장경로 접근 중 오류 발생"
+        case remoteFileURLError = "원격지 URL 오류"
+        case fetchError = "파일을 받아오지 못했습니다."
+        case move2LocalError = "파일을 저장하던 중 오류 발생"
     }
 }
