@@ -472,10 +472,10 @@
             </objects>
             <point key="canvasLocation" x="590" y="-60"/>
         </scene>
-        <!--View Controller-->
+        <!--Mask Authorized List View Controller-->
         <scene sceneID="Kna-i5-dH0">
             <objects>
-                <viewController id="ZWY-kH-5pK" sceneMemberID="viewController">
+                <viewController id="ZWY-kH-5pK" customClass="MaskAuthorizedListViewController" customModule="Filtering" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="GhF-nr-3Sx">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

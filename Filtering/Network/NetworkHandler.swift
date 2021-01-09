@@ -107,13 +107,26 @@ class NetworkHandler {
     
     ///허가된 마스크 목록 개수를 스크래핑 해오는 메소드
     static func scrapingNumberOfMasks(resultHandler: @escaping (Result<Int, Error>) -> Void){
+        //GCD or OperationQueue?
+        
+        
         guard let scrapURL: URL = URL(string: "https://nedrug.mfds.go.kr/pbp/CCBCC01/getList?totalPages=439&page=1&limit=10&sort=&sortOrder=&searchYn=&itemSeq=&itemName=&maskModelName=&entpName=&grade=&classNo=#none") else {
             return
         }
         do {
             let content = try String(contentsOf: scrapURL)
             let doc: Document = try SwiftSoup.parse(content)
-            
+            let divs: Elements = try doc.select("div.board_count")
+            guard let div = divs.first() else {
+                throw NSError()
+            }
+            let spans: Elements = try div.select("span[title]")
+            guard let span = spans.first() else {
+                throw NSError()
+            }
+            let numberOfMasksText: String = try span.text()
+            let numberOfMasks = Int(numberOfMasksText.trimmingCharacters(in: ["총", "건", " "]).replacingOccurrences(of: ",", with: ""))
+            print(numberOfMasks)
         } catch {
             
         }
