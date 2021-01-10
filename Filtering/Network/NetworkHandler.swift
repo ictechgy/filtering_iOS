@@ -108,27 +108,34 @@ class NetworkHandler {
     ///허가된 마스크 목록 개수를 스크래핑 해오는 메소드
     static func scrapingNumberOfMasks(resultHandler: @escaping (Result<Int, Error>) -> Void){
         //GCD or OperationQueue?
-        
-        
-        guard let scrapURL: URL = URL(string: "https://nedrug.mfds.go.kr/pbp/CCBCC01/getList?totalPages=439&page=1&limit=10&sort=&sortOrder=&searchYn=&itemSeq=&itemName=&maskModelName=&entpName=&grade=&classNo=#none") else {
-            return
-        }
-        do {
-            let content = try String(contentsOf: scrapURL)
-            let doc: Document = try SwiftSoup.parse(content)
-            let divs: Elements = try doc.select("div.board_count")
-            guard let div = divs.first() else {
-                throw NSError()
+        DispatchQueue.global().async {
+            guard let scrapURL: URL = URL(string: "https://nedrug.mfds.go.kr/pbp/CCBCC01/getList?totalPages=439&page=1&limit=10&sort=&sortOrder=&searchYn=&itemSeq=&itemName=&maskModelName=&entpName=&grade=&classNo=#none") else {
+                return resultHandler(.failure(ScrappingErrors.urlError as Error))
             }
-            let spans: Elements = try div.select("span[title]")
-            guard let span = spans.first() else {
-                throw NSError()
+            do {
+                let content = try String(contentsOf: scrapURL)
+                let doc: Document = try SwiftSoup.parse(content)
+                let divs: Elements = try doc.select("div.board_count")
+                guard let div = divs.first() else {
+                    throw ScrappingErrors.parsingError
+                }
+                let spans: Elements = try div.select("span[title]")
+                guard let span = spans.first() else {
+                    throw ScrappingErrors.parsingError
+                }
+                let numberOfMasksText: String = try span.text()
+                let numberOfMasks = Int(numberOfMasksText.trimmingCharacters(in: ["총", "건", " "]).replacingOccurrences(of: ",", with: ""))
+                guard let number = numberOfMasks else {
+                    throw ScrappingErrors.managementError
+                }
+                DispatchQueue.main.async {
+                    resultHandler(.success(number))
+                }
+            } catch {
+                DispatchQueue.main.async {
+                    resultHandler(.failure(error))
+                }
             }
-            let numberOfMasksText: String = try span.text()
-            let numberOfMasks = Int(numberOfMasksText.trimmingCharacters(in: ["총", "건", " "]).replacingOccurrences(of: ",", with: ""))
-            print(numberOfMasks)
-        } catch {
-            
         }
     }
     
@@ -200,5 +207,11 @@ class NetworkHandler {
         case remoteFileURLError = "원격지 URL 오류"
         case fetchError = "파일을 받아오지 못했습니다."
         case move2LocalError = "파일을 저장하던 중 오류 발생"
+    }
+    
+    enum ScrappingErrors: String, Error {
+        case urlError = "통신 URL상의 오류"
+        case parsingError = "파싱 오류"
+        case managementError = "값 변환 상의 오류"
     }
 }
