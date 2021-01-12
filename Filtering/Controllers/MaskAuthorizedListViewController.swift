@@ -6,13 +6,16 @@
 //
 
 import UIKit
-import CoreXLSX
 
 class MaskAuthorizedListViewController: UIViewController {
     
     let dateKey: String = "DownloadedDate"  //파일을 마지막으로 다운 받은 시각에 대한 UserDefaults 키 값
     let numberKey: String = "NumberOfAuthorizedMasks" //마스크 허가목록 개수에 대한 UserDefaults 키 값
 
+    lazy var parsingResultHandler: Result<[MaskItem], Error> = { [weak self] in
+        
+    }
+    //MARK:- LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -28,22 +31,23 @@ class MaskAuthorizedListViewController: UIViewController {
         
     }
     
+    //MARK:- Custom Methods
     func decide2Download() {
-        let lastDownloadedDateString = UserDefaults.standard.string(forKey: dateKey)    //이전에 파일을 다운로드 받은 일시 불러오기
-        let numberOfMasksLastFetched = UserDefaults.standard.integer(forKey: numberKey) //이전에 파악해둔 마스크 목록 개수 불러오기
-        
-        if lastDownloadedDateString == nil || numberOfMasksLastFetched == 0 {
+        guard let lastDownloadedDateString = UserDefaults.standard.string(forKey: dateKey) else {
             getNewMaskLists()
             return
-        }
+        }    //이전에 파일을 다운로드 받은 일시 불러오기
+        let numberOfMasksLastFetched = UserDefaults.standard.integer(forKey: numberKey) //이전에 파악해둔 마스크 목록 개수 불러오기
+        if numberOfMasksLastFetched == 0 { getNewMaskLists(); return }
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "YYYY-MM-dd hh:mm"
-        let lastDownloadedDate = dateFormatter.date(from: lastDownloadedDateString!)
-        
-        if lastDownloadedDate == nil { getNewMaskLists(); return }
-        
-        let timeInterval = lastDownloadedDate!.timeIntervalSinceNow //이전에 다운받은 일시와 현재 시각과의 시간 차(seconds)
+        guard let lastDownloadedDate = dateFormatter.date(from: lastDownloadedDateString) else {
+            getNewMaskLists()
+            return
+        }
+                
+        let timeInterval = lastDownloadedDate.timeIntervalSinceNow //이전에 다운받은 일시와 현재 시각과의 시간 차(seconds)
         if timeInterval > 43200 {   //12시간 넘었다면
             getNewMaskLists()
             return
@@ -56,7 +60,7 @@ class MaskAuthorizedListViewController: UIViewController {
                 if numberOfMasksLastFetched != number {
                     self.getNewMaskLists()
                 }else {
-                    
+                    //업데이트 할 필요가 없음
                 }
             case .failure(let error):
                 print(error)
@@ -69,23 +73,7 @@ class MaskAuthorizedListViewController: UIViewController {
         NetworkHandler.getMaskData { resultURL in
             switch resultURL {
             case .success(let url):
-                let filePath = url.absoluteString
-                guard let file: XLSXFile = XLSXFile(filepath: filePath) else{
-                    //do something
-                    return
-                }
-                
-                do {
-                    let path = try file.parseWorksheetPaths().first
-                    guard let worksheetPath = path else {
-                        throw NSError()
-                    }
-                    let worksheet = try file.parseWorksheet(at: worksheetPath)
-                    
-                } catch {
-                    
-                }
-                
+                MaskXLSXParser.parseXLSX(fileURL: url, resultHandler: parsingResultHandler)
             case .failure(let error):
                 print(error)
             }

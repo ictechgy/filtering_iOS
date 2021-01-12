@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -26,6 +26,7 @@
 		C4A233A4259DDC270088E42F /* UIDropDownViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C4A233A2259DDC270088E42F /* UIDropDownViewCell.xib */; };
 		C4A233A7259E02560088E42F /* SearchModeItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A233A6259E02560088E42F /* SearchModeItem.swift */; };
 		C4A233AD25A5C5670088E42F /* MaskItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A233AC25A5C5670088E42F /* MaskItem.swift */; };
+		C4A233BC25AB74DC0088E42F /* MaskXLSXParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A233BB25AB74DC0088E42F /* MaskXLSXParser.swift */; };
 		C4C98BF12583C19F0007B879 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4C98BF02583C19F0007B879 /* AppDelegate.swift */; };
 		C4C98BF32583C19F0007B879 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4C98BF22583C19F0007B879 /* SceneDelegate.swift */; };
 		C4C98BF52583C19F0007B879 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4C98BF42583C19F0007B879 /* ViewController.swift */; };
@@ -54,6 +55,7 @@
 		C4A233A2259DDC270088E42F /* UIDropDownViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UIDropDownViewCell.xib; sourceTree = "<group>"; };
 		C4A233A6259E02560088E42F /* SearchModeItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchModeItem.swift; sourceTree = "<group>"; };
 		C4A233AC25A5C5670088E42F /* MaskItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaskItem.swift; sourceTree = "<group>"; };
+		C4A233BB25AB74DC0088E42F /* MaskXLSXParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaskXLSXParser.swift; sourceTree = "<group>"; };
 		C4C98BED2583C19F0007B879 /* Filtering.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Filtering.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C4C98BF02583C19F0007B879 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C4C98BF22583C19F0007B879 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -93,6 +95,7 @@
 			children = (
 				C40B58692585174100237BD2 /* NetworkHandler.swift */,
 				C4133F2B2586532B00EEFB6A /* ItemXMLParser.swift */,
+				C4A233BB25AB74DC0088E42F /* MaskXLSXParser.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -177,7 +180,6 @@
 				E81DDDA5DADB9176736E3AA1 /* Pods-Filtering.debug.xcconfig */,
 				E2949BAA7B4E04545178113B /* Pods-Filtering.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -316,6 +318,7 @@
 				C4A2338F258F9AB70088E42F /* DataModel.xcdatamodeld in Sources */,
 				C40B58712585F95200237BD2 /* NonMedicalItem.swift in Sources */,
 				C40B586A2585174100237BD2 /* NetworkHandler.swift in Sources */,
+				C4A233BC25AB74DC0088E42F /* MaskXLSXParser.swift in Sources */,
 				C4A233952590B25E0088E42F /* QuasiDrug+CoreDataProperties.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

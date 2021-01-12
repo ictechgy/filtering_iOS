@@ -168,7 +168,9 @@ class NetworkHandler {
                 }else {
                     try FileManager.default.copyItem(at: fetchedFileTempUrl, to: localFileURL)
                 }
-                return resultHandler(.success(localFileURL))
+                return DispatchQueue.main.async {
+                    resultHandler(.success(localFileURL))
+                }
             } catch {
                 return DispatchQueue.main.async {
                     resultHandler(.failure(.move2LocalError))
