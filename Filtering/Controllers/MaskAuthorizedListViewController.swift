@@ -7,20 +7,58 @@
 
 import UIKit
 
-class MaskAuthorizedListViewController: UIViewController {
+class MaskAuthorizedListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
+    //MARK:- Variables
+    //MARK: IBOutlet Variables
+    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var searchBar: UISearchBar!
+    @IBOutlet weak var indicatorStackView: UIStackView!
+    @IBOutlet weak var indicatorView: UIActivityIndicatorView!
+    @IBOutlet weak var indicatorLabel: UILabel!
+    
+    //MARK: General Variables
     let dateKey: String = "DownloadedDate"  //파일을 마지막으로 다운 받은 시각에 대한 UserDefaults 키 값
     let numberKey: String = "NumberOfAuthorizedMasks" //마스크 허가목록 개수에 대한 UserDefaults 키 값
-
-    lazy var parsingResultHandler: Result<[MaskItem], Error> = { [weak self] in
-        
+    
+    let maskItemCellIdentifier: String = "maskItemCell"
+    var items: [MaskItem] = []
+    
+    lazy var userDefaults: UserDefaults = {
+        return UserDefaults.standard
+    }()
+    lazy var dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "YYYY-MM-dd hh:mm"
+        return formatter
+    }()
+    
+    lazy var parsingResultHandler: (Result<[MaskItem], Error>) -> Void = { [weak self] result in
+        switch result {
+        case .success(let maskItems):
+            guard let self = self else {
+                return
+            }
+            self.items = maskItems
+            self.tableView.reloadSections(IndexSet(0...0), with: .none)
+            self.indicatorStackView.isHidden = true
+            
+            let now = self.dateFormatter.string(from: Date())
+            self.userDefaults.setValue(now, forKey: self.dateKey)
+            self.userDefaults.setValue(self.items.count, forKey: self.numberKey)
+        case .failure(_):
+            <#code#>
+        }
     }
     //MARK:- LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        tableView.dataSource = self
+        tableView.delegate = self
     }
+    //viewDidLoad 단계에서 테이블 뷰와 검색 창은 hidden상태이며 indicator요소들만 보이는 상태입니다.
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -31,17 +69,21 @@ class MaskAuthorizedListViewController: UIViewController {
         
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        //TODO: 네트워크 통신 취소
+    }
+    
     //MARK:- Custom Methods
     func decide2Download() {
-        guard let lastDownloadedDateString = UserDefaults.standard.string(forKey: dateKey) else {
+        guard let lastDownloadedDateString = userDefaults.string(forKey: dateKey) else {
             getNewMaskLists()
             return
         }    //이전에 파일을 다운로드 받은 일시 불러오기
-        let numberOfMasksLastFetched = UserDefaults.standard.integer(forKey: numberKey) //이전에 파악해둔 마스크 목록 개수 불러오기
+        let numberOfMasksLastFetched = userDefaults.integer(forKey: numberKey) //이전에 파악해둔 마스크 목록 개수 불러오기
         if numberOfMasksLastFetched == 0 { getNewMaskLists(); return }
         
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "YYYY-MM-dd hh:mm"
         guard let lastDownloadedDate = dateFormatter.date(from: lastDownloadedDateString) else {
             getNewMaskLists()
             return
@@ -73,11 +115,30 @@ class MaskAuthorizedListViewController: UIViewController {
         NetworkHandler.getMaskData { resultURL in
             switch resultURL {
             case .success(let url):
-                MaskXLSXParser.parseXLSX(fileURL: url, resultHandler: parsingResultHandler)
+                MaskXLSXParser.parseXLSX(fileURL: url, resultHandler: self.parsingResultHandler)
             case .failure(let error):
                 print(error)
             }
         }
+    }
+    
+    //MARK:- TableView
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        items.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell: MaskItemTableViewCell = tableView.dequeueReusableCell(withIdentifier: maskItemCellIdentifier) as? MaskItemTableViewCell ?? MaskItemTableViewCell()
+        
+        let item = items[indexPath.row]
+        cell.itemName.text = item.itemName
+        cell.entpName.text = item.entpName
+        cell.maskTypeLable.text = item.classification.rawValue
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        <#code#>
     }
 
     /*
