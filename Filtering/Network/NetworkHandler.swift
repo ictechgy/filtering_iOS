@@ -161,7 +161,8 @@ class NetworkHandler {
                     resultHandler(.failure(.fetchError))
                 }
             }
-            
+            print(localFileURL.absoluteString)
+            print(fetchedFileTempUrl.absoluteString)
             do {
                 if FileManager.default.fileExists(atPath: localFileURL.absoluteString) {
                     try FileManager.default.replaceItemAt(localFileURL, withItemAt: fetchedFileTempUrl)

@@ -34,7 +34,7 @@ class MaskXLSXParser {
                     if i == 0 { continue }  //맨 윗줄은 칼럼명으로써 스킵해줌
                     
                     let cells = row.cells
-                    let mask = MaskItem(itemSeq: cells[0].value ?? "", itemName: cells[1].value ?? "", modelName: cells[2].value, entpName: cells[3].value ?? "", grade: MaskItem.Grade(rawValue: cells[4].value ?? nil) ?? .undefined, classification: MaskItem.MaskType(rawValue: cells[5].value ?? nil) ?? .undefined)
+                    let mask = MaskItem(itemSeq: cells[0].value ?? "", itemName: cells[1].value ?? "", modelName: cells[2].value, entpName: cells[3].value ?? "", grade: MaskItem.Grade(rawValue: cells[4].value ?? "") ?? .undefined, classification: MaskItem.MaskType(rawValue: cells[5].value ?? "") ?? .undefined)
                     
                     maskLists.append(mask)
                 }
