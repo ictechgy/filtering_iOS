@@ -15,6 +15,8 @@ class MaskXLSXParser {
         
         DispatchQueue.global().async {
             let filePath = fileURL.absoluteString
+            print(filePath)
+            print(FileManager.default.fileExists(atPath: filePath))
             guard let file: XLSXFile = XLSXFile(filepath: filePath) else{
                 //do something
                 return DispatchQueue.main.async {

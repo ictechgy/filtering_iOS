@@ -164,10 +164,18 @@ class NetworkHandler {
             print(localFileURL.absoluteString)
             print(fetchedFileTempUrl.absoluteString)
             do {
+                //아하! 파일에 접근할 때에는 URL의 absoluteString을 이용하거나 직접 경로를 입력하기보다 URL.path(또는 relative)를 쓰는게 정확하다.
+                //absoluteString을 쓰는 경우 접두어로 file://이 붙게 되어 제대로 인식이 안되는 것 같고.. 직접 String으로 path를 써주는 경우에는 실수하면 안될 듯.
                 if FileManager.default.fileExists(atPath: localFileURL.absoluteString) {
                     try FileManager.default.replaceItemAt(localFileURL, withItemAt: fetchedFileTempUrl)
                 }else {
                     try FileManager.default.copyItem(at: fetchedFileTempUrl, to: localFileURL)
+                    print(String(FileManager.default.fileExists(atPath: localFileURL.absoluteString)) + " in networkHandler")   //false
+                    print(FileManager.default.fileExists(atPath: "./Documents/maskData.xlsx"))  //false
+                    print(FileManager.default.fileExists(atPath: localFileURL.path))    //true
+                    print(localFileURL.path)    //제대로 된 경로 출력
+                    print(localFileURL.absoluteURL)     //'file://' 접두어가 붙는 경로 출력
+                    print(FileManager.default.currentDirectoryPath) //최상위 디렉토리 '/' 출력
                 }
                 return DispatchQueue.main.async {
                     resultHandler(.success(localFileURL))
