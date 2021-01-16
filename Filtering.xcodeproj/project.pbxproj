@@ -28,6 +28,7 @@
 		C4A233AD25A5C5670088E42F /* MaskItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A233AC25A5C5670088E42F /* MaskItem.swift */; };
 		C4A233BC25AB74DC0088E42F /* MaskXLSXParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A233BB25AB74DC0088E42F /* MaskXLSXParser.swift */; };
 		C4A233D125AEE0D40088E42F /* MaskItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A233D025AEE0D40088E42F /* MaskItemTableViewCell.swift */; };
+		C4A233E025B2002D0088E42F /* MaskAuthorizedListDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A233DF25B2002D0088E42F /* MaskAuthorizedListDetailViewController.swift */; };
 		C4C98BF12583C19F0007B879 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4C98BF02583C19F0007B879 /* AppDelegate.swift */; };
 		C4C98BF32583C19F0007B879 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4C98BF22583C19F0007B879 /* SceneDelegate.swift */; };
 		C4C98BF52583C19F0007B879 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4C98BF42583C19F0007B879 /* ViewController.swift */; };
@@ -58,6 +59,7 @@
 		C4A233AC25A5C5670088E42F /* MaskItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaskItem.swift; sourceTree = "<group>"; };
 		C4A233BB25AB74DC0088E42F /* MaskXLSXParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaskXLSXParser.swift; sourceTree = "<group>"; };
 		C4A233D025AEE0D40088E42F /* MaskItemTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaskItemTableViewCell.swift; sourceTree = "<group>"; };
+		C4A233DF25B2002D0088E42F /* MaskAuthorizedListDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaskAuthorizedListDetailViewController.swift; sourceTree = "<group>"; };
 		C4C98BED2583C19F0007B879 /* Filtering.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Filtering.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C4C98BF02583C19F0007B879 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C4C98BF22583C19F0007B879 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -120,6 +122,7 @@
 				C434E4BC2583D3B20029A313 /* SearchResultViewController.swift */,
 				C434E4C02583D3C60029A313 /* SearchResultDetailViewController.swift */,
 				C434E4C32583D3EE0029A313 /* MaskAuthorizedListViewController.swift */,
+				C4A233DF25B2002D0088E42F /* MaskAuthorizedListDetailViewController.swift */,
 				C434E4C62583D40E0029A313 /* FavoriteListViewController.swift */,
 				C434E4C92583D4200029A313 /* SettingsViewController.swift */,
 			);
@@ -319,6 +322,7 @@
 				C434E4BD2583D3B20029A313 /* SearchResultViewController.swift in Sources */,
 				C4C98BF32583C19F0007B879 /* SceneDelegate.swift in Sources */,
 				C434E4CA2583D4200029A313 /* SettingsViewController.swift in Sources */,
+				C4A233E025B2002D0088E42F /* MaskAuthorizedListDetailViewController.swift in Sources */,
 				C4A2338F258F9AB70088E42F /* DataModel.xcdatamodeld in Sources */,
 				C40B58712585F95200237BD2 /* NonMedicalItem.swift in Sources */,
 				C40B586A2585174100237BD2 /* NetworkHandler.swift in Sources */,

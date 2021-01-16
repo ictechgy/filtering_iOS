@@ -587,20 +587,66 @@
             </objects>
             <point key="canvasLocation" x="6328.985507246377" y="784.82142857142856"/>
         </scene>
-        <!--View Controller-->
+        <!--Mask Authorized List Detail View Controller-->
         <scene sceneID="ND7-AL-Zjs">
             <objects>
-                <viewController id="hjM-EF-NNf" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MaskAuthorizedListDetailViewController" id="hjM-EF-NNf" customClass="MaskAuthorizedListDetailViewController" customModule="Filtering" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="QeE-1d-pp2">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Jth-I4-Gnl">
+                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <wkWebViewConfiguration key="configuration">
+                                    <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
+                                    <wkPreferences key="preferences"/>
+                                </wkWebViewConfiguration>
+                            </wkWebView>
+                            <stackView hidden="YES" opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="Mfs-dJ-hYm">
+                                <rect key="frame" x="62" y="409.5" width="290" height="77.5"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="오류 발생" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jGT-vR-vHm">
+                                        <rect key="frame" x="0.0" y="0.0" width="290" height="26.5"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="22"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="웹페이지 로드 중 문제가 발생하였습니다. 다음에 다시 시도해주세요." textAlignment="center" lineBreakMode="characterWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0d7-Tk-qRU">
+                                        <rect key="frame" x="0.0" y="36.5" width="276.5" height="41"/>
+                                        <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="jGT-vR-vHm" secondAttribute="trailing" id="3h1-K2-y0c"/>
+                                    <constraint firstItem="jGT-vR-vHm" firstAttribute="leading" secondItem="Mfs-dJ-hYm" secondAttribute="leading" id="9YU-n2-117"/>
+                                    <constraint firstItem="jGT-vR-vHm" firstAttribute="top" secondItem="Mfs-dJ-hYm" secondAttribute="top" id="W7V-vg-gct"/>
+                                    <constraint firstItem="0d7-Tk-qRU" firstAttribute="top" secondItem="jGT-vR-vHm" secondAttribute="bottom" constant="10" id="owa-cL-iwn"/>
+                                </constraints>
+                            </stackView>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="bcD-VA-cbE"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="Mfs-dJ-hYm" firstAttribute="width" secondItem="Jth-I4-Gnl" secondAttribute="width" multiplier="0.7" id="AOl-Gj-gbE"/>
+                            <constraint firstItem="Mfs-dJ-hYm" firstAttribute="centerY" secondItem="QeE-1d-pp2" secondAttribute="centerY" id="B7x-dl-haK"/>
+                            <constraint firstItem="Mfs-dJ-hYm" firstAttribute="centerX" secondItem="QeE-1d-pp2" secondAttribute="centerX" id="D7K-GY-Mha"/>
+                            <constraint firstItem="Jth-I4-Gnl" firstAttribute="top" secondItem="bcD-VA-cbE" secondAttribute="top" id="X0T-Hk-6xa"/>
+                            <constraint firstItem="bcD-VA-cbE" firstAttribute="trailing" secondItem="Jth-I4-Gnl" secondAttribute="trailing" id="ufb-rS-wd7"/>
+                            <constraint firstItem="bcD-VA-cbE" firstAttribute="bottom" secondItem="Jth-I4-Gnl" secondAttribute="bottom" id="xcm-b2-34O"/>
+                            <constraint firstItem="Jth-I4-Gnl" firstAttribute="leading" secondItem="bcD-VA-cbE" secondAttribute="leading" id="zUi-ka-Tb7"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="errorNoticeStackView" destination="Mfs-dJ-hYm" id="zkd-eQ-yrJ"/>
+                        <outlet property="webView" destination="Jth-I4-Gnl" id="DQn-a2-HvM"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lem-oQ-o2b" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="7549" y="785"/>
+            <point key="canvasLocation" x="7137.68115942029" y="784.82142857142856"/>
         </scene>
         <!--Search-->
         <scene sceneID="HGC-Rk-cFc">

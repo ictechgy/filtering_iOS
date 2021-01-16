@@ -7,7 +7,7 @@
 
 import UIKit
 
-class MaskAuthorizedListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class MaskAuthorizedListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
     
     //MARK:- Variables
     //MARK: IBOutlet Variables
@@ -23,6 +23,7 @@ class MaskAuthorizedListViewController: UIViewController, UITableViewDelegate, U
     
     let maskItemCellIdentifier: String = "maskItemCell"
     var items: [MaskItem] = []
+    var filteredItems: [MaskItem] = []
     
     lazy var userDefaults: UserDefaults = {
         return UserDefaults.standard
@@ -40,10 +41,15 @@ class MaskAuthorizedListViewController: UIViewController, UITableViewDelegate, U
         }
         switch result {
         case .success(let maskItems):
+            self.tableView.isHidden = false
+            self.searchBar.isHidden = false
             
             self.items = maskItems
-            self.tableView.reloadSections(IndexSet(0...0), with: .none)
-            self.indicatorStackView.isHidden = true
+            self.searchBar(self.searchBar, textDidChange: self.searchBar.text ?? "")
+            //현재 테이블뷰는 사용자가 검색한 값이 없으면 그냥 items그대로, 검색한 값이 있으면 해당 검색한 값에 맞게 필터링해서 보여주려고 한다. 그래서 기본적으로 tableView에서 DataSource로 쓰는 배열을 filteredItems로 설정하였다. 그러면 맨 처음에 모든 목록을 보여주려면 self.items와 self.filteredItems는 동일해야한다.
+            //self.filteredItems = maskItems (또는 self.filteredItems = self.items)라고 바로 할당하지 않고 위의 메소드를 쓴 이유 및 여기에서 tableView.reloadSections()를 제거한 이유에 대하여.
+            //-> items와 filteredItems는 가장 처음에는 동일해야하겠지만 검색어가 있는 상태에서 다른화면으로 갔다가 다시 돌아오는 경우 업데이트가 이루어지면 문제가 발생한다. 검색어는 분명히 있는데 업데이트가 이루어지면서 그냥 self.filteredItems = maskItems라고 하면 검색어가 무시되고 모든 목록이 다 보여지게 된다. 따라서 searchBar의 딜리게이트 메소드를 한번 호출하도록 해두었다. 만약 검색어가 있었다면 다른 화면으로 갔다가 왔을 때 업데이트가 이루어지더라도 검색어에 맞는 목록만 보일 것이며 검색어가 없다면 그냥 self.items를 보여주는 것과 동일하게 된다.
+            //-> tableView.reloadSections()를 없앤 이유는 간단하다. searchBar Delegate 메소드에서 해당 메소드를 이미 호출하고 있기 때문에 굳이 중복호출 할 필요가 없다.
             
             let now = self.dateFormatter.string(from: Date())
             self.userDefaults.setValue(now, forKey: self.dateKey)
@@ -61,6 +67,8 @@ class MaskAuthorizedListViewController: UIViewController, UITableViewDelegate, U
         // Do any additional setup after loading the view.
         tableView.dataSource = self
         tableView.delegate = self
+        
+        searchBar.delegate = self
     }
     //viewDidLoad 단계에서 테이블 뷰와 검색 창은 hidden상태이며 indicator요소들만 보이는 상태입니다.
     
@@ -186,13 +194,13 @@ class MaskAuthorizedListViewController: UIViewController, UITableViewDelegate, U
     
     //MARK:- TableView
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        items.count
+        filteredItems.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: MaskItemTableViewCell = tableView.dequeueReusableCell(withIdentifier: maskItemCellIdentifier) as? MaskItemTableViewCell ?? MaskItemTableViewCell()
         
-        let item = items[indexPath.row]
+        let item = filteredItems[indexPath.row]
         cell.itemName.text = item.itemName
         cell.entpName.text = item.entpName
         cell.maskTypeLable.text = item.classification.rawValue
@@ -200,7 +208,23 @@ class MaskAuthorizedListViewController: UIViewController, UITableViewDelegate, U
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let detailViewController = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "MaskAuthorizedListDetailViewController") as? MaskAuthorizedListDetailViewController else {
+            return
+        }
         
+        detailViewController.itemSeq = filteredItems[indexPath.row].itemSeq
+        self.navigationController?.pushViewController(detailViewController, animated: true)
+    }
+    
+    //MARK:- SearchBar
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        self.filteredItems = searchText.isEmpty ? self.items : self.items.filter {
+            $0.itemName.range(of: searchText, options: .caseInsensitive) != nil || $0.entpName.range(of: searchText, options: .caseInsensitive) != nil
+            //아이템명 또는 업체명으로 검색할 수 있도록 설정
+            //위 구문은 String.contains()와 동일하다. 다만 대소문자 미구분인 것만 다르다.
+        }
+        
+        tableView.reloadSections(IndexSet(0...0), with: .automatic)
     }
 
     /*
