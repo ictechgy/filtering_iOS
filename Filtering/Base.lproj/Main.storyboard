@@ -537,7 +537,7 @@
                             </tableView>
                             <searchBar hidden="YES" contentMode="redraw" placeholder="제품명 / 업체명 입력" translatesAutoresizingMaskIntoConstraints="NO" id="hPP-FV-eyA">
                                 <rect key="frame" x="0.0" y="88" width="414" height="56"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" returnKeyType="done"/>
                                 <scopeButtonTitles>
                                     <string>Title</string>
                                     <string>Title</string>
@@ -574,7 +574,9 @@
                             <constraint firstItem="hPP-FV-eyA" firstAttribute="trailing" secondItem="xEh-fS-YbW" secondAttribute="trailing" id="xoP-J3-qY8"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="마스크 허가목록" id="nPs-YS-gdT"/>
+                    <navigationItem key="navigationItem" title="마스크 허가목록" id="nPs-YS-gdT">
+                        <barButtonItem key="backBarButtonItem" title="허가목록" id="mIQ-07-2F5"/>
+                    </navigationItem>
                     <connections>
                         <outlet property="indicatorLabel" destination="inB-c8-Rt9" id="chP-iI-4XG"/>
                         <outlet property="indicatorStackView" destination="PSE-xa-Snz" id="Dca-Zb-GDn"/>

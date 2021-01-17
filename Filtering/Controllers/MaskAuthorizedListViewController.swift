@@ -7,7 +7,7 @@
 
 import UIKit
 
-class MaskAuthorizedListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
+class MaskAuthorizedListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, UIGestureRecognizerDelegate {
     
     //MARK:- Variables
     //MARK: IBOutlet Variables
@@ -68,18 +68,32 @@ class MaskAuthorizedListViewController: UIViewController, UITableViewDelegate, U
         tableView.dataSource = self
         tableView.delegate = self
         
+        //검색 후 테이블 뷰를 탭/스크롤 시 올라온 키보드를 숨기기
+        let tapGestureRecognizer = UITapGestureRecognizer()
+        tapGestureRecognizer.numberOfTapsRequired = 1
+        tapGestureRecognizer.cancelsTouchesInView = false
+        tapGestureRecognizer.delegate = self
+        let panGestureRecognizer = UIPanGestureRecognizer()
+        panGestureRecognizer.minimumNumberOfTouches = 1
+        panGestureRecognizer.cancelsTouchesInView = false
+        panGestureRecognizer.delegate = self
+        
+        tableView.addGestureRecognizer(tapGestureRecognizer)
+        tableView.addGestureRecognizer(panGestureRecognizer)
+        
+        
         searchBar.delegate = self
+        
+        controlIndicators(message: "새로운 데이터가 있는지 확인중...", isHidden: false)
+        //이전 데이터를 다운 받은 시기로부터 12시간이 지났거나 데이터에서 row의 수가 달라진 경우/스크래핑을 통해 얻은 숫자 값이 달라진경우
+        // -> 재다운로드
+        decide2Download()
+        //새로운 데이터가 있는지 체크하는 것을 viewDidLoad시기에 한번만 진행하는 것으로 변경
     }
     //viewDidLoad 단계에서 테이블 뷰와 검색 창은 hidden상태이며 indicator요소들만 보이는 상태입니다.
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        controlIndicators(message: "새로운 데이터가 있는지 확인중...", isHidden: false)
-        
-        //이전 데이터를 다운 받은 시기로부터 12시간이 지났거나 데이터에서 row의 수가 달라진 경우/스크래핑을 통해 얻은 숫자 값이 달라진경우
-        // -> 재다운로드
-        decide2Download()
         
     }
     
@@ -216,6 +230,10 @@ class MaskAuthorizedListViewController: UIViewController, UITableViewDelegate, U
         self.navigationController?.pushViewController(detailViewController, animated: true)
     }
     
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        "총 " + String(filteredItems.count) + " 개의 목록 존재"
+    }
+    
     //MARK:- SearchBar
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         self.filteredItems = searchText.isEmpty ? self.items : self.items.filter {
@@ -225,8 +243,39 @@ class MaskAuthorizedListViewController: UIViewController, UITableViewDelegate, U
         }
         
         tableView.reloadSections(IndexSet(0...0), with: .automatic)
+        
+        //처음에 cancel 버튼은 보이지 않는 상태. 글자를 입력하면 보여주고 글자가 다 사라지면 가리기
+        searchBar.setShowsCancelButton(!searchText.isEmpty, animated: true)
     }
-
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.text = ""
+        self.searchBar(searchBar, textDidChange: "")
+        if searchBar.isFirstResponder {
+            searchBar.resignFirstResponder()
+        }
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+    }
+    
+    //MARK: - Gesture Recognizer
+    //키보드가 올라온 상태에서 테이블 뷰 탭/팬 제스쳐 시 키보드 가리기
+    //viewDidLoad에서 target-action방식으로 gesture recognizer 설정을 했더니 tap, pan 다 잘 작동하긴 했다. 그런데 테이블 뷰 스크롤이 안먹혔다.
+    //두개의 제스쳐는 동시에 인식이 불가하다.. 라고 하는데 이건 탭과 팬을 동시에 인식할 수 없다 뭐 이런 뜻 같은데. 아 같은 제스쳐를 인식하는 recognizer가 여러개면 기본적으로 여기서 하나만 받을 수 있다는 것 같다. 테이블뷰나 스크롤뷰가 touchesBegan을 먹는 것도 있었다.
+    //무튼간 팬때문에 테이블 뷰 스크롤 제스쳐가 인식이 안되는 듯 하여 delegate방식으로 바꿨다.
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive event: UIEvent) -> Bool {
+        if searchBar.isFirstResponder {
+            searchBar.resignFirstResponder()
+        }
+        
+        return false    //이후 delegate실행 안되도록 설정.
+    }
+    //gestureRecognizer(_, shouldRecognizeSimultaneouslyWith) 이것도 설정해줘야 할 것 같았는데 안해줘도 잘 작동한다.(이제는)
+    
+    
+    
     /*
     // MARK: - Navigation
 
