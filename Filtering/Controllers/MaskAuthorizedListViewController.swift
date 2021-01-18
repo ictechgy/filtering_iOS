@@ -59,7 +59,11 @@ class MaskAuthorizedListViewController: UIViewController, UITableViewDelegate, U
             //여기서 받을 수 있는 에러는 파싱에러, 파일 관련 에러, 워크시트 에러 등 로컬적인 부분이다.
             self.presentAlert(title: "오류 발생", message: "파일을 불러오던 도중 문제가 발생하였습니다. 다음에 다시 시도해주세요.", needToPop: true)
         }
+        self.isLoading = false
     }
+    
+    var isLoading: Bool = false //로딩중인지를 나타내는 프로퍼티
+    
     //MARK:- LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -84,23 +88,32 @@ class MaskAuthorizedListViewController: UIViewController, UITableViewDelegate, U
         
         searchBar.delegate = self
         
-        controlIndicators(message: "새로운 데이터가 있는지 확인중...", isHidden: false)
-        //이전 데이터를 다운 받은 시기로부터 12시간이 지났거나 데이터에서 row의 수가 달라진 경우/스크래핑을 통해 얻은 숫자 값이 달라진경우
-        // -> 재다운로드
-        decide2Download()
-        //새로운 데이터가 있는지 체크하는 것을 viewDidLoad시기에 한번만 진행하는 것으로 변경
     }
     //viewDidLoad 단계에서 테이블 뷰와 검색 창은 hidden상태이며 indicator요소들만 보이는 상태입니다.
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        //새로운 데이터가 있는지 체크하는 것을 viewDidLoad시기에 한번만 진행하는 것으로 변경 - > viewWillAppear(_)로 다시 옮겼다. 왜냐하면 viewDidLoad(_) 후에 뷰가 보여 로딩 중에 홈화면으로 나간다거나 하면 viewWillDisappear(_)가 호출되어 로딩이 중지된다. 그런데 다시 키면 viewDidLoad(_)가 불리는게 아니라 viewWillAppear(_)가 호출 될 것이므로 여기서 체크 후 데이터를 가져와야 한다. 어차피 처음 호출 시에 무조건 한번 로딩되는 것은 동일하다.
+        if items.isEmpty {
+            controlIndicators(message: "새로운 데이터가 있는지 확인중...", isHidden: false)
+            //이전 데이터를 다운 받은 시기로부터 12시간이 지났거나 데이터에서 row의 수가 달라진 경우/스크래핑을 통해 얻은 숫자 값이 달라진경우
+            // -> 재다운로드
+            decide2Download()
+            
+            isLoading = true
+        }
+        
+        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
-        //TODO: 네트워크 통신 취소
+        //네트워크 통신 취소
+        if isLoading {
+            abortLoading()
+        }
     }
     
     //MARK:- Custom Methods
@@ -124,19 +137,20 @@ class MaskAuthorizedListViewController: UIViewController, UITableViewDelegate, U
         }
         
         
-        NetworkHandler.scrapingNumberOfMasks { result in
+        NetworkHandler.scrapingNumberOfMasks { [weak self] result in
             switch result {
             case .success(let number):
                 if numberOfMasksLastFetched != number {
-                    self.getNewMaskLists()
+                    self?.getNewMaskLists()
                 }else {
                     //업데이트 할 필요가 없음 - 12시간도 지나지 않았고 새로운 데이터가 있지도 않음
-                    self.getLocalMaskLists()
+                    self?.getLocalMaskLists()
                 }
             case .failure(let error):
                 print(error)
-                self.presentAlert(title: "오류 발생", message: "목록 개수 확인 과정에서 오류 발생\n다음에 다시 시도하십시오.", needToPop: true)
-                self.controlIndicators(message: "", isHidden: true)
+                self?.presentAlert(title: "오류 발생", message: "목록 개수 확인 과정에서 오류 발생\n다음에 다시 시도하십시오.", needToPop: true)
+                self?.controlIndicators(message: "", isHidden: true)
+                self?.isLoading = false
             }
         }
         
@@ -145,7 +159,10 @@ class MaskAuthorizedListViewController: UIViewController, UITableViewDelegate, U
     ///새로운 데이터를 가져오기
     func getNewMaskLists() {
         controlIndicators(message: "새로운 데이터 받아오는 중..", isHidden: nil)
-        NetworkHandler.getMaskData { resultURL in
+        NetworkHandler.getMaskData { [weak self] resultURL in
+            guard let self = self else {
+                return
+            }
             switch resultURL {
             case .success(let url):
                 MaskXLSXParser.parseXLSX(fileURL: url, resultHandler: self.parsingResultHandler)
@@ -153,6 +170,7 @@ class MaskAuthorizedListViewController: UIViewController, UITableViewDelegate, U
                 print(error)
                 self.presentAlert(title: "오류 발생", message: "서버에서 데이터를 받아오던 도중 오류가 발생하였습니다.\n다음에 다시 시도하여주세요.", needToPop: false)
                 self.controlIndicators(message: "", isHidden: true)
+                self.isLoading = false
             }
         }
     }
@@ -162,16 +180,13 @@ class MaskAuthorizedListViewController: UIViewController, UITableViewDelegate, U
         //앱을 처음으로 다운받아 실행시켰다면 이 메소드는 호출되지 않을 것이며 데이터를 새로 받아 올 것. (이후에는 업데이트가 필요하면 업데이트를 알아서 함)
         //다른 화면 잠깐 갔다가 다시 왔을 때 업데이트를 다시 할 필요가 없다면 로컬 데이터를 다시 파싱 할 필요도 없음(보여줬던 것 그대로 다시 보여주면 됨)
         //다만 앱을 껐다가 다시 킨 경우(12시간도 안지났고 목록 수도 안 변해서) 업데이트가 필요없다면 이 메소드가 호출 될 텐데 이 때 items는 비어있을 것이므로 이때에 대한 대처는 필요. 기존 저장되어있던 파일을 파싱해서 가져와야 함.
-        if items.count == 0 {
-            controlIndicators(message: "기존 데이터 불러오는 중", isHidden: nil)
-            guard let documentURL: URL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
-                return presentAlert(title: "오류 발생", message: "로컬 파일시스템에 접근할 수 없습니다.", needToPop: true)
-            }
-            let localFileURL: URL = documentURL.appendingPathComponent("maskData.xlsx")
-            MaskXLSXParser.parseXLSX(fileURL: localFileURL, resultHandler: self.parsingResultHandler)
-        }else {
-            controlIndicators(message: "", isHidden: true)
+        controlIndicators(message: "기존 데이터 불러오는 중", isHidden: nil)
+        guard let documentURL: URL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
+            return presentAlert(title: "오류 발생", message: "로컬 파일시스템에 접근할 수 없습니다.", needToPop: true)
         }
+        let localFileURL: URL = documentURL.appendingPathComponent("maskData.xlsx")
+        MaskXLSXParser.parseXLSX(fileURL: localFileURL, resultHandler: self.parsingResultHandler)
+        //viewDidLoad(_)에서 한번만 데이터를 로드할 것이므로 parsingResultHandler는 이제 무조건 호출 될 것이고 if문으로 item이 0인지 아닌지 판별하는 것은 큰 의미가 없어져 삭제
     }
     
     ///indicator들을 한번에 제어하는 메소드
@@ -204,6 +219,11 @@ class MaskAuthorizedListViewController: UIViewController, UITableViewDelegate, U
         alertController.addAction(okAlertAction)
         
         self.navigationController?.visibleViewController?.present(alertController, animated: true, completion: nil)
+    }
+    
+    //로딩중에 화면을 벗어나거나 앱을 종료한 경우 로드를 중단하기 위한 메소드
+    func abortLoading() {
+        
     }
     
     //MARK:- TableView

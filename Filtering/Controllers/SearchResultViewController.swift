@@ -184,7 +184,10 @@ class SearchResultViewController: UIViewController, UITableViewDelegate, UITable
         
         //segue를 통해 세팅된 searchContent에 맞는 값을 가져오기
         loadingIndicator.startAnimating()
-        networkHandler.getContents(searchMode: searchMode, searchContent: searchContent, pageNum: numberOfPage, numOfRows: numberOfRowsPerPage) { result in
+        networkHandler.getContents(searchMode: searchMode, searchContent: searchContent, pageNum: numberOfPage, numOfRows: numberOfRowsPerPage) { [weak self] result in
+            guard let self = self else {
+                return
+            }
             switch result {
             case .success(let data):
                 let parser: ItemXMLParser = ItemXMLParser.shared

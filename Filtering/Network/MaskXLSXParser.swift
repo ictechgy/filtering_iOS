@@ -11,7 +11,7 @@ import CoreXLSX
 class MaskXLSXParser {
     private init(){}
     
-    static func parseXLSX(fileURL: URL, resultHandler: @escaping (Result<[MaskItem], Error>)->Void) {
+    func parseXLSX(fileURL: URL, resultHandler: @escaping (Result<[MaskItem], Error>)->Void) {
         
         DispatchQueue.global().async {
             let filePath = fileURL.path

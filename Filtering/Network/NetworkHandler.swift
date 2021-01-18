@@ -73,8 +73,10 @@ class NetworkHandler {
         //그래서 전부 percentEncodedQueryItems라고 해서 이미 인코딩 된 것으로 넣어줬고, 인코딩이 필요한 프로퍼티들만 별도로 미리 따로 인코딩 해줬다.
         
         isCanceled = false
-        let urlSessionTask: URLSessionTask = urlSession.dataTask(with: url) { (data, response, error) in
+        let urlSessionTask: URLSessionTask = urlSession.dataTask(with: url) { [unowned self] (data, response, error) in
             //async
+            task = nil          //retain cycle을 유의한다. 그냥 익명클로저면 상관이 없는데 메소드가 실행되면 이 task자체를 NetworkHandler 객체에서 참조하고 있게 된다.
+            //self뿐만 아니라 resultHandler에 대한 강한 참조도 그대로 있게 되므로 통신 완료 시 nil로 처리한다.
             
             guard let data = data else{
                 var error: NetworkErrorType
@@ -106,8 +108,10 @@ class NetworkHandler {
     }
     
     ///허가된 마스크 목록 개수를 스크래핑 해오는 메소드
-    static func scrapingNumberOfMasks(resultHandler: @escaping (Result<Int, Error>) -> Void){
+    func scrapingNumberOfMasks(resultHandler: @escaping (Result<Int, Error>) -> Void){
         //GCD or OperationQueue?
+        
+        
         DispatchQueue.global().async {
             guard let scrapURL: URL = URL(string: "https://nedrug.mfds.go.kr/pbp/CCBCC01/getList?totalPages=439&page=1&limit=10&sort=&sortOrder=&searchYn=&itemSeq=&itemName=&maskModelName=&entpName=&grade=&classNo=#none") else {
                 return resultHandler(.failure(ScrappingErrors.urlError as Error))
@@ -140,7 +144,7 @@ class NetworkHandler {
     }
     
     ///허가된 마스크 목록을 엑셀파일로 받아오는 메소드
-    static func getMaskData(resultHandler: @escaping (Result<URL, MaskDataError>) -> Void) {
+    func getMaskData(resultHandler: @escaping (Result<URL, MaskDataError>) -> Void) {
         guard let documentURL: URL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
             return resultHandler(.failure(.documentURLError))
         }
@@ -182,6 +186,10 @@ class NetworkHandler {
         }
         
         task.resume()
+    }
+    
+    func abortMaskNetworking() {
+        
     }
     
     enum NetworkErrorType: Error {
