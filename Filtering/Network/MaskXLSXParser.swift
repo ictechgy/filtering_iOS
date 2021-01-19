@@ -9,14 +9,18 @@ import Foundation
 import CoreXLSX
 
 class MaskXLSXParser {
+    static let shared = MaskXLSXParser()
+    private var parseWork: DispatchWorkItem?
+    
     private init(){}
     
     func parseXLSX(fileURL: URL, resultHandler: @escaping (Result<[MaskItem], Error>)->Void) {
         
-        DispatchQueue.global().async {
+        parseWork = DispatchWorkItem { [unowned self] in
             let filePath = fileURL.path
             guard let file: XLSXFile = XLSXFile(filepath: filePath) else{
                 //do something
+                parseWork = nil
                 return DispatchQueue.main.async {
                     resultHandler(.failure(XLSXParsingError.fileNotExist))
                 }
@@ -47,15 +51,23 @@ class MaskXLSXParser {
                     
                     maskLists.append(mask)
                 }
-                return DispatchQueue.main.async {
+                DispatchQueue.main.async {
                     resultHandler(.success(maskLists))
                 }
             } catch {
-                return DispatchQueue.main.async {
+                DispatchQueue.main.async {
                     resultHandler(.failure(error))
                 }
             }
+            parseWork = nil
         }
+        
+        DispatchQueue.global().async(execute: parseWork!)
+    }
+    
+    func abortParsingXLSX() {
+        parseWork?.cancel()
+        parseWork = nil
     }
     
     enum XLSXParsingError: String, Error {

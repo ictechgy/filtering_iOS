@@ -136,8 +136,12 @@ class MaskAuthorizedListViewController: UIViewController, UITableViewDelegate, U
             return
         }
         
+        guard let networkHandler = NetworkHandler.shared else {
+            presentAlert(title: "오류 발생", message: "네트워크 오류가 발생하였습니다. 다음에 다시 시도해주세요.", needToPop: true)
+            return
+        }
         
-        NetworkHandler.scrapingNumberOfMasks { [weak self] result in
+        networkHandler.scrapingNumberOfMasks { [weak self] result in
             switch result {
             case .success(let number):
                 if numberOfMasksLastFetched != number {
@@ -159,16 +163,23 @@ class MaskAuthorizedListViewController: UIViewController, UITableViewDelegate, U
     ///새로운 데이터를 가져오기
     func getNewMaskLists() {
         controlIndicators(message: "새로운 데이터 받아오는 중..", isHidden: nil)
-        NetworkHandler.getMaskData { [weak self] resultURL in
+        
+        guard let networkHandler = NetworkHandler.shared else {
+            presentAlert(title: "오류 발생", message: "네트워크 오류가 발생하였습니다. 다음에 다시 시도해주세요.", needToPop: true)
+            return
+        }
+        
+        networkHandler.getMaskData { [weak self] resultURL in
             guard let self = self else {
                 return
             }
             switch resultURL {
             case .success(let url):
-                MaskXLSXParser.parseXLSX(fileURL: url, resultHandler: self.parsingResultHandler)
+                MaskXLSXParser.shared.parseXLSX(fileURL: url, resultHandler: self.parsingResultHandler)
             case .failure(let error):
-                print(error)
-                self.presentAlert(title: "오류 발생", message: "서버에서 데이터를 받아오던 도중 오류가 발생하였습니다.\n다음에 다시 시도하여주세요.", needToPop: false)
+                if error != .canceled {
+                    self.presentAlert(title: "오류 발생", message: "서버에서 데이터를 받아오던 도중 오류가 발생하였습니다.\n다음에 다시 시도하여주세요.", needToPop: true)
+                }
                 self.controlIndicators(message: "", isHidden: true)
                 self.isLoading = false
             }
@@ -185,7 +196,7 @@ class MaskAuthorizedListViewController: UIViewController, UITableViewDelegate, U
             return presentAlert(title: "오류 발생", message: "로컬 파일시스템에 접근할 수 없습니다.", needToPop: true)
         }
         let localFileURL: URL = documentURL.appendingPathComponent("maskData.xlsx")
-        MaskXLSXParser.parseXLSX(fileURL: localFileURL, resultHandler: self.parsingResultHandler)
+        MaskXLSXParser.shared.parseXLSX(fileURL: localFileURL, resultHandler: self.parsingResultHandler)
         //viewDidLoad(_)에서 한번만 데이터를 로드할 것이므로 parsingResultHandler는 이제 무조건 호출 될 것이고 if문으로 item이 0인지 아닌지 판별하는 것은 큰 의미가 없어져 삭제
     }
     
@@ -223,7 +234,8 @@ class MaskAuthorizedListViewController: UIViewController, UITableViewDelegate, U
     
     //로딩중에 화면을 벗어나거나 앱을 종료한 경우 로드를 중단하기 위한 메소드
     func abortLoading() {
-        
+        NetworkHandler.shared?.abortMaskNetworking()
+        MaskXLSXParser.shared.abortParsingXLSX()
     }
     
     //MARK:- TableView

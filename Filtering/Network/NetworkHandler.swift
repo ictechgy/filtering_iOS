@@ -10,9 +10,11 @@ import SwiftSoup
 
 class NetworkHandler {
     
+    //MARK:- Properties
     ///singletone
     static let shared: NetworkHandler? = NetworkHandler()
     
+    //MARK: Search Related Properties
     private var apiKey: String
     private let requestURL: String = "http://apis.data.go.kr/1471057/NonMdcinPrductPrmisnInfoService/getNonMdcinPrductPrmisnInfoList"
     private let urlSession: URLSession = URLSession.shared
@@ -22,6 +24,12 @@ class NetworkHandler {
     ///작업이 취소되었는지를 판별하는 프로퍼티
     private var isCanceled: Bool = false
     
+    //MARK: Mask-Related Properties
+    private var scrappingWork: DispatchWorkItem?
+    private var maskTask: URLSessionDownloadTask?
+    private var isMaskTaskCanceled: Bool = false
+    
+    //MARK:- Initializer
     //제대로 파일 값을 읽어오지 못하는 경우 nil을 반환합니다. failable
     private init?(){
         //plist로부터 읽어오기, 싱글톤 객체 생성 시 최초 1회 작동
@@ -45,6 +53,7 @@ class NetworkHandler {
         self.apiKey = retrievedKey
     }
     
+    //MARK:- Search-Related Methods
     ///사용자가 검색한 값을 기반으로 서버로부터 데이터를 가져옵니다.
     func getContents(searchMode: SearchMode, searchContent: String, pageNum numberOfPage: Int, numOfRows numberOfRowsPerPage: Int, resultHandler: @escaping (Result<Data, NetworkErrorType>) -> Void) {
         
@@ -101,18 +110,19 @@ class NetworkHandler {
         task = urlSessionTask
     }
     
+    //MARK: Cancel Search
     func abortNetworking() {
         isCanceled = true
         task?.cancel()  //cancel 할 시 dataTask에서 완료 콜백 클로저 handler가 data nil인 상태로 작동
         task = nil
     }
     
+    //MARK:- Mask-Related Methods
     ///허가된 마스크 목록 개수를 스크래핑 해오는 메소드
     func scrapingNumberOfMasks(resultHandler: @escaping (Result<Int, Error>) -> Void){
         //GCD or OperationQueue?
         
-        
-        DispatchQueue.global().async {
+        scrappingWork = DispatchWorkItem { [unowned self] in
             guard let scrapURL: URL = URL(string: "https://nedrug.mfds.go.kr/pbp/CCBCC01/getList?totalPages=439&page=1&limit=10&sort=&sortOrder=&searchYn=&itemSeq=&itemName=&maskModelName=&entpName=&grade=&classNo=#none") else {
                 return resultHandler(.failure(ScrappingErrors.urlError as Error))
             }
@@ -140,7 +150,10 @@ class NetworkHandler {
                     resultHandler(.failure(error))
                 }
             }
+            self.scrappingWork = nil
         }
+        
+        DispatchQueue.global().async(execute: scrappingWork!)
     }
     
     ///허가된 마스크 목록을 엑셀파일로 받아오는 메소드
@@ -158,7 +171,16 @@ class NetworkHandler {
         urlRequest.allHTTPHeaderFields = ["Cache-Control":"max-age=0", "Connection":"keep-alive", "Content-Length":"117", "Content-Type":"application/x-www-form-urlencoded"]
         
         let urlSession = URLSession.shared
-        let task = urlSession.downloadTask(with: urlRequest) { fetchedFileTempUrl, response, error in   //Async
+        maskTask = urlSession.downloadTask(with: urlRequest) { [unowned self] fetchedFileTempUrl, response, error in   //Async
+            
+            if isMaskTaskCanceled {     //취소된 이후의 콜백 호출이라면
+                self.isMaskTaskCanceled = false
+                DispatchQueue.main.async {
+                    resultHandler(.failure(.canceled))
+                }
+                self.maskTask = nil
+                return
+            }
             
             guard let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode == 200, let fetchedFileTempUrl = fetchedFileTempUrl else {
                 return DispatchQueue.main.async {
@@ -174,24 +196,31 @@ class NetworkHandler {
                 }else {
                     try FileManager.default.copyItem(at: fetchedFileTempUrl, to: localFileURL)
                 }
-                return DispatchQueue.main.async {
+                DispatchQueue.main.async {
                     resultHandler(.success(localFileURL))
                 }
             } catch {
-                return DispatchQueue.main.async {
+                DispatchQueue.main.async {
                     resultHandler(.failure(.move2LocalError))
                 }
             }
-            
+            self.maskTask = nil
         }
         
-        task.resume()
+        maskTask!.resume()
     }
     
+    //MARK: Cancel MaskRelated Search
     func abortMaskNetworking() {
+        scrappingWork?.cancel()
+        scrappingWork = nil
         
+        isMaskTaskCanceled = true
+        maskTask?.cancel()
+        maskTask = nil
     }
     
+    //MARK:- Enums
     enum NetworkErrorType: Error {
                 
         case applicationError(Int = 1, String = "서비스 제공 상태가 원활하지 않습니다.")
@@ -219,6 +248,7 @@ class NetworkHandler {
         case remoteFileURLError = "원격지 URL 오류"
         case fetchError = "파일을 받아오지 못했습니다."
         case move2LocalError = "파일을 저장하던 중 오류 발생"
+        case canceled
     }
     
     enum ScrappingErrors: String, Error {
