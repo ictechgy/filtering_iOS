@@ -7,7 +7,10 @@
 
 import UIKit
 
-class SettingsViewController: UIViewController {
+class MoreViewController: UITableViewController {
+    
+    let identifier2OpenSource = "move2OpenSourceVC"
+    let identifier2About = "move2AboutVC"
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -15,6 +18,19 @@ class SettingsViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
     
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        var identifier: String
+        switch indexPath.row {
+        case 0:
+            identifier = identifier2OpenSource
+        case 1:
+            identifier = identifier2About
+        default:
+            return
+        }
+        
+        performSegue(withIdentifier: identifier, sender: self)
+    }
 
     /*
     // MARK: - Navigation
