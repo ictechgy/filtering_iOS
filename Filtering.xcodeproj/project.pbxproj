@@ -31,6 +31,8 @@
 		C4A233E025B2002D0088E42F /* MaskAuthorizedListDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A233DF25B2002D0088E42F /* MaskAuthorizedListDetailViewController.swift */; };
 		C4A233EB25B84EA10088E42F /* CardTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A233E925B84EA10088E42F /* CardTableViewCell.swift */; };
 		C4A233EC25B84EA10088E42F /* CardTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C4A233EA25B84EA10088E42F /* CardTableViewCell.xib */; };
+		C4A233EF25B8743A0088E42F /* LicenseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A233EE25B8743A0088E42F /* LicenseViewController.swift */; };
+		C4A233F225B8879A0088E42F /* LicenseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A233F125B8879A0088E42F /* LicenseModel.swift */; };
 		C4C98BF12583C19F0007B879 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4C98BF02583C19F0007B879 /* AppDelegate.swift */; };
 		C4C98BF32583C19F0007B879 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4C98BF22583C19F0007B879 /* SceneDelegate.swift */; };
 		C4C98BF52583C19F0007B879 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4C98BF42583C19F0007B879 /* ViewController.swift */; };
@@ -64,6 +66,8 @@
 		C4A233DF25B2002D0088E42F /* MaskAuthorizedListDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaskAuthorizedListDetailViewController.swift; sourceTree = "<group>"; };
 		C4A233E925B84EA10088E42F /* CardTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardTableViewCell.swift; sourceTree = "<group>"; };
 		C4A233EA25B84EA10088E42F /* CardTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CardTableViewCell.xib; sourceTree = "<group>"; };
+		C4A233EE25B8743A0088E42F /* LicenseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LicenseViewController.swift; sourceTree = "<group>"; };
+		C4A233F125B8879A0088E42F /* LicenseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LicenseModel.swift; sourceTree = "<group>"; };
 		C4C98BED2583C19F0007B879 /* Filtering.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Filtering.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C4C98BF02583C19F0007B879 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C4C98BF22583C19F0007B879 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -116,6 +120,7 @@
 				C4A233982590F0E90088E42F /* CoreDataHandler.swift */,
 				C4A233A6259E02560088E42F /* SearchModeItem.swift */,
 				C4A233AC25A5C5670088E42F /* MaskItem.swift */,
+				C4A233F125B8879A0088E42F /* LicenseModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -129,6 +134,7 @@
 				C4A233DF25B2002D0088E42F /* MaskAuthorizedListDetailViewController.swift */,
 				C434E4C62583D40E0029A313 /* FavoriteListViewController.swift */,
 				C434E4C92583D4200029A313 /* MoreViewController.swift */,
+				C4A233EE25B8743A0088E42F /* LicenseViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -333,9 +339,11 @@
 				C4A233E025B2002D0088E42F /* MaskAuthorizedListDetailViewController.swift in Sources */,
 				C4A2338F258F9AB70088E42F /* DataModel.xcdatamodeld in Sources */,
 				C40B58712585F95200237BD2 /* NonMedicalItem.swift in Sources */,
+				C4A233EF25B8743A0088E42F /* LicenseViewController.swift in Sources */,
 				C40B586A2585174100237BD2 /* NetworkHandler.swift in Sources */,
 				C4A233BC25AB74DC0088E42F /* MaskXLSXParser.swift in Sources */,
 				C4A233952590B25E0088E42F /* QuasiDrug+CoreDataProperties.swift in Sources */,
+				C4A233F225B8879A0088E42F /* LicenseModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

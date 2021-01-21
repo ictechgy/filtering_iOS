@@ -1,5 +1,5 @@
 //
-//  SettingsViewController.swift
+//  MoreViewController.swift
 //  Filtering
 //
 //  Created by JINHONG AN on 2020/12/12.

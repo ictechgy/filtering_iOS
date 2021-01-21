@@ -297,7 +297,7 @@
         <!--Open-source license-->
         <scene sceneID="Vxa-tu-Qfe">
             <objects>
-                <viewController id="OGh-nP-04o" sceneMemberID="viewController">
+                <viewController id="OGh-nP-04o" customClass="LicenseViewController" customModule="Filtering" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="v9B-br-Z4b">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -306,7 +306,7 @@
                                 <rect key="frame" x="0.0" y="88" width="414" height="725"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="oea-Av-oFO">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="CardCell" id="oea-Av-oFO" customClass="CardTableViewCell" customModule="Filtering" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="414" height="43.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="oea-Av-oFO" id="aHm-AB-iPI">
@@ -327,6 +327,9 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Open-source license" id="r4W-DW-2vO"/>
+                    <connections>
+                        <outlet property="tableView" destination="N7E-7v-YPY" id="6XH-Kz-wDB"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="O4p-2b-n0e" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
