@@ -7,9 +7,10 @@
 
 import UIKit
 
-class LicenseViewController: UIViewController, UITableViewDataSource {
+class LicenseViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     let cellIdentifier = "CardCell"
+    let titleForHeader = "\nThis application is Copyright © JINHONG AN. All rights reserved.\nthe following sets forth attribution notices for third party software that may be contained in this application\nI express my infinite gratitude to the open source community.\n\tdeveloper email : ictechgy@gmail.com"
     @IBOutlet weak var tableView: UITableView!
     
     lazy var licenseList: [LicenseInfo] = []
@@ -20,6 +21,7 @@ class LicenseViewController: UIViewController, UITableViewDataSource {
         // Do any additional setup after loading the view.
         tableView.register(UINib(nibName: "CardTableViewCell", bundle: nil), forCellReuseIdentifier: cellIdentifier)
         tableView.dataSource = self
+        tableView.delegate = self
 
         guard let licenseModel: LicenseModel = LicenseModel() else {
             let alert: UIAlertController = UIAlertController(title: "오류 발생", message: "라이선스 정보를 가져오던 도중 문제가 발생하였습니다. 다음에 다시 시도하십시오.", preferredStyle: .alert)
@@ -45,6 +47,19 @@ class LicenseViewController: UIViewController, UITableViewDataSource {
         cell.content.text = licenseList[indexPath.row].contents
         
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        titleForHeader
+    }
+    //tableView에 별도의 View와 Label을 넣는 것도 해봤는데 높이 조절에 대한 부분이 애매해서 titleForHeader로 바꿨다.
+    //tableView에 View와 Label을 넣고 해당 Label에 대한 outlet을 만든 다음 여기서 텍스트를 지정해주면 그냥 될까..?
+    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        guard let headerView = view as? UITableViewHeaderFooterView else {
+            return
+        }
+        headerView.textLabel?.text = titleForHeader
+        headerView.textLabel?.font = UIFont.systemFont(ofSize: 16.0)
     }
 
     /*

@@ -20,30 +20,30 @@
                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="IoQ-RH-KGe">
                         <rect key="frame" x="8" y="8" width="416" height="343"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="V1T-gy-fQE">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="center" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="V1T-gy-fQE">
                                 <rect key="frame" x="0.0" y="0.0" width="416" height="27.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="23"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <progressView opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progressViewStyle="bar" progress="1" translatesAutoresizingMaskIntoConstraints="NO" id="XbP-ZJ-ZP9">
+                            <progressView opaque="NO" userInteractionEnabled="NO" alpha="0.5" contentMode="scaleToFill" verticalHuggingPriority="750" progressViewStyle="bar" progress="1" translatesAutoresizingMaskIntoConstraints="NO" id="XbP-ZJ-ZP9">
                                 <rect key="frame" x="0.0" y="35.5" width="416" height="2.5"/>
-                                <color key="progressTintColor" systemColor="systemGrayColor"/>
+                                <rect key="contentStretch" x="0.0" y="0.0" width="0.5" height="0.5"/>
+                                <color key="progressTintColor" systemColor="opaqueSeparatorColor"/>
                             </progressView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Contents" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Cdg-KN-oue">
-                                <rect key="frame" x="0.0" y="45" width="416" height="298"/>
+                                <rect key="frame" x="8" y="45" width="400" height="298"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
                         <constraints>
-                            <constraint firstAttribute="bottom" secondItem="Cdg-KN-oue" secondAttribute="bottom" id="6JU-iu-EPD"/>
                             <constraint firstItem="V1T-gy-fQE" firstAttribute="leading" secondItem="IoQ-RH-KGe" secondAttribute="leading" id="8Gd-kg-GKq"/>
-                            <constraint firstAttribute="trailing" secondItem="Cdg-KN-oue" secondAttribute="trailing" id="BIJ-Ti-JYb"/>
+                            <constraint firstItem="Cdg-KN-oue" firstAttribute="leading" secondItem="IoQ-RH-KGe" secondAttribute="leading" constant="8" id="Dij-n2-Omi"/>
                             <constraint firstAttribute="trailing" secondItem="XbP-ZJ-ZP9" secondAttribute="trailing" id="M89-vq-nni"/>
-                            <constraint firstItem="Cdg-KN-oue" firstAttribute="leading" secondItem="IoQ-RH-KGe" secondAttribute="leading" id="Nf8-BN-7Va"/>
                             <constraint firstItem="V1T-gy-fQE" firstAttribute="top" secondItem="IoQ-RH-KGe" secondAttribute="top" id="q8f-RQ-CdN"/>
+                            <constraint firstAttribute="trailing" secondItem="Cdg-KN-oue" secondAttribute="trailing" constant="8" id="rEV-kj-zPP"/>
                             <constraint firstAttribute="trailing" secondItem="V1T-gy-fQE" secondAttribute="trailing" id="ykg-SX-kKw"/>
                             <constraint firstItem="XbP-ZJ-ZP9" firstAttribute="leading" secondItem="IoQ-RH-KGe" secondAttribute="leading" id="zXm-Zo-jjN"/>
                         </constraints>
@@ -68,8 +68,8 @@
         </tableViewCell>
     </objects>
     <resources>
-        <systemColor name="systemGrayColor">
-            <color red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        <systemColor name="opaqueSeparatorColor">
+            <color red="0.77647058823529413" green="0.77647058823529413" blue="0.78431372549019607" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

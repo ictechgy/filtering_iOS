@@ -151,6 +151,12 @@ class SearchResultViewController: UIViewController, UITableViewDelegate, UITable
         self.navigationController?.pushViewController(detailViewController, animated: true)
     }
     
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        var msg: String = "'" + (searchContent ?? "알 수 없음") + "'에 대해 "
+        msg.append(String(numberOfSearchResults) + " 개의 검색 결과가 존재합니다.")
+        return msg
+    }
+    
     //MARK:- Custom Methods
     func presentAlert(title: String, message: String, needToPop: Bool) {
         let alertController: UIAlertController = UIAlertController(title: title, message: message, preferredStyle: .alert)

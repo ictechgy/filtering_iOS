@@ -18,8 +18,8 @@ class CardTableViewCell: UITableViewCell {
         // Initialization code
         
         //컨테이너 뷰 외곽에 외곽선 추가
-        containerStackView.layer.borderWidth = 0.5
-        containerStackView.layer.borderColor = UIColor.gray.cgColor
+        containerStackView.layer.borderWidth = 1.3
+        containerStackView.layer.borderColor = UIColor.black.cgColor
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
