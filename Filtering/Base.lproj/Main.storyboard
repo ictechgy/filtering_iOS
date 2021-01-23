@@ -257,7 +257,7 @@
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Uda-Rj-6ld">
                                                         <rect key="frame" x="0.0" y="0.0" width="398" height="345"/>
-                                                        <mutableString key="text">
+                                                        <string key="text">
 
 본 어플리케이션은 "편하게 의약외품(마스크)을 찾고 싶다." 라는 생각으로 만든 어플리케이션입니다. 인터넷이나 편의점, 마트 등에서 구입하는 의약외품들이 인증된 제품인지 검색할 수 있습니다.
 
@@ -267,7 +267,7 @@
 
  - 모든 데이터의 저작권은 식품의약품안전처/공공데이터포털에 있습니다.
 
-제작자 : 안진홍 / 이메일 : ictechgy@gmail.com</mutableString>
+제작자 : 안진홍 / 이메일 : ictechgy@gmail.com</string>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
@@ -607,10 +607,10 @@
             </objects>
             <point key="canvasLocation" x="3845" y="785"/>
         </scene>
-        <!--Tab Bar Controller-->
+        <!--Base Tab Bar Controller-->
         <scene sceneID="kaT-3E-Fjh">
             <objects>
-                <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="glg-Xx-ANT" sceneMemberID="viewController">
+                <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="glg-Xx-ANT" customClass="BaseTabBarController" customModule="Filtering" customModuleProvider="target" sceneMemberID="viewController">
                     <toolbarItems/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="DKy-W2-IOv">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
@@ -808,7 +808,7 @@
         <!--Search-->
         <scene sceneID="HGC-Rk-cFc">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="DbO-79-JIi" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="DbO-79-JIi" customClass="SearchNavigationController" customModule="Filtering" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Search" image="magnifyingglass.circle" catalog="system" selectedImage="magnifyingglass.circle.fill" id="6p9-N9-a87"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="sKb-bz-mBx">

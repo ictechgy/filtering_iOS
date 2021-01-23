@@ -33,6 +33,8 @@
 		C4A233EC25B84EA10088E42F /* CardTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C4A233EA25B84EA10088E42F /* CardTableViewCell.xib */; };
 		C4A233EF25B8743A0088E42F /* LicenseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A233EE25B8743A0088E42F /* LicenseViewController.swift */; };
 		C4A233F225B8879A0088E42F /* LicenseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A233F125B8879A0088E42F /* LicenseModel.swift */; };
+		C4A2340125BC10760088E42F /* BaseTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A2340025BC10750088E42F /* BaseTabBarController.swift */; };
+		C4A2340425BC211E0088E42F /* SearchNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A2340325BC211E0088E42F /* SearchNavigationController.swift */; };
 		C4C98BF12583C19F0007B879 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4C98BF02583C19F0007B879 /* AppDelegate.swift */; };
 		C4C98BF32583C19F0007B879 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4C98BF22583C19F0007B879 /* SceneDelegate.swift */; };
 		C4C98BF52583C19F0007B879 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4C98BF42583C19F0007B879 /* ViewController.swift */; };
@@ -68,6 +70,8 @@
 		C4A233EA25B84EA10088E42F /* CardTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CardTableViewCell.xib; sourceTree = "<group>"; };
 		C4A233EE25B8743A0088E42F /* LicenseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LicenseViewController.swift; sourceTree = "<group>"; };
 		C4A233F125B8879A0088E42F /* LicenseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LicenseModel.swift; sourceTree = "<group>"; };
+		C4A2340025BC10750088E42F /* BaseTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTabBarController.swift; sourceTree = "<group>"; };
+		C4A2340325BC211E0088E42F /* SearchNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchNavigationController.swift; sourceTree = "<group>"; };
 		C4C98BED2583C19F0007B879 /* Filtering.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Filtering.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C4C98BF02583C19F0007B879 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C4C98BF22583C19F0007B879 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -168,8 +172,10 @@
 				C434E4BB2583D3510029A313 /* Controllers */,
 				C4C98BF02583C19F0007B879 /* AppDelegate.swift */,
 				C4C98BF22583C19F0007B879 /* SceneDelegate.swift */,
+				C4A2340325BC211E0088E42F /* SearchNavigationController.swift */,
 				C4C98BF42583C19F0007B879 /* ViewController.swift */,
 				C4C98BF62583C19F0007B879 /* Main.storyboard */,
+				C4A2340025BC10750088E42F /* BaseTabBarController.swift */,
 				C4C98BF92583C19F0007B879 /* Assets.xcassets */,
 				C4C98BFB2583C19F0007B879 /* LaunchScreen.storyboard */,
 				C4C98BFE2583C19F0007B879 /* Info.plist */,
@@ -329,6 +335,7 @@
 				C434E4C42583D3EE0029A313 /* MaskAuthorizedListViewController.swift in Sources */,
 				C4A233D125AEE0D40088E42F /* MaskItemTableViewCell.swift in Sources */,
 				C4A233AD25A5C5670088E42F /* MaskItem.swift in Sources */,
+				C4A2340125BC10760088E42F /* BaseTabBarController.swift in Sources */,
 				C4DA7E5B258A79770040E846 /* SearchItemTableViewCell.swift in Sources */,
 				C4C98BF52583C19F0007B879 /* ViewController.swift in Sources */,
 				C4C98BF12583C19F0007B879 /* AppDelegate.swift in Sources */,
@@ -343,6 +350,7 @@
 				C40B586A2585174100237BD2 /* NetworkHandler.swift in Sources */,
 				C4A233BC25AB74DC0088E42F /* MaskXLSXParser.swift in Sources */,
 				C4A233952590B25E0088E42F /* QuasiDrug+CoreDataProperties.swift in Sources */,
+				C4A2340425BC211E0088E42F /* SearchNavigationController.swift in Sources */,
 				C4A233F225B8879A0088E42F /* LicenseModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -498,7 +506,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.jinhong.Filtering;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jh.Filtering;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -518,7 +526,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.jinhong.Filtering;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jh.Filtering;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
