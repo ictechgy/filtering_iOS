@@ -12,6 +12,8 @@
 		C40B586D25851DEE00237BD2 /* keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = C40B586C25851DEE00237BD2 /* keys.plist */; };
 		C40B58712585F95200237BD2 /* NonMedicalItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C40B58702585F95200237BD2 /* NonMedicalItem.swift */; };
 		C4133F2C2586532B00EEFB6A /* ItemXMLParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4133F2B2586532B00EEFB6A /* ItemXMLParser.swift */; };
+		C41BCB2A25BCA54500968446 /* AppearanceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41BCB2925BCA54500968446 /* AppearanceViewController.swift */; };
+		C429002725BD88BF00E46227 /* AppearanceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C429002625BD88BF00E46227 /* AppearanceTableViewCell.swift */; };
 		C434E4BD2583D3B20029A313 /* SearchResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C434E4BC2583D3B20029A313 /* SearchResultViewController.swift */; };
 		C434E4C12583D3C60029A313 /* SearchResultDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C434E4C02583D3C60029A313 /* SearchResultDetailViewController.swift */; };
 		C434E4C42583D3EE0029A313 /* MaskAuthorizedListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C434E4C32583D3EE0029A313 /* MaskAuthorizedListViewController.swift */; };
@@ -49,6 +51,8 @@
 		C40B586C25851DEE00237BD2 /* keys.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = keys.plist; sourceTree = "<group>"; };
 		C40B58702585F95200237BD2 /* NonMedicalItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NonMedicalItem.swift; sourceTree = "<group>"; };
 		C4133F2B2586532B00EEFB6A /* ItemXMLParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemXMLParser.swift; sourceTree = "<group>"; };
+		C41BCB2925BCA54500968446 /* AppearanceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceViewController.swift; sourceTree = "<group>"; };
+		C429002625BD88BF00E46227 /* AppearanceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceTableViewCell.swift; sourceTree = "<group>"; };
 		C434E4BC2583D3B20029A313 /* SearchResultViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultViewController.swift; sourceTree = "<group>"; };
 		C434E4C02583D3C60029A313 /* SearchResultDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultDetailViewController.swift; sourceTree = "<group>"; };
 		C434E4C32583D3EE0029A313 /* MaskAuthorizedListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaskAuthorizedListViewController.swift; sourceTree = "<group>"; };
@@ -139,6 +143,7 @@
 				C434E4C62583D40E0029A313 /* FavoriteListViewController.swift */,
 				C434E4C92583D4200029A313 /* MoreViewController.swift */,
 				C4A233EE25B8743A0088E42F /* LicenseViewController.swift */,
+				C41BCB2925BCA54500968446 /* AppearanceViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -194,6 +199,7 @@
 				C4A233D025AEE0D40088E42F /* MaskItemTableViewCell.swift */,
 				C4A233E925B84EA10088E42F /* CardTableViewCell.swift */,
 				C4A233EA25B84EA10088E42F /* CardTableViewCell.xib */,
+				C429002625BD88BF00E46227 /* AppearanceTableViewCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -332,10 +338,12 @@
 				C4A2339E259B5B7C0088E42F /* UIDropDownView.swift in Sources */,
 				C4A233A3259DDC270088E42F /* UIDropDownViewCell.swift in Sources */,
 				C4A233EB25B84EA10088E42F /* CardTableViewCell.swift in Sources */,
+				C41BCB2A25BCA54500968446 /* AppearanceViewController.swift in Sources */,
 				C434E4C42583D3EE0029A313 /* MaskAuthorizedListViewController.swift in Sources */,
 				C4A233D125AEE0D40088E42F /* MaskItemTableViewCell.swift in Sources */,
 				C4A233AD25A5C5670088E42F /* MaskItem.swift in Sources */,
 				C4A2340125BC10760088E42F /* BaseTabBarController.swift in Sources */,
+				C429002725BD88BF00E46227 /* AppearanceTableViewCell.swift in Sources */,
 				C4DA7E5B258A79770040E846 /* SearchItemTableViewCell.swift in Sources */,
 				C4C98BF52583C19F0007B879 /* ViewController.swift in Sources */,
 				C4C98BF12583C19F0007B879 /* AppDelegate.swift in Sources */,

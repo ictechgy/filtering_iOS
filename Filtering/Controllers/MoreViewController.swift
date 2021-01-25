@@ -11,6 +11,7 @@ class MoreViewController: UITableViewController {
     
     let identifier2OpenSource = "move2OpenSourceVC"
     let identifier2About = "move2AboutVC"
+    let identifier2Appearance = "move2AppearanceVC"
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,6 +26,9 @@ class MoreViewController: UITableViewController {
             identifier = identifier2OpenSource
         case 1:
             identifier = identifier2About
+            //FIXME: 다크모드 설정부분 세그는 이상하게 두번 작동하네..??? 왜지? 
+//        case 2:
+//            identifier = identifier2Appearance
         default:
             return
         }

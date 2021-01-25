@@ -17,6 +17,18 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let _ = (scene as? UIWindowScene) else { return }
+        
+        //AppDelegate의 application(_, didFinishLaunchingWithOptions)에 써도 되지만... Scene이 하나이므로 이곳에 작성.
+        //앱의 라이트모드 다크모드 설정
+        let interfaceStyle: InterfaceStyle = InterfaceStyle(rawValue: UserDefaults.standard.integer(forKey: appearanceKey)) ?? .default
+        switch interfaceStyle {
+        case .light:
+            self.window?.overrideUserInterfaceStyle = .light
+        case .dark:
+            self.window?.overrideUserInterfaceStyle = .dark
+        case .default:  //systemColor나 다크모드 지원 Asset을 추가/사용한 경우 모드에 따라서 색이 알아서 되겠지만 명시적으로 표기.
+            self.window?.overrideUserInterfaceStyle = UITraitCollection.current.userInterfaceStyle
+        }
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
