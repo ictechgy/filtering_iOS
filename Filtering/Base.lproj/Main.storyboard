@@ -146,7 +146,7 @@
                                 </prototypes>
                             </tableView>
                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="즐겨찾기 한 제품이 없습니다." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pyW-Kc-kdY">
-                                <rect key="frame" x="93" y="439" width="228" height="23"/>
+                                <rect key="frame" x="93" y="438.5" width="228" height="24"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -161,7 +161,6 @@
                             <constraint firstItem="gVB-tN-vjt" firstAttribute="trailing" secondItem="YfT-L7-3Ty" secondAttribute="trailing" id="dL6-Pa-kYp"/>
                             <constraint firstItem="YfT-L7-3Ty" firstAttribute="leading" secondItem="gVB-tN-vjt" secondAttribute="leading" id="hP1-ty-dpH"/>
                             <constraint firstItem="YfT-L7-3Ty" firstAttribute="top" secondItem="gVB-tN-vjt" secondAttribute="top" id="ni8-fr-h9D"/>
-                            <constraint firstItem="pyW-Kc-kdY" firstAttribute="top" secondItem="gVB-tN-vjt" secondAttribute="top" constant="351" id="zKp-PH-BYk"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="즐겨찾기 목록" id="cxo-t8-hW2"/>
@@ -988,7 +987,7 @@
         <scene sceneID="vql-uB-25s">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="d1H-Sr-8IR" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Favorites" image="star.circle" catalog="system" selectedImage="star.circle.fill" id="wxL-cg-gBC"/>
+                    <tabBarItem key="tabBarItem" title="Favorites" image="heart.circle" catalog="system" selectedImage="heart.circle.fill" id="wxL-cg-gBC"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="6dL-Qp-l3a">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
@@ -1049,10 +1048,10 @@
         <image name="circle" catalog="system" width="128" height="121"/>
         <image name="ellipsis.circle" catalog="system" width="128" height="121"/>
         <image name="ellipsis.circle.fill" catalog="system" width="128" height="121"/>
+        <image name="heart.circle" catalog="system" width="128" height="121"/>
+        <image name="heart.circle.fill" catalog="system" width="128" height="121"/>
         <image name="magnifyingglass.circle" catalog="system" width="128" height="121"/>
         <image name="magnifyingglass.circle.fill" catalog="system" width="128" height="121"/>
-        <image name="star.circle" catalog="system" width="128" height="121"/>
-        <image name="star.circle.fill" catalog="system" width="128" height="121"/>
         <namedColor name="AccentColor">
             <color red="0.0" green="0.46000000000000002" blue="0.89000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

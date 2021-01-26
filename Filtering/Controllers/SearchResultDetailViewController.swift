@@ -18,18 +18,21 @@ class SearchResultDetailViewController: UIViewController {
     
     lazy var addToFavoritesButton: UIBarButtonItem = {
         let button = UIBarButtonItem(image: nil, style: .plain, target: self, action: #selector(favoritesButtonTapped(_:)))
-        button.tintColor = .systemYellow
+        button.tintColor = .systemRed
         //이미지 및 enable 여부는 viewWillAppear에서 결정하도록 하자.
 
         return button
     }()
     
-    lazy var star: ()-> UIImage = { [unowned self] in
+    lazy var filledStar: UIImage = UIImage(systemName: "heart.fill")!
+    lazy var emptyStar: UIImage = UIImage(systemName: "heart")!
+    
+    lazy var heart: ()-> UIImage = { [unowned self] in
         var iconImage: UIImage
         if self.isAddedToFavorites {
-            iconImage = UIImage(systemName: "star.fill")!
+            iconImage = self.filledStar
         }else {
-            iconImage = UIImage(systemName: "star")!
+            iconImage = self.emptyStar
         }
         return iconImage
     }
@@ -68,7 +71,7 @@ class SearchResultDetailViewController: UIViewController {
         checkFavorites()    //현재 아이템이 즐겨찾기에 추가되어있는지 아닌지를 체크합니다.
         //이 메소드가 작동함으로써 현재 아이템이 DB에 있는지 없는지 알 수 있으며 itemSeq가 nil인 경우 즐겨찾기 비활성화 여부도 알 수 있다.
         
-        addToFavoritesButton.image = star()  //뷰가 나타날 때마다 새로 아이콘 이미지 설정.
+        addToFavoritesButton.image = heart()  //뷰가 나타날 때마다 새로 아이콘 이미지 설정.
         //상세화면에서 즐겨찾기 추가 후 바로 Favorite 즐겨찾기 목록에서 삭제하고 다시 돌아오는 경우가 있을 수 있어 매번 체크해야함
         
         addToFavoritesButton.isEnabled = isFavoritesAvailable   //활성화여부 설정
@@ -149,7 +152,7 @@ class SearchResultDetailViewController: UIViewController {
             //이미 즐겨찾기에 추가되어있다면 삭제합니다.
             let result = coreDataHandler.deleteItem(itemSeq: self.item.itemSeq!)    //itemSeq가 nil이라면 버튼이 비활성화되도록 해두었으므로 unwrapping 가능
             if result {     //삭제 성공
-                self.addToFavoritesButton.image = UIImage(systemName: "star")!
+                self.addToFavoritesButton.image = self.emptyStar
                 self.isAddedToFavorites = false
             }else {
                 //삭제 실패 - alert를 띄우고 버튼 이미지는 바꾸지 않습니다.
@@ -162,7 +165,7 @@ class SearchResultDetailViewController: UIViewController {
             
             if result {     //즐겨찾기 추가 성공
                 //버튼 이미지를 바꾸고 프로퍼티 값 변경
-                self.addToFavoritesButton.image = UIImage(systemName: "star.fill")!
+                self.addToFavoritesButton.image = self.filledStar
                 self.isAddedToFavorites = true
             }else {
                 //즐겨찾기 추가 실패 -  alert를 띄우고 버튼 이미지는 바꾸지 않습니다.
