@@ -11,7 +11,7 @@ import Network
 class SearchNavigationController: UINavigationController {
     
     //search쪽 작업들은 인터넷 연결이 필수적이다. 테스트 해보니 인터넷 연결이 없는 경우 의약외품 검색 및 마스크 목록 보기 진입 시 오류 발생 메시지와 함께 진입이 되지는 않는다.
-    lazy var networkMonitor: NWPathMonitor = NWPathMonitor()
+    var networkMonitor: NWPathMonitor?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,7 +25,8 @@ class SearchNavigationController: UINavigationController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        networkMonitor.pathUpdateHandler = { [unowned self] path in
+        networkMonitor = NWPathMonitor()    //cancel을 한 경우 다시 생성해줘야 한다. cancel을 한 객체는 더이상 쓸 수 없음
+        networkMonitor?.pathUpdateHandler = { [unowned self] path in
             //이 부분때문이었다. 네트워크 상태를 모니터링하고 이후에 콜백으로 작동하는 과정 자체가 전부 백그라운드 쓰레드에서 진행되다보니.. 이 부분에서 View에 대한 부분을 건드리면 메인쓰레드에서의 접근이 아니어서 문제가 생긴다.
             //이 핸들 클로저 등록 구문은 백그라운드에서 실행이 되며, 등록 시에도 최초 한번은 호출되는 것으로 보인다. (인터넷 연결 끊고 앱 켰을 시 알림이 뜬다.)
             DispatchQueue.main.async {
@@ -40,14 +41,15 @@ class SearchNavigationController: UINavigationController {
                 
             }
         }
-        networkMonitor.start(queue: DispatchQueue.global(qos: .background))
+        networkMonitor?.start(queue: DispatchQueue.global(qos: .background))
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
-        networkMonitor.cancel()
-        networkMonitor.pathUpdateHandler = nil
+        networkMonitor?.cancel()
+        networkMonitor?.pathUpdateHandler = nil
+        networkMonitor = nil
     }
 
     /*

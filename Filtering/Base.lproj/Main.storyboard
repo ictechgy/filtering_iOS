@@ -54,7 +54,7 @@
                                 </subviews>
                             </stackView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MJc-vK-Brq">
-                                <rect key="frame" x="80" y="556" width="254" height="34"/>
+                                <rect key="frame" x="132" y="559" width="150" height="34"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                 <state key="normal" title="마스크 정보 검색하기"/>
                                 <connections>
@@ -67,11 +67,12 @@
                         <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="f8K-OG-fjC" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="BG1-qy-Cdb"/>
-                            <constraint firstItem="MJc-vK-Brq" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="80" id="Cu9-pE-TcV"/>
                             <constraint firstItem="f8K-OG-fjC" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="12" id="DMu-bH-R1D"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="MJc-vK-Brq" secondAttribute="bottom" constant="220" id="Exu-6y-Qir"/>
+                            <constraint firstItem="f8K-OG-fjC" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="ZL7-bb-aJ2"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="f8K-OG-fjC" secondAttribute="trailing" constant="12" id="d8O-Tt-WAe"/>
-                            <constraint firstItem="MJc-vK-Brq" firstAttribute="top" secondItem="f8K-OG-fjC" secondAttribute="bottom" constant="80" id="fp7-qe-rNC"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="MJc-vK-Brq" secondAttribute="trailing" constant="80" id="kxg-xN-HhO"/>
+                            <constraint firstItem="MJc-vK-Brq" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="fSB-uq-0ry"/>
+                            <constraint firstItem="MJc-vK-Brq" firstAttribute="top" relation="greaterThanOrEqual" secondItem="f8K-OG-fjC" secondAttribute="bottom" constant="80" id="pvu-jH-nlp"/>
                         </constraints>
                         <connections>
                             <outletCollection property="gestureRecognizers" destination="CHO-fr-P18" appends="YES" id="LiL-bW-y0i"/>
@@ -804,39 +805,46 @@
                                             <rect key="frame" x="0.0" y="0.0" width="383" height="70"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="제품명이 들어갈 공간" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="H4d-ct-5fu">
-                                                    <rect key="frame" x="20" y="11" width="355" height="21.5"/>
-                                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="18"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="bottom" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="gc4-dl-gGj">
-                                                    <rect key="frame" x="20" y="43.5" width="355" height="16.5"/>
+                                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="Dah-Vg-xy5">
+                                                    <rect key="frame" x="20" y="8" width="343" height="54"/>
                                                     <subviews>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="제조회사 명" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hiq-OW-UlG">
-                                                            <rect key="frame" x="0.0" y="2" width="172.5" height="14.5"/>
-                                                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="제품명이 들어갈 공간" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="H4d-ct-5fu">
+                                                            <rect key="frame" x="0.0" y="0.0" width="343" height="21.5"/>
+                                                            <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="18"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="마스크 용도 표기" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ezm-K7-2SW">
-                                                            <rect key="frame" x="182.5" y="0.0" width="172.5" height="16.5"/>
-                                                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                                            <nil key="textColor"/>
-                                                            <nil key="highlightedColor"/>
-                                                        </label>
+                                                        <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="bottom" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="gc4-dl-gGj">
+                                                            <rect key="frame" x="0.0" y="29.5" width="343" height="24.5"/>
+                                                            <subviews>
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="제조회사 명" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hiq-OW-UlG">
+                                                                    <rect key="frame" x="0.0" y="10" width="166.5" height="14.5"/>
+                                                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                                    <nil key="textColor"/>
+                                                                    <nil key="highlightedColor"/>
+                                                                </label>
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="마스크 용도 표기" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ezm-K7-2SW">
+                                                                    <rect key="frame" x="176.5" y="6.5" width="166.5" height="18"/>
+                                                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                                    <nil key="textColor"/>
+                                                                    <nil key="highlightedColor"/>
+                                                                </label>
+                                                            </subviews>
+                                                        </stackView>
                                                     </subviews>
+                                                    <constraints>
+                                                        <constraint firstAttribute="trailing" secondItem="H4d-ct-5fu" secondAttribute="trailing" id="3n1-fx-rg4"/>
+                                                        <constraint firstAttribute="trailing" secondItem="gc4-dl-gGj" secondAttribute="trailing" id="DSz-KA-RPz"/>
+                                                        <constraint firstItem="H4d-ct-5fu" firstAttribute="leading" secondItem="Dah-Vg-xy5" secondAttribute="leading" id="X9V-IH-PHK"/>
+                                                        <constraint firstItem="gc4-dl-gGj" firstAttribute="leading" secondItem="Dah-Vg-xy5" secondAttribute="leading" id="fcM-9E-uqC"/>
+                                                    </constraints>
                                                 </stackView>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="H4d-ct-5fu" firstAttribute="leading" secondItem="Tq1-4Z-jCB" secondAttribute="leadingMargin" id="0sc-vy-hre"/>
-                                                <constraint firstAttribute="bottom" secondItem="gc4-dl-gGj" secondAttribute="bottom" constant="10" id="BIb-lk-ewh"/>
-                                                <constraint firstItem="H4d-ct-5fu" firstAttribute="top" relation="greaterThanOrEqual" secondItem="Tq1-4Z-jCB" secondAttribute="topMargin" id="Iep-Rg-ynZ"/>
-                                                <constraint firstItem="gc4-dl-gGj" firstAttribute="leading" secondItem="Tq1-4Z-jCB" secondAttribute="leading" constant="20" id="L0q-lI-dsb"/>
-                                                <constraint firstItem="gc4-dl-gGj" firstAttribute="leading" secondItem="H4d-ct-5fu" secondAttribute="leading" id="kJV-JK-pPf"/>
-                                                <constraint firstItem="H4d-ct-5fu" firstAttribute="trailing" secondItem="Tq1-4Z-jCB" secondAttribute="trailingMargin" id="pdJ-tX-JBP"/>
-                                                <constraint firstItem="gc4-dl-gGj" firstAttribute="top" secondItem="H4d-ct-5fu" secondAttribute="bottom" constant="11" id="qNR-Ms-sT8"/>
-                                                <constraint firstItem="gc4-dl-gGj" firstAttribute="trailing" secondItem="H4d-ct-5fu" secondAttribute="trailing" id="vEL-BJ-LJj"/>
+                                                <constraint firstAttribute="bottom" secondItem="Dah-Vg-xy5" secondAttribute="bottom" constant="8" id="Bbi-Rg-SvE"/>
+                                                <constraint firstItem="Dah-Vg-xy5" firstAttribute="leading" secondItem="Tq1-4Z-jCB" secondAttribute="leading" constant="20" symbolic="YES" id="GNt-Ja-RA6"/>
+                                                <constraint firstItem="Dah-Vg-xy5" firstAttribute="top" secondItem="Tq1-4Z-jCB" secondAttribute="top" constant="8" id="hvL-y5-a0R"/>
+                                                <constraint firstAttribute="trailing" secondItem="Dah-Vg-xy5" secondAttribute="trailing" constant="20" symbolic="YES" id="tzS-s0-frb"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <gestureRecognizers/>
@@ -859,7 +867,7 @@
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="PSE-xa-Snz">
                                 <rect key="frame" x="-20" y="418" width="454" height="60.5"/>
                                 <subviews>
-                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="large" id="JJs-Av-o64">
+                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="large" id="JJs-Av-o64">
                                         <rect key="frame" x="208.5" y="0.0" width="37" height="36"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="color" name="AccentColor"/>

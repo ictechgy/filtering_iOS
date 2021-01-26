@@ -31,6 +31,13 @@ class MaskAuthorizedListDetailViewController: UIViewController {
         webView.load(urlRequest)
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        if webView.isLoading {
+            webView.stopLoading()
+        }
+    }
 
     /*
     // MARK: - Navigation

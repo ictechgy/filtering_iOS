@@ -139,7 +139,6 @@ class FavoriteListViewController: UIViewController, UITableViewDataSource, UITab
         
         let tapGestureRecognizer: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tableViewCellTapped(_:)))
         cell.addGestureRecognizer(tapGestureRecognizer)
-        cell.tag = indexPath.row
         
         let item = items[indexPath.row]
         
@@ -203,13 +202,19 @@ class FavoriteListViewController: UIViewController, UITableViewDataSource, UITab
         }
 
         if isEditing {  //edit 중인 상태인 경우
+            guard let row = tableView.indexPath(for: cell)?.row else {
+                return //row값을 못얻는 경우 selected 상태변화도 없도록
+            }
+            
             cell.setSelected(!cell.isSelected, animated: true)  //toggle
             
             if cell.isSelected {    //위의 toggle에 의해 이제 막선택된 경우라면
-                self.selectedItems.insert(cell.tag)
+                self.selectedItems.insert(row)
             }else {     //toggle에 의해 이제 막 선택이 해제된 경우라면
-                self.selectedItems.remove(cell.tag)
+                self.selectedItems.remove(row)
             }
+            //기존에 이 부분을 cell에 직접 달아준 tag로 진행했었다. - tableView(_:, cellForRowAt:)에서 각 셀에 row값으로 tag를 설정했고 그 값을 이용해서 삭제진행 -
+            //하지만 그렇게 하면 몇몇 목록이 삭제되어도 남아있는 cell들의 tag값은 그대로 유지되기 때문에 나중에 뒷부분 삭제를 진행하면 indexOutOfRange 에러가 발생한다. 따라서 위와 같이 바꿔주었다. - tableView(_:, cellForRowAt:)에서 cell에 tag를 부여하는 부분도 삭제 -
             
             return
         }

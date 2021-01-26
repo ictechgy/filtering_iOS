@@ -122,9 +122,10 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate, UISearchBar
             
         //허가받은 목록 버튼 누른 경우
         case showMaskAuthorizedList:
-            guard let nextViewController = segue.destination as? MaskAuthorizedListViewController else {
+            guard segue.destination is MaskAuthorizedListViewController else {
                 return
             }
+            //something to do?
         default:
             return
         }
