@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		469D9A014A89D54538C84E1E /* Pods_Filtering.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC416A2ECF67CDC0DC7E6FAD /* Pods_Filtering.framework */; };
+		C40562A825C1C03D00BFDEF3 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C40562A725C1C03D00BFDEF3 /* GoogleService-Info.plist */; };
 		C40B586A2585174100237BD2 /* NetworkHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C40B58692585174100237BD2 /* NetworkHandler.swift */; };
 		C40B586D25851DEE00237BD2 /* keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = C40B586C25851DEE00237BD2 /* keys.plist */; };
 		C40B58712585F95200237BD2 /* NonMedicalItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C40B58702585F95200237BD2 /* NonMedicalItem.swift */; };
@@ -47,6 +48,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C40562A725C1C03D00BFDEF3 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C40B58692585174100237BD2 /* NetworkHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkHandler.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		C40B586C25851DEE00237BD2 /* keys.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = keys.plist; sourceTree = "<group>"; };
 		C40B58702585F95200237BD2 /* NonMedicalItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NonMedicalItem.swift; sourceTree = "<group>"; };
@@ -185,6 +187,7 @@
 				C4C98BFB2583C19F0007B879 /* LaunchScreen.storyboard */,
 				C4C98BFE2583C19F0007B879 /* Info.plist */,
 				C40B586C25851DEE00237BD2 /* keys.plist */,
+				C40562A725C1C03D00BFDEF3 /* GoogleService-Info.plist */,
 			);
 			path = Filtering;
 			sourceTree = "<group>";
@@ -278,6 +281,7 @@
 				C4C98BFA2583C19F0007B879 /* Assets.xcassets in Resources */,
 				C4C98BF82583C19F0007B879 /* Main.storyboard in Resources */,
 				C4A233EC25B84EA10088E42F /* CardTableViewCell.xib in Resources */,
+				C40562A825C1C03D00BFDEF3 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

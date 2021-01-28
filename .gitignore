@@ -188,7 +188,8 @@ Dependencies/
 
 ## Additional Settings ##
 
-info.plist
+Info.plist
 keys.plist
+GoogleService-Info.plist
 
 ## END ##

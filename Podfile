@@ -8,5 +8,6 @@ target 'Filtering' do
   # Pods for Filtering
     pod 'CoreXLSX', '~> 0.14.0'
     pod 'SwiftSoup'
+    pod 'Firebase/Analytics'
 
 end
