@@ -6,6 +6,9 @@
 //
 
 import UIKit
+import FirebaseStorage
+import SDWebImage
+import FirebaseUI
 
 class SearchResultViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
@@ -28,6 +31,11 @@ class SearchResultViewController: UIViewController, UITableViewDelegate, UITable
     private var loadedPageCount: Int = 1
     private var numberOfRows: Int = 20
     private var parsingResultHandler: ((Result<[NonMedicalItem], Error>, Int) -> Void)!
+    
+    //Firebase Storage
+    lazy var photoStorageRef: StorageReference = {
+        return Storage.storage().reference().child("QuasiDrugPhotos")
+    }()
 
     
     //MARK:- LifeCycle
@@ -126,6 +134,23 @@ class SearchResultViewController: UIViewController, UITableViewDelegate, UITable
         let item = items[indexPath.row]
         cell.itemName.text = item.itemName
         cell.entpName.text = item.entpName
+        
+        guard let itemSeq = item.itemSeq else {
+            return cell
+        }
+        let photoDirRef: StorageReference = photoStorageRef.child(itemSeq) //해당 아이템 itemSeq로 된 폴더 가리키기
+        let photoRef: StorageReference = photoDirRef.child(itemSeq + "_1.jpg")  //사진들 중 첫번째 사진 참조
+        
+        cell.itemPhoto.sd_setImage(with: photoRef, placeholderImage: nil) { (image, error, imageCacheType, ref) in
+            //completion
+            if error != nil {
+                print(error?.localizedDescription)
+                return
+            }  //error 발생 시 아무것도 하지 않습니다.
+            
+            //에러가 없다면
+            cell.itemPhoto.isHidden = false     //UIImageView 보여주기
+        }
         
         return cell
     }

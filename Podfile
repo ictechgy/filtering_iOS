@@ -10,5 +10,6 @@ target 'Filtering' do
     pod 'SwiftSoup'
     pod 'Firebase/Analytics'
     pod 'Firebase/Storage'
+    pod 'FirebaseUI/Storage'
 
 end

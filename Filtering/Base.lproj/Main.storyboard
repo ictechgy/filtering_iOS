@@ -539,41 +539,41 @@
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="resultItemCell" id="SSV-Og-OQU" customClass="SearchItemTableViewCell" customModule="Filtering" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="55.5" width="414" height="86"/>
+                                        <rect key="frame" x="0.0" y="55.5" width="414" height="117"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="SSV-Og-OQU" id="dOS-F8-brr">
-                                            <rect key="frame" x="0.0" y="0.0" width="383" height="86"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="383" height="117"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="V0z-hP-beY">
-                                                    <rect key="frame" x="20" y="0.0" width="343" height="86"/>
+                                                    <rect key="frame" x="20" y="8" width="343" height="101"/>
                                                     <subviews>
-                                                        <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Znn-GO-kyx">
-                                                            <rect key="frame" x="0.0" y="5" width="71.5" height="76"/>
+                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Znn-GO-kyx">
+                                                            <rect key="frame" x="0.0" y="5" width="186" height="91"/>
                                                             <constraints>
-                                                                <constraint firstAttribute="width" constant="71.5" id="HaI-Of-iZ1"/>
+                                                                <constraint firstAttribute="width" constant="186" id="n14-Ge-8EH"/>
                                                             </constraints>
                                                         </imageView>
                                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="Jn8-VA-rbm">
-                                                            <rect key="frame" x="0.0" y="17.5" width="343" height="51"/>
+                                                            <rect key="frame" x="194" y="25" width="149" height="51"/>
                                                             <subviews>
-                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="제품명이 들어갈 공간" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vvF-Y8-VRe">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="343" height="21.5"/>
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="제품명이 들어갈 공간" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vvF-Y8-VRe">
+                                                                    <rect key="frame" x="0.0" y="0.0" width="149" height="21.5"/>
                                                                     <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="18"/>
                                                                     <nil key="textColor"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
-                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="제조회사 명" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="J6z-oX-H1D">
-                                                                    <rect key="frame" x="0.0" y="36.5" width="343" height="14.5"/>
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="제조회사 명" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="J6z-oX-H1D">
+                                                                    <rect key="frame" x="0.0" y="36.5" width="149" height="14.5"/>
                                                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                                     <nil key="textColor"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
                                                             </subviews>
                                                             <constraints>
-                                                                <constraint firstAttribute="bottom" secondItem="J6z-oX-H1D" secondAttribute="bottom" id="4Sj-jJ-hdD"/>
+                                                                <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="J6z-oX-H1D" secondAttribute="bottom" id="4Sj-jJ-hdD"/>
                                                                 <constraint firstItem="vvF-Y8-VRe" firstAttribute="leading" secondItem="Jn8-VA-rbm" secondAttribute="leading" id="NPw-5V-Tye"/>
-                                                                <constraint firstItem="vvF-Y8-VRe" firstAttribute="top" secondItem="Jn8-VA-rbm" secondAttribute="top" id="NZD-eY-Cz4"/>
+                                                                <constraint firstItem="vvF-Y8-VRe" firstAttribute="top" relation="greaterThanOrEqual" secondItem="Jn8-VA-rbm" secondAttribute="top" id="NZD-eY-Cz4"/>
                                                                 <constraint firstItem="J6z-oX-H1D" firstAttribute="leading" secondItem="Jn8-VA-rbm" secondAttribute="leading" id="XjS-EC-OXF"/>
                                                                 <constraint firstAttribute="trailing" secondItem="J6z-oX-H1D" secondAttribute="trailing" id="eTo-ve-pRk"/>
                                                                 <constraint firstAttribute="trailing" secondItem="vvF-Y8-VRe" secondAttribute="trailing" id="gmA-En-keh"/>
@@ -581,14 +581,18 @@
                                                         </stackView>
                                                     </subviews>
                                                     <constraints>
-                                                        <constraint firstAttribute="bottom" secondItem="Znn-GO-kyx" secondAttribute="bottom" constant="5" id="abh-6O-2HI"/>
+                                                        <constraint firstItem="Jn8-VA-rbm" firstAttribute="centerY" secondItem="V0z-hP-beY" secondAttribute="centerY" id="1hm-xe-bBk"/>
+                                                        <constraint firstItem="Znn-GO-kyx" firstAttribute="centerY" secondItem="V0z-hP-beY" secondAttribute="centerY" id="31c-Dy-ZJG"/>
+                                                        <constraint firstAttribute="bottom" secondItem="Znn-GO-kyx" secondAttribute="bottom" constant="5" id="Gux-Vs-6Em"/>
+                                                        <constraint firstItem="Znn-GO-kyx" firstAttribute="leading" secondItem="V0z-hP-beY" secondAttribute="leading" id="XUB-VS-a5T"/>
                                                         <constraint firstItem="Znn-GO-kyx" firstAttribute="top" secondItem="V0z-hP-beY" secondAttribute="top" constant="5" id="cMt-Fj-79G"/>
+                                                        <constraint firstItem="Jn8-VA-rbm" firstAttribute="leading" secondItem="Znn-GO-kyx" secondAttribute="trailing" constant="8" symbolic="YES" id="r3o-Z0-Z1U"/>
                                                     </constraints>
                                                 </stackView>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstAttribute="bottom" secondItem="V0z-hP-beY" secondAttribute="bottom" id="AlP-na-zWy"/>
-                                                <constraint firstItem="V0z-hP-beY" firstAttribute="top" secondItem="dOS-F8-brr" secondAttribute="top" id="LhC-DV-MSj"/>
+                                                <constraint firstAttribute="bottom" secondItem="V0z-hP-beY" secondAttribute="bottom" constant="8" id="AlP-na-zWy"/>
+                                                <constraint firstItem="V0z-hP-beY" firstAttribute="top" secondItem="dOS-F8-brr" secondAttribute="top" constant="8" id="LhC-DV-MSj"/>
                                                 <constraint firstItem="V0z-hP-beY" firstAttribute="leading" secondItem="dOS-F8-brr" secondAttribute="leading" constant="20" symbolic="YES" id="N6C-YX-0a0"/>
                                                 <constraint firstAttribute="trailing" secondItem="V0z-hP-beY" secondAttribute="trailing" constant="20" symbolic="YES" id="UUO-7X-fQb"/>
                                             </constraints>
