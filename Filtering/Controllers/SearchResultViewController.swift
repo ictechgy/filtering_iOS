@@ -141,15 +141,30 @@ class SearchResultViewController: UIViewController, UITableViewDelegate, UITable
         let photoDirRef: StorageReference = photoStorageRef.child(itemSeq) //해당 아이템 itemSeq로 된 폴더 가리키기
         let photoRef: StorageReference = photoDirRef.child(itemSeq + "_1.jpg")  //사진들 중 첫번째 사진 참조
         
-        cell.itemPhoto.sd_setImage(with: photoRef, placeholderImage: nil) { (image, error, imageCacheType, ref) in
-            //completion
-            if error != nil {
-                print(error?.localizedDescription)
-                return
-            }  //error 발생 시 아무것도 하지 않습니다.
-            
-            //에러가 없다면
-            cell.itemPhoto.isHidden = false     //UIImageView 보여주기
+        //cell 재활용 전 설정
+        cell.itemPhoto.sd_cancelCurrentImageLoad()  //로드중인 이미지가 있었다면 취소합니다.
+        cell.itemPhoto.image = nil
+        cell.itemPhoto.isHidden = true
+        
+        if let existingImage = item.itemImage { //만약 기존에 이미 이미지를 로딩 했었던 아이템이라면
+            cell.itemPhoto.image = existingImage
+        }else {
+            cell.itemPhoto.sd_setImage(with: photoRef, placeholderImage: nil) { [weak self] (image, error, imageCacheType, ref) in
+                guard let self = self else {
+                    return  //self 없을 시 return
+                }
+                
+                //completion (main queue)
+                //궁금한게 있다. 이 클로저부분은 콜백으로 실행될텐데 이 때 여기서 가리키는 cell이 기존의 그 cell이라고 장담할 수 있을까? 이미 재활용되어서 다른 셀을 가리키는 것이라면?? -> 그래서 재활용 되기 전에 기존 Load를 cancel하는 메소드를 기입해주긴 했다..
+                if error != nil {
+                    print(error?.localizedDescription)
+                    return
+                }  //error 발생 시 아무것도 하지 않습니다.
+                
+                //에러가 없다면
+                cell.itemPhoto.isHidden = false     //UIImageView 보여주기
+                self.items[cell.tag].itemImage = image  //이미지를 저장
+            }
         }
         
         return cell
@@ -172,6 +187,7 @@ class SearchResultViewController: UIViewController, UITableViewDelegate, UITable
         guard let detailViewController = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "SearchResultDetailViewController") as? SearchResultDetailViewController else {
             return
         }
+        //만약에 이미지가 다 로드되기 전에 셀을 탭해서 상세화면으로 넘어간다면 상세화면에서도 이미지는 안뜨겠지? (이미지가 있는 것이었어도 로드가 안됐다면) 그럼 그 상태에서 즐겨찾기 한다면.. 이미지 또한 안들어가겠군..
         detailViewController.item = items[tag]
         self.navigationController?.pushViewController(detailViewController, animated: true)
     }

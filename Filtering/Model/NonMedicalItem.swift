@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit.UIImage
 
 ///검색 결과값에 대한 하나하나의 항목을 담을 구조체
 struct NonMedicalItem {
@@ -41,6 +42,9 @@ struct NonMedicalItem {
     
     ///취소됐다면 그 날짜
     var cancelDate: String?
+    
+    //아이템 사진
+    var itemImage: UIImage?
     
     struct DocData: Codable {
         var title: DocType
