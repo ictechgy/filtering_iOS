@@ -142,27 +142,29 @@ class SearchResultViewController: UIViewController, UITableViewDelegate, UITable
         let photoRef: StorageReference = photoDirRef.child(itemSeq + "_1.jpg")  //사진들 중 첫번째 사진 참조
         
         //cell 재활용 전 설정
-        cell.itemPhoto.sd_cancelCurrentImageLoad()  //로드중인 이미지가 있었다면 취소합니다.
-        cell.itemPhoto.image = nil
-        cell.itemPhoto.isHidden = true
+        cell.itemImageView.sd_cancelCurrentImageLoad()  //로드중인 이미지가 있었다면 취소합니다.
+        cell.itemImageView.image = nil
+        cell.itemImageView.isHidden = true
         
         if let existingImage = item.itemImage { //만약 기존에 이미 이미지를 로딩 했었던 아이템이라면
-            cell.itemPhoto.image = existingImage
+            cell.itemImageView.image = existingImage
+            cell.itemImageView.isHidden = false
         }else {
-            cell.itemPhoto.sd_setImage(with: photoRef, placeholderImage: nil) { [weak self] (image, error, imageCacheType, ref) in
+            cell.itemImageView.sd_setImage(with: photoRef, placeholderImage: nil) { [weak self] (image, error, imageCacheType, ref) in
                 guard let self = self else {
                     return  //self 없을 시 return
                 }
                 
                 //completion (main queue)
                 //궁금한게 있다. 이 클로저부분은 콜백으로 실행될텐데 이 때 여기서 가리키는 cell이 기존의 그 cell이라고 장담할 수 있을까? 이미 재활용되어서 다른 셀을 가리키는 것이라면?? -> 그래서 재활용 되기 전에 기존 Load를 cancel하는 메소드를 기입해주긴 했다..
+                //또 궁금한 것은.. 이미지를 다운로드 받다가 다 다운되기 전에 화면이 pop되거나 다른화면으로 push되는 등의 화면 전환 동작이 생기면 다운로드 받던 것은 어떻게 되는 걸까? 
                 if error != nil {
                     print(error?.localizedDescription)
                     return
                 }  //error 발생 시 아무것도 하지 않습니다.
                 
                 //에러가 없다면
-                cell.itemPhoto.isHidden = false     //UIImageView 보여주기
+                cell.itemImageView.isHidden = false     //UIImageView 보여주기
                 self.items[cell.tag].itemImage = image  //이미지를 저장
             }
         }

@@ -37,6 +37,7 @@ class SearchResultDetailViewController: UIViewController {
         return iconImage
     }
     
+    @IBOutlet weak var itemImageView: UIImageView!
     @IBOutlet weak var itemSeq: UILabel!
     @IBOutlet weak var itemName: UILabel!
     @IBOutlet weak var classNo: UILabel!
@@ -88,6 +89,12 @@ class SearchResultDetailViewController: UIViewController {
         cancelCode.text = "인증상태: " + (item.cancelCode ?? notApplicable)
         cancelDate.text = "취소일: " + (item.cancelDate ?? notApplicable)
         //text.append로 하니까 viewWillAppear할 때마다 뒤에 계속 값이 붙어서 변경 (다른 화면으로 단순히 이동했다가 다시 오는경우..)
+        
+        guard let image = item.itemImage else {
+            return
+        }
+        itemImageView.image = image
+        itemImageView.isHidden = false
     }
     
     ///segmented control에 의해 바뀌어야 하는 뷰의 내용 제어

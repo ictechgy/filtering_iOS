@@ -88,6 +88,7 @@ class CoreDataHandler {
         }
     }
     
+    //Image를 어떻게 저장할 것인가.. 파일을 통째로 그냥 저장해서 쓸 것인지, 아니면 메타데이터를 이용하는 방식을 쓸 것인지
     ///item을 넘겨받아 해당 아이템을 저장
     func insertItem(item: NonMedicalItem) -> Bool {
         //NSManagedObjectContext 가져오기

@@ -9,7 +9,7 @@ import UIKit
 
 class SearchItemTableViewCell: UITableViewCell {
     
-    @IBOutlet weak var itemPhoto: UIImageView!
+    @IBOutlet weak var itemImageView: UIImageView!
     @IBOutlet weak var itemName: UILabel!
     @IBOutlet weak var entpName: UILabel!
 

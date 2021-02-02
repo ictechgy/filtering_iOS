@@ -7,6 +7,7 @@
         <attribute name="classNoName" optional="YES" attributeType="String"/>
         <attribute name="eeDocData" optional="YES" attributeType="Binary"/>
         <attribute name="entpName" optional="YES" attributeType="String"/>
+        <attribute name="itemImage" optional="YES"/>
         <attribute name="itemName" optional="YES" attributeType="String"/>
         <attribute name="itemPermitDate" optional="YES" attributeType="String"/>
         <attribute name="itemSeq" optional="YES" attributeType="String"/>
@@ -19,6 +20,6 @@
         </uniquenessConstraints>
     </entity>
     <elements>
-        <element name="QuasiDrug" positionX="-13013.05078125" positionY="-7888.726043701172" width="289.3839721679688" height="208"/>
+        <element name="QuasiDrug" positionX="-13013.05078125" positionY="-7888.726043701172" width="289.3839721679688" height="209"/>
     </elements>
 </model>
