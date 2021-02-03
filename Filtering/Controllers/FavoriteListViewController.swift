@@ -145,6 +145,14 @@ class FavoriteListViewController: UIViewController, UITableViewDataSource, UITab
         cell.itemName.text = item.itemName
         cell.entpName.text = item.entpName
         
+        cell.itemImageView.image = nil
+        cell.itemImageView.isHidden = true
+        
+        if let existingImage = item.itemImage {     //이미지가 있을 경우에만 세팅해주고 보여줍니다.
+            cell.itemImageView.image = existingImage
+            cell.itemImageView.isHidden = false
+        }
+        
         return cell
     }
     

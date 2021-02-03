@@ -1,8 +1,8 @@
 //
 //  QuasiDrug+CoreDataProperties.swift
-//  Filtering
+//  
 //
-//  Created by JINHONG AN on 2020/12/21.
+//  Created by JINHONG AN on 2021/02/03.
 //
 //
 
@@ -16,20 +16,17 @@ extension QuasiDrug {
         return NSFetchRequest<QuasiDrug>(entityName: "QuasiDrug")
     }
 
-    @NSManaged public var itemSeq: String?
-    @NSManaged public var itemName: String?
-    @NSManaged public var classNo: String?
-    @NSManaged public var classNoName: String?
-    @NSManaged public var entpName: String?
-    @NSManaged public var itemPermitDate: String?
     @NSManaged public var cancelCode: String?
     @NSManaged public var cancelDate: String?
+    @NSManaged public var classNo: String?
+    @NSManaged public var classNoName: String?
     @NSManaged public var eeDocData: Data?
-    @NSManaged public var udDocData: Data?
+    @NSManaged public var entpName: String?
+    @NSManaged public var itemImage: Data?
+    @NSManaged public var itemName: String?
+    @NSManaged public var itemPermitDate: String?
+    @NSManaged public var itemSeq: String?
     @NSManaged public var nbDocData: Data?
-
-}
-
-extension QuasiDrug : Identifiable {
+    @NSManaged public var udDocData: Data?
 
 }

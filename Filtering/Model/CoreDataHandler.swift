@@ -7,6 +7,7 @@
 
 import Foundation
 import CoreData
+import UIKit.UIImage
 
 //AppDelegate.swift에 작성하지 않고 별도로 구현
 class CoreDataHandler {
@@ -88,7 +89,17 @@ class CoreDataHandler {
         }
     }
     
-    //Image를 어떻게 저장할 것인가.. 파일을 통째로 그냥 저장해서 쓸 것인지, 아니면 메타데이터를 이용하는 방식을 쓸 것인지
+    /*
+    Image를 어떻게 저장할 것인가.. 파일을 통째로 그냥 저장해서 쓸 것인지, 아니면 메타데이터를 이용하는 방식을 쓸 것인지
+    Image를 Binary Data로 변환 해 CoreData에 저장할 수도 있고 파일 id값만 CoreData에 저장하고 이미지 자체는 파일시스템을 이용할 수도 있다. - 애플에서는 큰 파일(BLOB)의 경우 파일 시스템을 같이 이용할 것을 권하고 있다.
+     - 참고 사이트
+        1. https://jiseobkim.github.io/swift/2019/07/11/swift-File-Manager.html
+        2. https://www.vadimbulavin.com/how-to-save-images-and-videos-to-core-data-efficiently/
+        3. https://fluffy.es/store-image-coredata/
+        
+     처음에는 참고사이트 1처럼 구현할까 했었으나 참고 사이트 2번을 보니 External Storage를 같이 이용하는게 이미지 용량이 커질수록 더 빠르다고 하여 해당 방식으로 만들어보고자 한다. - 이미지 크기가 작으면 CoreData 자체에 저장하고 이미지 크기가 크면 FileSystem을 이용하는 방식 (크기에 대한 기준은 우리가 정하는것은 아님. 휴리스틱하게 CoreData가 알아서. iOS 5.0부터 지원) -
+     */
+    
     ///item을 넘겨받아 해당 아이템을 저장
     func insertItem(item: NonMedicalItem) -> Bool {
         //NSManagedObjectContext 가져오기
@@ -112,6 +123,7 @@ class CoreDataHandler {
             managedObject.setValue(item.itemPermitDate, forKey: #keyPath(QuasiDrug.itemPermitDate))
             managedObject.setValue(item.cancelCode, forKey: #keyPath(QuasiDrug.cancelCode))
             managedObject.setValue(item.cancelDate, forKey: #keyPath(QuasiDrug.cancelDate))
+            managedObject.setValue(item.itemImage?.pngData(), forKey: #keyPath(QuasiDrug.itemImage))
             
             let encoder = PropertyListEncoder()
             
@@ -217,6 +229,10 @@ class CoreDataHandler {
                 item.itemPermitDate = drug.itemPermitDate
                 item.cancelCode = drug.cancelCode
                 item.cancelDate = drug.cancelDate
+                
+                if let imageData = drug.itemImage { //저장된 이미지 데이터가 있다면 설정해주기
+                    item.itemImage = UIImage(data: imageData)
+                }
                 
                 let decoder = PropertyListDecoder()
                 
