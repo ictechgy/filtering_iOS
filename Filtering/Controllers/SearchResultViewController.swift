@@ -15,7 +15,8 @@ class SearchResultViewController: UIViewController, UITableViewDelegate, UITable
     //ViewController에서 입력한 검색 내용
     var searchContent: String?
     var searchMode: SearchMode = .itemName
-    private let cellIdentifier: String = "resultItemCell"
+    private let cellWithImageIdentifier: String = "resultItemCellWithImage"
+    private let cellWithoutImageIdentifier: String = "resultItemCellWithoutImage"
     
     @IBOutlet weak var loadingIndicator: UIActivityIndicatorView!
     @IBOutlet weak var tableView: UITableView!
@@ -123,6 +124,13 @@ class SearchResultViewController: UIViewController, UITableViewDelegate, UITable
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+
+        
+        let item = items[indexPath.row]
+        let identifier: String = item.itemImage == nil ? cellWithoutImageIdentifier : cellWithImageIdentifier
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: identifier) 
+        
         guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) as? SearchItemTableViewCell else {
             return SearchItemTableViewCell()
         }
@@ -131,7 +139,6 @@ class SearchResultViewController: UIViewController, UITableViewDelegate, UITable
         cell.addGestureRecognizer(tapGestureRecognizer)
         cell.tag = indexPath.row
         
-        let item = items[indexPath.row]
         cell.itemName.text = item.itemName
         cell.entpName.text = item.entpName
         

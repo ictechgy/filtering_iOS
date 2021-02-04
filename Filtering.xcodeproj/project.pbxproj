@@ -44,7 +44,7 @@
 		C4C98BF82583C19F0007B879 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C4C98BF62583C19F0007B879 /* Main.storyboard */; };
 		C4C98BFA2583C19F0007B879 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C4C98BF92583C19F0007B879 /* Assets.xcassets */; };
 		C4C98BFD2583C19F0007B879 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C4C98BFB2583C19F0007B879 /* LaunchScreen.storyboard */; };
-		C4DA7E5B258A79770040E846 /* SearchItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DA7E59258A79770040E846 /* SearchItemTableViewCell.swift */; };
+		C4DA7E5B258A79770040E846 /* NMItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4DA7E59258A79770040E846 /* NMItemTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -86,7 +86,7 @@
 		C4C98BF92583C19F0007B879 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C4C98BFC2583C19F0007B879 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C4C98BFE2583C19F0007B879 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		C4DA7E59258A79770040E846 /* SearchItemTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchItemTableViewCell.swift; sourceTree = "<group>"; };
+		C4DA7E59258A79770040E846 /* NMItemTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NMItemTableViewCell.swift; sourceTree = "<group>"; };
 		CC416A2ECF67CDC0DC7E6FAD /* Pods_Filtering.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Filtering.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E2949BAA7B4E04545178113B /* Pods-Filtering.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Filtering.release.xcconfig"; path = "Target Support Files/Pods-Filtering/Pods-Filtering.release.xcconfig"; sourceTree = "<group>"; };
 		E81DDDA5DADB9176736E3AA1 /* Pods-Filtering.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Filtering.debug.xcconfig"; path = "Target Support Files/Pods-Filtering/Pods-Filtering.debug.xcconfig"; sourceTree = "<group>"; };
@@ -195,7 +195,7 @@
 		C4DA7E58258A794C0040E846 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				C4DA7E59258A79770040E846 /* SearchItemTableViewCell.swift */,
+				C4DA7E59258A79770040E846 /* NMItemTableViewCell.swift */,
 				C4A2339D259B5B7B0088E42F /* UIDropDownView.swift */,
 				C4A233A1259DDC270088E42F /* UIDropDownViewCell.swift */,
 				C4A233A2259DDC270088E42F /* UIDropDownViewCell.xib */,
@@ -348,7 +348,7 @@
 				C4A233AD25A5C5670088E42F /* MaskItem.swift in Sources */,
 				C4A2340125BC10760088E42F /* BaseTabBarController.swift in Sources */,
 				C429002725BD88BF00E46227 /* AppearanceTableViewCell.swift in Sources */,
-				C4DA7E5B258A79770040E846 /* SearchItemTableViewCell.swift in Sources */,
+				C4DA7E5B258A79770040E846 /* NMItemTableViewCell.swift in Sources */,
 				C4C98BF52583C19F0007B879 /* ViewController.swift in Sources */,
 				C4C98BF12583C19F0007B879 /* AppDelegate.swift in Sources */,
 				C4A233942590B25E0088E42F /* QuasiDrug+CoreDataClass.swift in Sources */,
