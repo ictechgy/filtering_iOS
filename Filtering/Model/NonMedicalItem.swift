@@ -46,6 +46,9 @@ struct NonMedicalItem {
     //아이템 사진
     var itemImage: UIImage?
     
+    //아이템 사진이 있는지 없는지 여부
+    var isImageExist: Bool = false
+    
     struct DocData: Codable {
         var title: DocType
         

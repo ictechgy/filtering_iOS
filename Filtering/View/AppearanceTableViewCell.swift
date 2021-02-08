@@ -6,7 +6,7 @@
 //
 
 import UIKit
-
+//다크모드 설정화면에서 쓰이는 UITableViewCell
 class AppearanceTableViewCell: UITableViewCell {
     
     @IBOutlet weak var appearanceName: UILabel!

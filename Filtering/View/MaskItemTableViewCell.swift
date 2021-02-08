@@ -6,9 +6,9 @@
 //
 
 import UIKit
-
-class MaskItemTableViewCell: SearchItemTableViewCell {
-    //기본 구성은 SearchItemTableViewCell과 유사.
+//마스크 허가목록 화면용 TableViewCell
+class MaskItemTableViewCell: NMItemCellWithoutImage {
+    //기본 구성은 NMItemCellWithoutImage과 유사.
     @IBOutlet weak var maskTypeLable: UILabel!
 
     override func awakeFromNib() {

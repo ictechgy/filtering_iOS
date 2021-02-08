@@ -232,6 +232,7 @@ class CoreDataHandler {
                 
                 if let imageData = drug.itemImage { //저장된 이미지 데이터가 있다면 설정해주기
                     item.itemImage = UIImage(data: imageData)
+                    item.isImageExist = item.itemImage != nil
                 }
                 
                 let decoder = PropertyListDecoder()

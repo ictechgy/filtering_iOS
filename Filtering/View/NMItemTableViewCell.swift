@@ -7,6 +7,7 @@
 
 import UIKit
 
+//검색결과, 즐겨찾기 화면용 TableViewCell
 ///NonMedicalItem TableViewCell Without UIImage
 class NMItemCellWithoutImage: UITableViewCell {
     
@@ -26,12 +27,10 @@ class NMItemCellWithoutImage: UITableViewCell {
     
 }
 
-///NonMedicalItem TableViewCell With UIImage
-class NMItemCellWithImage: UITableViewCell {
+///NonMedicalItem TableViewCell With UIImage - Inherited from 'NMItemCellWithoutImage'
+class NMItemCellWithImage: NMItemCellWithoutImage {
     
     @IBOutlet weak var itemImageView: UIImageView!
-    @IBOutlet weak var itemName: UILabel!
-    @IBOutlet weak var entpName: UILabel!
 
     override func awakeFromNib() {
         super.awakeFromNib()

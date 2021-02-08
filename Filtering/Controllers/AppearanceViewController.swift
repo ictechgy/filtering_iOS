@@ -8,6 +8,7 @@
 import UIKit
 
 let appearanceKey: String = "Appearance"
+//다크모드 설정화면 VC
 class AppearanceViewController: UITableViewController {
     
     lazy var userDefaults = UserDefaults.standard

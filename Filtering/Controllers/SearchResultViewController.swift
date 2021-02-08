@@ -38,6 +38,22 @@ class SearchResultViewController: UIViewController, UITableViewDelegate, UITable
         return Storage.storage().reference().child("QuasiDrugPhotos")
     }()
 
+    var parsedItemsTempStorage: [NonMedicalItem] = [] {
+        didSet {
+            if parsedItemsTempStorage.count == self.numberOfRows || items.count + parsedItemsTempStorage.count == numberOfSearchResults {
+                self.items.append(contentsOf: parsedItemsTempStorage)
+                
+                //tableView 다시 그리기
+                //FIXME: - reloadData()보다 효율적인 메소드로 변경할 것
+                //self?.tableView.reloadData()
+                self.tableView.reloadSections(IndexSet(0...0), with: .automatic)
+                //더 나은 방법이 있을까..?
+                
+                self.loadingIndicator.stopAnimating()
+                parsedItemsTempStorage.removeAll()
+            }
+        }
+    }
     
     //MARK:- LifeCycle
     override func viewDidLoad() {
@@ -52,14 +68,10 @@ class SearchResultViewController: UIViewController, UITableViewDelegate, UITable
                     self?.isResultExists.isHidden = false
                     self?.tableView.isHidden = true
                 }else {
-                    self?.items.append(contentsOf: parsedItems)
+                    //파싱된 result 아이템들에 대해 Firebase에서 이미지 데이터가 있는지 조회 후 세팅
+                    self?.setDatasAfterImageCheck(parsedItems: parsedItems)
                     self?.numberOfSearchResults = numberOfTotalItems
-                    
-                    //tableView 다시 그리기
-                    //FIXME: - reloadData()보다 효율적인 메소드로 변경할 것
-                    //self?.tableView.reloadData()
-                    self?.tableView.reloadSections(IndexSet(0...0), with: .automatic)
-                    //더 나은 방법이 있을까..?
+                    return
                 }
                 
             case .failure(_):
@@ -124,17 +136,13 @@ class SearchResultViewController: UIViewController, UITableViewDelegate, UITable
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-
         
         let item = items[indexPath.row]
-        let identifier: String = item.itemImage == nil ? cellWithoutImageIdentifier : cellWithImageIdentifier
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: identifier) 
+        let identifier: String =  item.isImageExist ? cellWithImageIdentifier : cellWithoutImageIdentifier
         
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) as? SearchItemTableViewCell else {
-            return SearchItemTableViewCell()
-        }
-        //TODO: 각각의 아이템 클릭 시 작동할 코드 작성
+        let cell: NMItemCellWithoutImage = tableView.dequeueReusableCell(withIdentifier: identifier) as? NMItemCellWithoutImage ?? ( item.isImageExist ? NMItemCellWithImage() : NMItemCellWithoutImage() )
+        
         let tapGestureRecognizer: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tableViewCellTapped(_:)))
         cell.addGestureRecognizer(tapGestureRecognizer)
         cell.tag = indexPath.row
@@ -142,22 +150,23 @@ class SearchResultViewController: UIViewController, UITableViewDelegate, UITable
         cell.itemName.text = item.itemName
         cell.entpName.text = item.entpName
         
-        guard let itemSeq = item.itemSeq else {
+        //이미지 설정
+        guard let cellWithImage: NMItemCellWithImage = cell as? NMItemCellWithImage, let itemSeq = item.itemSeq else {
             return cell
         }
+        
         let photoDirRef: StorageReference = photoStorageRef.child(itemSeq) //해당 아이템 itemSeq로 된 폴더 가리키기
         let photoRef: StorageReference = photoDirRef.child(itemSeq + "_1.jpg")  //사진들 중 첫번째 사진 참조
         
         //cell 재활용 전 설정
-        cell.itemImageView.sd_cancelCurrentImageLoad()  //로드중인 이미지가 있었다면 취소합니다.
-        cell.itemImageView.image = nil
-        cell.itemImageView.isHidden = true
+        cellWithImage.itemImageView.sd_cancelCurrentImageLoad()  //로드중인 이미지가 있었다면 취소합니다.
+        cellWithImage.itemImageView.image = nil     //이미지 삭제
+        //imageView Hidden은 더이상 설정 할 필요 없음
         
         if let existingImage = item.itemImage { //만약 기존에 이미 이미지를 로딩 했었던 아이템이라면
-            cell.itemImageView.image = existingImage
-            cell.itemImageView.isHidden = false
+            cellWithImage.itemImageView.image = existingImage
         }else {
-            cell.itemImageView.sd_setImage(with: photoRef, placeholderImage: nil) { [weak self] (image, error, imageCacheType, ref) in
+            cellWithImage.itemImageView.sd_setImage(with: photoRef, placeholderImage: nil/*TODO: 로드중임을 나타내는 이미지 필요*/) { [weak self] (image, error, imageCacheType, ref) in
                 guard let self = self else {
                     return  //self 없을 시 return
                 }
@@ -166,12 +175,12 @@ class SearchResultViewController: UIViewController, UITableViewDelegate, UITable
                 //궁금한게 있다. 이 클로저부분은 콜백으로 실행될텐데 이 때 여기서 가리키는 cell이 기존의 그 cell이라고 장담할 수 있을까? 이미 재활용되어서 다른 셀을 가리키는 것이라면?? -> 그래서 재활용 되기 전에 기존 Load를 cancel하는 메소드를 기입해주긴 했다..
                 //또 궁금한 것은.. 이미지를 다운로드 받다가 다 다운되기 전에 화면이 pop되거나 다른화면으로 push되는 등의 화면 전환 동작이 생기면 다운로드 받던 것은 어떻게 되는 걸까? 
                 if error != nil {
+                    //TODO: error 발생 시 에러발생했다는 이미지로 대체 필요
                     print(error?.localizedDescription)
                     return
-                }  //error 발생 시 아무것도 하지 않습니다.
+                }
                 
                 //에러가 없다면
-                cell.itemImageView.isHidden = false     //UIImageView 보여주기
                 self.items[cell.tag].itemImage = image  //이미지를 저장
             }
         }
@@ -255,6 +264,28 @@ class SearchResultViewController: UIViewController, UITableViewDelegate, UITable
                 default:
                     self.presentAlert(title: "오류 발생", message: "서버로부터 데이터를 받아오던 도중 오류가 발생하였습니다. 다시 시도하세요", needToPop: true)
                 }
+            }
+        }
+    }
+    
+    func setDatasAfterImageCheck(parsedItems: [NonMedicalItem]) {
+        
+        for var item in parsedItems {
+            guard let itemSeq = item.itemSeq else {
+                item.isImageExist = false
+                parsedItemsTempStorage.append(item)
+                continue
+            }
+            let photoDirRef: StorageReference = photoStorageRef.child(itemSeq) //해당 아이템 itemSeq로 된 폴더 가리키기
+            let photoRef: StorageReference = photoDirRef.child(itemSeq + "_1.jpg")  //사진들 중 첫번째 사진 참조
+            
+            photoRef.getMetadata { [weak self] metaData, error in
+                if error != nil {
+                    item.isImageExist = false
+                } else {
+                    item.isImageExist = true
+                }
+                self?.parsedItemsTempStorage.append(item)
             }
         }
     }

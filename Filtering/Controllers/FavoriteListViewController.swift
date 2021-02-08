@@ -16,7 +16,8 @@ class FavoriteListViewController: UIViewController, UITableViewDataSource, UITab
     
     
     //MARK:- Constant, Variables
-    let cellIdentifier: String = "favoriteItemCell"
+    let cellWithImageIdentifier: String = "favoriteItemCellWithImage"
+    let cellWithoutImageIdentifier: String = "favoriteItemCellWithoutImage"
     var items: [NonMedicalItem] = [] {
         didSet {    //items가 초기화(initialized) 된 이후에 작동
             self.editButtonItem.isEnabled =  !(self.items.count == 0)
@@ -133,25 +134,26 @@ class FavoriteListViewController: UIViewController, UITableViewDataSource, UITab
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) as? SearchItemTableViewCell else {
-            return SearchItemTableViewCell()
-        }
+        let item = items[indexPath.row]
+        let identifier: String = item.isImageExist ? cellWithImageIdentifier : cellWithoutImageIdentifier
+            
+        let cell: NMItemCellWithoutImage = tableView.dequeueReusableCell(withIdentifier: identifier) as? NMItemCellWithoutImage ?? (item.isImageExist ? NMItemCellWithImage() : NMItemCellWithoutImage())
         
         let tapGestureRecognizer: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tableViewCellTapped(_:)))
         cell.addGestureRecognizer(tapGestureRecognizer)
         
-        let item = items[indexPath.row]
-        
         cell.itemName.text = item.itemName
         cell.entpName.text = item.entpName
         
-        cell.itemImageView.image = nil
-        cell.itemImageView.isHidden = true
-        
-        if let existingImage = item.itemImage {     //이미지가 있을 경우에만 세팅해주고 보여줍니다.
-            cell.itemImageView.image = existingImage
-            cell.itemImageView.isHidden = false
+        guard let cellWithImage: NMItemCellWithImage = cell as? NMItemCellWithImage, let itemImage: UIImage = item.itemImage else {
+            return cell
         }
+        
+        //기존 이미지 처리
+        cellWithImage.itemImageView.image = nil //기존 이미지 삭제
+        //hidden은 더 이상 필요 없음
+        
+        cellWithImage.itemImageView.image = itemImage   //이미지 설정
         
         return cell
     }
@@ -205,14 +207,11 @@ class FavoriteListViewController: UIViewController, UITableViewDataSource, UITab
     //MARK: UIGestureRecognizer in UITableViewCell action method
     ///각각의 뷰 셀을 터치시 작동하는 메소드
     @objc func tableViewCellTapped(_ sender: UITapGestureRecognizer){
-        guard let cell = sender.view as? UITableViewCell else {
+        guard let cell = sender.view as? UITableViewCell, let row = tableView.indexPath(for: cell)?.row else {
             return
-        }
+        }   //row값을 못얻는 경우 추가적 진행 없음 (edit모드인 경우 selected 상태변화도 없음)
 
         if isEditing {  //edit 중인 상태인 경우
-            guard let row = tableView.indexPath(for: cell)?.row else {
-                return //row값을 못얻는 경우 selected 상태변화도 없도록
-            }
             
             cell.setSelected(!cell.isSelected, animated: true)  //toggle
             
@@ -232,7 +231,7 @@ class FavoriteListViewController: UIViewController, UITableViewDataSource, UITab
         }   //즐겨찾기 목록 클릭 시 넘어가는 상세 화면은 기존 화면을 재이용합니다.
         
         
-        detailViewController.item = items[cell.tag]
+        detailViewController.item = items[row]  //cell에 tag값이 설정되어있지 않은 경우 기본값은 0이네
         self.navigationController?.pushViewController(detailViewController, animated: true)
     }
     
