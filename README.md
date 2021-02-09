@@ -21,6 +21,10 @@
    
 5. 다크모드 지원   
 6. 언제 Dispatch Queue를 쓰고 언제 Operation Queue를 쓸 것인지   
+ 비동기 작업에 대해 React Native를 이용했을 때에는 Async Await, Android에서는 Async Task(deprecated)나 Excutors, ThreadPool을 썼었다.   
+ 
+7. 즐겨찾기 목록화면에서 Editing 모드 때 아이템을 삭제할 수 있도록 구현   
+ tableView의 didSelectRowAt 메소드를 쓰지 않고 GestureRecognizer를 직접 add해서 다음 VC로 넘기는 작업을 구성했었는데 이게 Editing 모드에서도 cell이 selected 되는게 아니라 다음 화면으로 넘어가게 작동이 됬었다.. 때문에 editing모드일 때는 cell 선택이 되도록 해주는 작업을 해줬었는데 이후 선택된 셀의 인덱스를 Set에 저장하고 처리하는 작업까지 해주었다. 그런데 보니까.. tableView에 indexPathForSelectedRows 프로퍼티가 있더라. 쉽게 구현할 수 있었던 항목들을 괜히 어렵게 구현한 것 같다. Developer Documentation을 잘 살펴보도록 하자
 
    
 사용한 라이브러리들  
