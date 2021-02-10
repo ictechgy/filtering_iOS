@@ -20,6 +20,7 @@
 		C434E4C42583D3EE0029A313 /* MaskAuthorizedListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C434E4C32583D3EE0029A313 /* MaskAuthorizedListViewController.swift */; };
 		C434E4C72583D40E0029A313 /* FavoriteListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C434E4C62583D40E0029A313 /* FavoriteListViewController.swift */; };
 		C434E4CA2583D4200029A313 /* MoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C434E4C92583D4200029A313 /* MoreViewController.swift */; };
+		C49D793E25D14BD200BEFB9A /* SignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C49D793D25D14BD200BEFB9A /* SignInViewController.swift */; };
 		C4A2338F258F9AB70088E42F /* DataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C4A2338D258F9AB70088E42F /* DataModel.xcdatamodeld */; };
 		C4A233942590B25E0088E42F /* QuasiDrug+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A233922590B25E0088E42F /* QuasiDrug+CoreDataClass.swift */; };
 		C4A233952590B25E0088E42F /* QuasiDrug+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A233932590B25E0088E42F /* QuasiDrug+CoreDataProperties.swift */; };
@@ -60,6 +61,7 @@
 		C434E4C32583D3EE0029A313 /* MaskAuthorizedListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaskAuthorizedListViewController.swift; sourceTree = "<group>"; };
 		C434E4C62583D40E0029A313 /* FavoriteListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteListViewController.swift; sourceTree = "<group>"; };
 		C434E4C92583D4200029A313 /* MoreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreViewController.swift; sourceTree = "<group>"; };
+		C49D793D25D14BD200BEFB9A /* SignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewController.swift; sourceTree = "<group>"; };
 		C4A2338E258F9AB70088E42F /* DataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DataModel.xcdatamodel; sourceTree = "<group>"; };
 		C4A233922590B25E0088E42F /* QuasiDrug+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "QuasiDrug+CoreDataClass.swift"; sourceTree = "<group>"; };
 		C4A233932590B25E0088E42F /* QuasiDrug+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "QuasiDrug+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -146,6 +148,7 @@
 				C434E4C92583D4200029A313 /* MoreViewController.swift */,
 				C4A233EE25B8743A0088E42F /* LicenseViewController.swift */,
 				C41BCB2925BCA54500968446 /* AppearanceViewController.swift */,
+				C49D793D25D14BD200BEFB9A /* SignInViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -358,6 +361,7 @@
 				C4A233E025B2002D0088E42F /* MaskAuthorizedListDetailViewController.swift in Sources */,
 				C4A2338F258F9AB70088E42F /* DataModel.xcdatamodeld in Sources */,
 				C40B58712585F95200237BD2 /* NonMedicalItem.swift in Sources */,
+				C49D793E25D14BD200BEFB9A /* SignInViewController.swift in Sources */,
 				C4A233EF25B8743A0088E42F /* LicenseViewController.swift in Sources */,
 				C40B586A2585174100237BD2 /* NetworkHandler.swift in Sources */,
 				C4A233BC25AB74DC0088E42F /* MaskXLSXParser.swift in Sources */,

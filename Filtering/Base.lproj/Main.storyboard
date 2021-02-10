@@ -26,10 +26,10 @@
             </objects>
             <point key="canvasLocation" x="2712" y="-2359"/>
         </scene>
-        <!--View Controller-->
+        <!--Sign In View Controller-->
         <scene sceneID="jY5-xs-hz7">
             <objects>
-                <viewController id="n01-Ew-bir" sceneMemberID="viewController">
+                <viewController id="n01-Ew-bir" customClass="SignInViewController" customModule="Filtering" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="cZv-oz-oxO">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -38,13 +38,13 @@
                                 <rect key="frame" x="20" y="276" width="374" height="34"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" textContentType="email"/>
                             </textField>
                             <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="gYe-9X-Nga">
                                 <rect key="frame" x="20" y="327" width="374" height="34"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" textContentType="password"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gO8-US-ajZ">
                                 <rect key="frame" x="67" y="387" width="281" height="30"/>
@@ -99,6 +99,13 @@
                         <viewLayoutGuide key="safeArea" id="hdf-j7-U0m"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
+                    <connections>
+                        <outlet property="emailField" destination="cF9-m6-q74" id="79X-an-VXl"/>
+                        <outlet property="forgotPwButton" destination="Jp3-jf-BxI" id="OUQ-q3-jcS"/>
+                        <outlet property="logInButton" destination="gO8-US-ajZ" id="Ppz-il-crr"/>
+                        <outlet property="pwField" destination="gYe-9X-Nga" id="UsP-Nn-rwF"/>
+                        <outlet property="signUpButton" destination="OYX-l2-btl" id="a0E-x5-9e0"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4Ds-Nn-KVf" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
