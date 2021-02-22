@@ -11,5 +11,8 @@ target 'Filtering' do
     pod 'Firebase/Analytics'
     pod 'Firebase/Storage'
     pod 'FirebaseUI/Storage'
+    pod 'Firebase/Auth'
+    pod 'RxSwift'
+    pod 'RxCocoa'
 
 end
