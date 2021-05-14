@@ -1,11 +1,12 @@
 # filtering_iOS
-필터링 안드로이드 앱의 iOS 버전 (iOS Native, Swift)
+'필터링' 안드로이드 앱의 iOS 버전 (iOS Native, Swift)
 
 안드로이드 버전 Repo -> https://github.com/ictechgy/filtering (React Native 사용)     
       
 &nbsp;   
       
 ## 🤔 본 어플리케이션을 만들게된 계기 (What made me create this application?)
+React Native로 만들었던 안드로이드 앱을 Swift로 구현해보자
    
 &nbsp;   
    
@@ -58,6 +59,10 @@
 &nbsp;   
    
 ## 🛠 개선해야할 점/추가했으면 하는 기능 (Needs to be improved / Want to add)
+1. 지나친 Massive ViewController   
+대부분의 기능을 ViewController에 두다보니 VC가 지나치게 무거워졌다. 
+2. 코드 작성에 기준이 부족했고 난잡   
+필요한 기능을 단순히 구현하려고만 하다보니 뒤죽박죽 스파게티 코드가 되어버렸다. 유지보수, 디버깅에 어려움이 많다.
    
 &nbsp;   
    
