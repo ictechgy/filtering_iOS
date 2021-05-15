@@ -25,6 +25,12 @@ React Native로 만들었던 안드로이드 앱을 Swift로 구현해보자
 &nbsp;   
    
 ## 🚀 사용했거나 사용하려 했던 패턴/스킬 (Used Or Tried Patterns And Skills)
+1. Delegate 패턴   
+2. CoreData   
+즐겨찾기 저장용   
+3. Custom View   
+UIDropDownView - ref: ['Prathamesh Salvi' medium blog, license: MIT](http://medium.com/@prathamsalvi27/ios-swift-dropdown-menu-3b2a69c34b23)   
+ 
    
 &nbsp;   
    
