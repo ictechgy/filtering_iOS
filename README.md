@@ -1,7 +1,7 @@
 # filtering_iOS
 '필터링' 안드로이드 앱의 iOS 버전 (iOS Native, Swift)
 
-안드로이드 버전 Repo -> https://github.com/ictechgy/filtering (React Native 사용)     
+안드로이드 버전 Repo -> https://github.com/ictechgy/filtering (React Native 사용, 구글플레이 출시)     
       
 &nbsp;   
       
@@ -52,6 +52,7 @@ UIDropDownView - ref: ['Prathamesh Salvi' medium blog, license: MIT](http://medi
    
 5. 다크모드 지원   
 6. 언제 Dispatch Queue를 쓰고 언제 Operation Queue를 쓸 것인지   
+ 대부분의 작업은 DispatchQueue로 처리하였다. (일시정지, 중지, 다시시작 및 KVO가 필요가 없다고 판단했기 때문에)    
  비동기 작업에 대해 React Native를 이용했을 때에는 Async Await, Android에서는 Async Task(deprecated)나 Excutors, ThreadPool을 썼었다.   
  
 7. 즐겨찾기 목록화면에서 Editing 모드 때 아이템을 삭제할 수 있도록 구현   
